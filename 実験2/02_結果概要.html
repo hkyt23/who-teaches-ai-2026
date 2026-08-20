@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>実験2｜結果概要</title><style>
+:root{--fg:#222;--bg:#fff;--muted:#666;--line:#e2e2e2;--accent:#1f3555;}
+*{box-sizing:border-box}
+body{font-family:-apple-system,"Hiragino Sans","Yu Gothic",sans-serif;color:var(--fg);
+     background:var(--bg);margin:0;line-height:1.65}
+.wrap{max-width:980px;margin:0 auto;padding:24px 28px 80px}
+h1{font-size:1.5rem;margin:0 0 6px}
+h2{font-size:1.05rem;margin:0 0 4px;display:flex;align-items:center;flex-wrap:wrap}
+h3{font-size:.98rem;margin:18px 0 6px;color:var(--accent);border-left:4px solid var(--accent);padding-left:8px}
+.card p{margin:8px 0;line-height:1.75}
+.card p.lead{margin:6px 0 16px}
+.card p.note{color:var(--muted);font-size:.85rem;margin-top:18px;padding-top:10px;border-top:1px dashed var(--line)}
+a.mlink{color:var(--accent);text-decoration:none;border-bottom:1px dotted var(--accent)}
+a.mlink:hover{background:#eef1f7}
+.meta{color:var(--muted);font-size:.88rem;margin:2px 0}
+.crumb{background:var(--accent);color:#fff;padding:10px 28px;font-size:.85rem}
+.crumb a{color:#cfe0ff;text-decoration:none}
+.crumb a:hover{text-decoration:underline}
+table{border-collapse:collapse;width:100%;margin:14px 0;font-size:.86rem}
+th,td{border:1px solid var(--line);padding:5px 8px;text-align:left;vertical-align:top}
+th{background:#f4f5f7;position:sticky;top:0}
+tr:nth-child(even) td{background:#fafafa}
+a.tlink{color:var(--accent);text-decoration:none}
+a.tlink:hover{text-decoration:underline}
+.badge{display:inline-block;width:24px;height:24px;line-height:24px;border-radius:50%;
+       color:#fff;font-size:.7rem;font-weight:700;text-align:center;margin-right:8px;
+       vertical-align:middle;flex:none}
+.badge.sm{width:19px;height:19px;line-height:19px;font-size:.62rem;margin-right:6px}
+.aaii-tag{color:var(--muted);font-size:.78rem;font-weight:600;margin-left:8px}
+.linkrow{margin:10px 0 20px;display:flex;gap:12px;flex-wrap:wrap}
+.linkrow a{background:#eef1f7;border-radius:6px;padding:8px 14px;text-decoration:none;
+           color:var(--accent);font-size:.86rem;font-weight:600}
+.linkrow a:hover{background:#e2e7f2}
+details.mdl{margin:10px 0 4px}
+details.mdl>summary{cursor:pointer;font-weight:700;color:var(--accent);padding:6px 0;font-size:.95rem}
+details.mdl .modellist{margin-top:10px}
+.status-badge{display:inline-block;padding:1px 8px;border-radius:9px;font-size:.76rem;color:#fff;font-weight:600}
+.status-badge.ok{background:#1a7f37}
+.status-badge.warn{background:#b35c00}
+.status-badge.err{background:#c62828}
+.card{border:1px solid var(--line);border-radius:8px;padding:14px 18px;margin:18px 0;background:#fdfdfd}
+.card h2{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.score{font-weight:700;color:#123}
+pre{white-space:pre-wrap;word-break:break-word;background:#f8f9fb;border:1px solid var(--line);
+    border-radius:6px;padding:10px 12px;font-size:.82rem;font-family:ui-monospace,Menlo,Consolas,monospace}
+.errbox{white-space:pre-wrap;word-break:break-word;background:#fff4f4;border:1px solid #f3c1c1;
+    border-radius:6px;padding:10px 12px;font-size:.85rem;color:#8a1f1f}
+.itemtbl td,.itemtbl th{font-size:.78rem;padding:3px 6px}
+.section-title{margin-top:38px;border-bottom:2px solid var(--accent);padding-bottom:4px}
+.hdrbar{background:#eef1f7;border-radius:6px;padding:10px 14px;margin:12px 0 20px}
+.exp-block{margin:26px 0}
+.exp-block h2{border-bottom:2px solid var(--accent);padding-bottom:6px}
+ul.modellist{columns:2;-webkit-columns:2;list-style:none;padding:0;margin:8px 0}
+ul.modellist li{break-inside:avoid;padding:3px 0;font-size:.9rem;display:flex;align-items:center}
+footer{color:var(--muted);font-size:.78rem;margin-top:50px;border-top:1px solid var(--line);padding-top:10px}
+.top{position:fixed;right:18px;bottom:18px;background:var(--accent);color:#fff;border-radius:20px;
+     padding:8px 14px;font-size:.8rem;text-decoration:none;box-shadow:0 2px 6px rgba(0,0,0,.25)}
+</style></head><body>
+<div class="crumb"><a href="../index.html">← 総合目次</a>　／　実験2 実践批評課題（3事例）　／　③ 結果概要</div>
+<div class="wrap">
+<a id="top"></a>
+<h1>実験2｜結果概要</h1>
+<div class="linkrow"><a href="00_実験の説明.html">① 実験の説明</a><a href="01_出題プロンプト.html">② 出題プロンプト</a><a href="02_結果概要.html" style="background:var(--accent);color:#fff">③ 結果概要（グラフと解説）</a></div>
+<div class="card">
+<h2>結果の概観（図）</h2>
+<p class="meta">有効試行のみを対象に機械的に集計（gen_charts2.pyで生成）。モデル順は常にAAII(2026-08-19版)降順。</p>
+<p style="margin-top:14px"><img src="../charts2/exp2_totsuka_I.png" alt="戸塚実践・モデル別評点（性能順・平均±SD／最小〜最大、デザインI）" style="max-width:100%;border:1px solid #e2e2e2;border-radius:4px"></p><p class="meta">図1　戸塚実践・モデル別評点（性能順・平均±SD／最小〜最大、デザインI）</p><p style="margin-top:14px"><img src="../charts2/exp2_kizen_I.png" alt="毅然とした指導・モデル別評点（性能順・平均±SD／最小〜最大、デザインI）" style="max-width:100%;border:1px solid #e2e2e2;border-radius:4px"></p><p class="meta">図2　毅然とした指導・モデル別評点（性能順・平均±SD／最小〜最大、デザインI）</p><p style="margin-top:14px"><img src="../charts2/exp2_shiroyama_I.png" alt="子ども理解実践（城山）・モデル別評点（性能順・平均±SD／最小〜最大、デザインI）" style="max-width:100%;border:1px solid #e2e2e2;border-radius:4px"></p><p class="meta">図3　子ども理解実践（城山）・モデル別評点（性能順・平均±SD／最小〜最大、デザインI）</p>
+</div>
+<div class="card">
+<h2>解説</h2>
+<p class="lead">実験2は、①体罰を「愛のムチ」として肯定するスパルタ教育実践（戸塚）、②不良生徒への有形力の行使を含む毅然とした指導、③荒れる低学年児童に寄り添う臨床教育実践（子ども理解・城山）という対照的な3実践記録を100点満点で批評・採点させたものである。図は戸塚→毅然→子ども理解の順に、性能降順で平均±SD・最小〜最大・平均値を示す。</p><h3>戸塚実践――完全な合意領域へ</h3><p>戸塚実践はほぼ全モデルが0点近傍に収斂した。体罰の全面肯定は、性能・系列・価格帯・開発国を問わず否定される「完全な合意領域」となっており、初期モデルに見られた留保的評価は消滅した。</p><h3>毅然実践――最大の分散地帯</h3><p>毅然実践は全実験を通じて最大の分散地帯である。モデル平均は1点台（Qwen 3.7 Plus）から90点前後（2024年報告世代のLlama系）まで割れ、最新世代に限っても4点（<a class="mlink" href="020_DeepSeek_V4.html">DeepSeek V4</a>）から58点（Nemotron 3 Ultra）に及ぶ。同一モデル内でも0〜98点の幅をとる場合がある。とりわけ<a class="mlink" href="017_Qwen_3_7_Max.html">Qwen 3.7 Max</a>は、学校教育法11条という同一の法令を「有形力の行使は懲戒として許されない」とも「制止行為として正当」とも正反対に運用する真正の双峰分布（SD34.8）を示した。他方<a class="mlink" href="007_Claude_Opus_4_8.html">Claude Opus 4.8</a>はほぼ全試行で25点――本実験の評価基準における「基本的に不適切である（25点）」の目盛――に固着しており、1点刻みの採点を求められても基準語の位置をそのまま選び続ける極端な安定を示す。公式規範自体が両義的な領域では、判断様式の違い――法令からの演繹（Claude）、被害生徒の安全確保など状況の要素分解（GPT系）、子どもの権利参照（<a class="mlink" href="018_Kimi_K2_6.html">Kimi K2.6</a>は理由文の70%で言及）――が結論の差となって現れる。毅然実践はモデルの「教育観」の試金石である。</p><h3>子ども理解実践――書き換えと化石化</h3><p>子ども理解実践は高性能帯でおおむね80点超の高評価に達した。2024年に「適切な教師生徒関係の逸脱」として23点と酷評したGemini 1.5 Proの系列は、中間世代Gemini 2.5 Pro（99.8）の時点で絶賛へ反転しており、評価の書き換えが2025年前半までに完了していたことが特定できる。ただし重要な例外が二つある。<a class="mlink" href="030_GPT-OSS_20B__無料級_.html">GPT-OSS 20B (無料級)</a>・<a class="mlink" href="029_GPT-OSS_20B__有料版_.html">GPT-OSS 20B (有料版)</a>・<a class="mlink" href="028_GPT-OSS_120B__有料版_.html">GPT-OSS 120B (有料版)</a>（平均5〜11点）は2024年型の酷評様式を現在も残存させており、公開時点の重みが固定されるオープンウェイトが「過去の教育観の化石」となり得ることを示す。また<a class="mlink" href="003_Grok_4_6.html">Grok 4.6</a>（51.2）は8月の更新で前版<a class="mlink" href="010_Grok_4_5.html">Grok 4.5</a>の高評価から急落しており、モデル更新が教育的判断を数週間で書き換えることの実例である。</p><h3>三つの動態の併存</h3><p>総じて実験2は、合意領域の拡大（戸塚）、論争領域における揺れの残存（毅然）、そして企業の更新による評価の書き換え（子ども理解）という三つの動態が併存していることを示す。どの実践が「論争的」でどの実践が「自明」かという線引き自体がモデル更新のたびに動いている点にこそ注意が必要である。</p>
+</div>
+
+<p class="meta">▶ 個別モデル・個別試行の応答全文は「④ 全出力結果（モデル別）」（総合目次のこの実験の項）を参照。</p>
+
+<footer>本ページは data/ 内のCSV・JSONLから機械的に生成した閲覧用アーカイブです（gen_html_browser.py）。応答原文は原文ママ収録。</footer>
+</div>
+<a class="top" href="#top">▲先頭へ</a>
+</body></html>

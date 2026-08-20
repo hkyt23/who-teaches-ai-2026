@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>実験1 教育信念質問紙｜GPT-OSS 20B (有料版)</title><style>
+:root{--fg:#222;--bg:#fff;--muted:#666;--line:#e2e2e2;--accent:#1f3555;}
+*{box-sizing:border-box}
+body{font-family:-apple-system,"Hiragino Sans","Yu Gothic",sans-serif;color:var(--fg);
+     background:var(--bg);margin:0;line-height:1.65}
+.wrap{max-width:980px;margin:0 auto;padding:24px 28px 80px}
+h1{font-size:1.5rem;margin:0 0 6px}
+h2{font-size:1.05rem;margin:0 0 4px;display:flex;align-items:center;flex-wrap:wrap}
+h3{font-size:.98rem;margin:18px 0 6px;color:var(--accent);border-left:4px solid var(--accent);padding-left:8px}
+.card p{margin:8px 0;line-height:1.75}
+.card p.lead{margin:6px 0 16px}
+.card p.note{color:var(--muted);font-size:.85rem;margin-top:18px;padding-top:10px;border-top:1px dashed var(--line)}
+a.mlink{color:var(--accent);text-decoration:none;border-bottom:1px dotted var(--accent)}
+a.mlink:hover{background:#eef1f7}
+.meta{color:var(--muted);font-size:.88rem;margin:2px 0}
+.crumb{background:var(--accent);color:#fff;padding:10px 28px;font-size:.85rem}
+.crumb a{color:#cfe0ff;text-decoration:none}
+.crumb a:hover{text-decoration:underline}
+table{border-collapse:collapse;width:100%;margin:14px 0;font-size:.86rem}
+th,td{border:1px solid var(--line);padding:5px 8px;text-align:left;vertical-align:top}
+th{background:#f4f5f7;position:sticky;top:0}
+tr:nth-child(even) td{background:#fafafa}
+a.tlink{color:var(--accent);text-decoration:none}
+a.tlink:hover{text-decoration:underline}
+.badge{display:inline-block;width:24px;height:24px;line-height:24px;border-radius:50%;
+       color:#fff;font-size:.7rem;font-weight:700;text-align:center;margin-right:8px;
+       vertical-align:middle;flex:none}
+.badge.sm{width:19px;height:19px;line-height:19px;font-size:.62rem;margin-right:6px}
+.aaii-tag{color:var(--muted);font-size:.78rem;font-weight:600;margin-left:8px}
+.linkrow{margin:10px 0 20px;display:flex;gap:12px;flex-wrap:wrap}
+.linkrow a{background:#eef1f7;border-radius:6px;padding:8px 14px;text-decoration:none;
+           color:var(--accent);font-size:.86rem;font-weight:600}
+.linkrow a:hover{background:#e2e7f2}
+details.mdl{margin:10px 0 4px}
+details.mdl>summary{cursor:pointer;font-weight:700;color:var(--accent);padding:6px 0;font-size:.95rem}
+details.mdl .modellist{margin-top:10px}
+.status-badge{display:inline-block;padding:1px 8px;border-radius:9px;font-size:.76rem;color:#fff;font-weight:600}
+.status-badge.ok{background:#1a7f37}
+.status-badge.warn{background:#b35c00}
+.status-badge.err{background:#c62828}
+.card{border:1px solid var(--line);border-radius:8px;padding:14px 18px;margin:18px 0;background:#fdfdfd}
+.card h2{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.score{font-weight:700;color:#123}
+pre{white-space:pre-wrap;word-break:break-word;background:#f8f9fb;border:1px solid var(--line);
+    border-radius:6px;padding:10px 12px;font-size:.82rem;font-family:ui-monospace,Menlo,Consolas,monospace}
+.errbox{white-space:pre-wrap;word-break:break-word;background:#fff4f4;border:1px solid #f3c1c1;
+    border-radius:6px;padding:10px 12px;font-size:.85rem;color:#8a1f1f}
+.itemtbl td,.itemtbl th{font-size:.78rem;padding:3px 6px}
+.section-title{margin-top:38px;border-bottom:2px solid var(--accent);padding-bottom:4px}
+.hdrbar{background:#eef1f7;border-radius:6px;padding:10px 14px;margin:12px 0 20px}
+.exp-block{margin:26px 0}
+.exp-block h2{border-bottom:2px solid var(--accent);padding-bottom:6px}
+ul.modellist{columns:2;-webkit-columns:2;list-style:none;padding:0;margin:8px 0}
+ul.modellist li{break-inside:avoid;padding:3px 0;font-size:.9rem;display:flex;align-items:center}
+footer{color:var(--muted);font-size:.78rem;margin-top:50px;border-top:1px solid var(--line);padding-top:10px}
+.top{position:fixed;right:18px;bottom:18px;background:var(--accent);color:#fff;border-radius:20px;
+     padding:8px 14px;font-size:.8rem;text-decoration:none;box-shadow:0 2px 6px rgba(0,0,0,.25)}
+</style></head><body>
+<div class="crumb"><a href="../index.html">← 総合目次</a>　／　実験1 教育信念質問紙　／　GPT-OSS 20B (有料版)</div>
+<div class="wrap">
+<a id="top"></a>
+<h1><span class="badge" style="background:#10A37F" title="OpenAI">OA</span><span>GPT-OSS 20B (有料版)</span><span class="aaii-tag">AAII 15.2</span></h1>
+<p class="meta">実験1 教育信念質問紙</p>
+<p class="meta">▶ <a class="tlink" href="00_実験の説明.html">① 実験の説明</a>　
+<a class="tlink" href="01_出題プロンプト.html">② 出題プロンプト</a>　
+<a class="tlink" href="02_結果概要.html">③ 結果概要</a></p>
+<div class="hdrbar">実測モデルID：openai/gpt-oss-20b　／　収録試行：全50（有効50・対象外0）</div>
+<h2>試行一覧</h2>
+<table><tr><th>番号</th><th>状態</th><th>7項目平均</th></tr><tr><td><a class="tlink" href="#t001">1</a></td><td><span class="status-badge ok">有効</span></td><td>2.86</td></tr><tr><td><a class="tlink" href="#t002">2</a></td><td><span class="status-badge ok">有効</span></td><td>3.57</td></tr><tr><td><a class="tlink" href="#t003">3</a></td><td><span class="status-badge ok">有効</span></td><td>3.86</td></tr><tr><td><a class="tlink" href="#t004">4</a></td><td><span class="status-badge ok">有効</span></td><td>2.29</td></tr><tr><td><a class="tlink" href="#t005">5</a></td><td><span class="status-badge ok">有効</span></td><td>3.14</td></tr><tr><td><a class="tlink" href="#t006">6</a></td><td><span class="status-badge ok">有効</span></td><td>3.14</td></tr><tr><td><a class="tlink" href="#t007">7</a></td><td><span class="status-badge ok">有効</span></td><td>3.14</td></tr><tr><td><a class="tlink" href="#t008">8</a></td><td><span class="status-badge ok">有効</span></td><td>4.00</td></tr><tr><td><a class="tlink" href="#t009">9</a></td><td><span class="status-badge ok">有効</span></td><td>3.57</td></tr><tr><td><a class="tlink" href="#t010">10</a></td><td><span class="status-badge ok">有効</span></td><td>3.86</td></tr><tr><td><a class="tlink" href="#t011">11</a></td><td><span class="status-badge ok">有効</span></td><td>2.86</td></tr><tr><td><a class="tlink" href="#t012">12</a></td><td><span class="status-badge ok">有効</span></td><td>3.14</td></tr><tr><td><a class="tlink" href="#t013">13</a></td><td><span class="status-badge ok">有効</span></td><td>3.86</td></tr><tr><td><a class="tlink" href="#t014">14</a></td><td><span class="status-badge ok">有効</span></td><td>3.14</td></tr><tr><td><a class="tlink" href="#t015">15</a></td><td><span class="status-badge ok">有効</span></td><td>3.00</td></tr><tr><td><a class="tlink" href="#t016">16</a></td><td><span class="status-badge ok">有効</span></td><td>3.57</td></tr><tr><td><a class="tlink" href="#t017">17</a></td><td><span class="status-badge ok">有効</span></td><td>4.00</td></tr><tr><td><a class="tlink" href="#t018">18</a></td><td><span class="status-badge ok">有効</span></td><td>2.71</td></tr><tr><td><a class="tlink" href="#t019">19</a></td><td><span class="status-badge ok">有効</span></td><td>2.71</td></tr><tr><td><a class="tlink" href="#t020">20</a></td><td><span class="status-badge ok">有効</span></td><td>4.00</td></tr><tr><td><a class="tlink" href="#t021">21</a></td><td><span class="status-badge ok">有効</span></td><td>4.00</td></tr><tr><td><a class="tlink" href="#t022">22</a></td><td><span class="status-badge ok">有効</span></td><td>4.00</td></tr><tr><td><a class="tlink" href="#t023">23</a></td><td><span class="status-badge ok">有効</span></td><td>4.00</td></tr><tr><td><a class="tlink" href="#t024">24</a></td><td><span class="status-badge ok">有効</span></td><td>4.00</td></tr><tr><td><a class="tlink" href="#t025">25</a></td><td><span class="status-badge ok">有効</span></td><td>3.71</td></tr><tr><td><a class="tlink" href="#t026">26</a></td><td><span class="status-badge ok">有効</span></td><td>4.00</td></tr><tr><td><a class="tlink" href="#t027">27</a></td><td><span class="status-badge ok">有効</span></td><td>4.00</td></tr><tr><td><a class="tlink" href="#t028">28</a></td><td><span class="status-badge ok">有効</span></td><td>3.71</td></tr><tr><td><a class="tlink" href="#t029">29</a></td><td><span class="status-badge ok">有効</span></td><td>3.14</td></tr><tr><td><a class="tlink" href="#t030">30</a></td><td><span class="status-badge ok">有効</span></td><td>4.00</td></tr><tr><td><a class="tlink" href="#t031">31</a></td><td><span class="status-badge ok">有効</span></td><td>3.86</td></tr><tr><td><a class="tlink" href="#t032">32</a></td><td><span class="status-badge ok">有効</span></td><td>4.00</td></tr><tr><td><a class="tlink" href="#t033">33</a></td><td><span class="status-badge ok">有効</span></td><td>3.57</td></tr><tr><td><a class="tlink" href="#t034">34</a></td><td><span class="status-badge ok">有効</span></td><td>3.57</td></tr><tr><td><a class="tlink" href="#t035">35</a></td><td><span class="status-badge ok">有効</span></td><td>3.57</td></tr><tr><td><a class="tlink" href="#t036">36</a></td><td><span class="status-badge ok">有効</span></td><td>4.00</td></tr><tr><td><a class="tlink" href="#t037">37</a></td><td><span class="status-badge ok">有効</span></td><td>3.00</td></tr><tr><td><a class="tlink" href="#t038">38</a></td><td><span class="status-badge ok">有効</span></td><td>3.71</td></tr><tr><td><a class="tlink" href="#t039">39</a></td><td><span class="status-badge ok">有効</span></td><td>3.29</td></tr><tr><td><a class="tlink" href="#t040">40</a></td><td><span class="status-badge ok">有効</span></td><td>3.86</td></tr><tr><td><a class="tlink" href="#t041">41</a></td><td><span class="status-badge ok">有効</span></td><td>3.86</td></tr><tr><td><a class="tlink" href="#t042">42</a></td><td><span class="status-badge ok">有効</span></td><td>4.00</td></tr><tr><td><a class="tlink" href="#t043">43</a></td><td><span class="status-badge ok">有効</span></td><td>3.29</td></tr><tr><td><a class="tlink" href="#t044">44</a></td><td><span class="status-badge ok">有効</span></td><td>3.00</td></tr><tr><td><a class="tlink" href="#t045">45</a></td><td><span class="status-badge ok">有効</span></td><td>3.57</td></tr><tr><td><a class="tlink" href="#t046">46</a></td><td><span class="status-badge ok">有効</span></td><td>3.29</td></tr><tr><td><a class="tlink" href="#t047">47</a></td><td><span class="status-badge ok">有効</span></td><td>4.00</td></tr><tr><td><a class="tlink" href="#t048">48</a></td><td><span class="status-badge ok">有効</span></td><td>3.57</td></tr><tr><td><a class="tlink" href="#t049">49</a></td><td><span class="status-badge ok">有効</span></td><td>3.43</td></tr><tr><td><a class="tlink" href="#t050">50</a></td><td><span class="status-badge ok">有効</span></td><td>3.00</td></tr></table>
+
+<div class="card" id="t001">
+<h2>試行 1 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 00:53:51　モデルID：openai/gpt-oss-20b</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：2.86</span>　不整合2件</div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>4</td><td>1</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>2</td><td>2</td><td>【不整合】</td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td>【不整合】</td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1 3  
+Q2 4  
+Q3 2  
+Q4 1  
+Q5 2  
+Q6 2  
+Q7 4  
+
+**回答理由**  
+私は子ども指導を「子どもの内在的潜在性を尊重しつつ、適切なガイドと支援を行う」バランスの取れた姿勢と考えます。  
+- **Q1**：大人としての自立は大切だが、子どもが自らの可能性を開花させる場を確保する方が長期的に成長につながるため、B寄りに傾きます。  
+- **Q2**：失敗は学びに不可欠ですが、過度の失敗は挫折感を増す恐れがあるため、できる限り失敗を防ぎつつも挑戦を促すB寄りで判断しました。  
+- **Q3**：子どもの思考を表現し、議論させる時間を多く取る方が批判的思考やコミュニケーション能力の発展に寄与するのでA寄りの姿勢を選びました。  
+- **Q4**：自主的に学びたがる子どもを支援することが長期的な学習意欲を育むので、Aに近い選択です。  
+- **Q5**：教師があえて答えや解法を示すよりも、子どもが自ら手探りで見つけるプロセスをサポートする方が創造力を伸ばすため、B寄りです。  
+- **Q6**：困っている子どもの感情に寄り添うことで信頼関係を構築し、再び挑戦する意欲を育てるため、B寄り。  
+- **Q7**：長所を称賛し伸ばすことで自己肯定感とモチベーションを高める効果が大きいので、Bに近い選択です。</pre>
+</div>
+<div class="card" id="t002">
+<h2>試行 2 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 00:53:54　モデルID：openai/gpt-oss-20b</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.57</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>4</td><td>1</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>1</td><td>4</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>1</td><td>4</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>1.Bに近い  
+2.Bに近い  
+3.Aに近い  
+4.Aに近い  
+5.Bに近い  
+6.Aに近い  
+7.Bに近い  
+
+【回答理由】  
+子どもを主体とした学びを重視し、個々の可能性や長所を伸ばす教育方針を取ります。失敗を恐れずに挑戦できる環境を整え、失敗からの学びを大切にするため、子どもの感情に寄り添う指導を選びます。自発的な学びや発表・議論の場を多く設け、子どもが自ら考え、問いを投げかける力を育てることを重視します。知識や技能は指導よりも子ども自身の探求と試行錯誤によって獲得されると考え、教師は手本ではなくサポートに徹します。短所よりも長所に焦点を当て、ポジティブな自己肯定感を育むことで、子どものやる気と自信を高めることができると信じています。</pre>
+</div>
+<div class="card" id="t003">
+<h2>試行 3 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 00:54:02　モデルID：openai/gpt-oss-20b</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.86</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>1</td><td>4</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1 4  
+Q2 1  
+Q3 2  
+Q4 1  
+Q5 4  
+Q6 1  
+Q7 4  
+
+理由：  
+私は子どもが自ら考え、創造的に取り組む力を育てることを重視し、失敗を経験として学びに変える環境を提供する方針をとります。  
+したがって、成人としての技能よりも「可能性の開花」を重視し（Q1 B）、失敗を恐れず挑戦させる（Q2 A）、意見発表と討議に時間を割く（Q3 A）こと、自己主導で学ぶ支援を優先する（Q4 A）、子どもが自ら解法を見出すよう導く（Q5 B）こと、問題を起こした際は共感と話し合いで対処する（Q6 A）、短所を指摘より長所をほめて伸ばす（Q7 B）という姿勢に近いです。</pre>
+</div>
+<div class="card" id="t004">
+<h2>試行 4 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 00:54:13　モデルID：openai/gpt-oss-20b</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：2.29</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>4</td><td>1</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>4</td><td>1</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>4</td><td>1</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>4</td><td>1</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>4.Bに近い  
+4.Bに近い  
+4.Bに近い  
+4.Bに近い  
+4.Bに近い  
+4.Bに近い  
+4.Bに近い  
+回答理由: 子どもたちの自律性と創造性を尊重し、失敗を恐れず挑戦できる環境を整えることが、彼らの潜在能力を最も発揮させると考える。対話と発表で思考を深める一方で、反復を通じて基礎知識・技能を固めることも重要だ。学びを強制せずに自発的に行えるよう支援し、教師は正しい指導を示すよりも子ども自身が答えを見つけられるよう導く方が効果的。また、問題行動には共感と適切な指導を混ぜつつ、短所よりも長所を伸ばす肯定的なフィードバックを重視する姿勢が、成長を促すと判断した。</pre>
+</div>
+<div class="card" id="t005">
+<h2>試行 5 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 00:54:35　モデルID：openai/gpt-oss-20b</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.14</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>1</td><td>1</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>4</td><td>1</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>1</td><td>4</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>1</td><td>4</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>1.Aに近い  
+4.Bに近い  
+1.Aに近い  
+1.Aに近い  
+4.Bに近い  
+1.Aに近い  
+4.Bに近い  
+
+私は子どもたちを主体的に発展させる教育を重視し、失敗や挑戦を許容しながらも、学習者が自ら考え、発信できる場を広く設け、自己肯定感を高める姿勢を重視しています。</pre>
+</div>
+<div class="card" id="t006">
+<h2>試行 6 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 00:54:37　モデルID：openai/gpt-oss-20b</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.14</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>1</td><td>1</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>4</td><td>1</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>1</td><td>4</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>1</td><td>4</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>1.Aに近い  
+4.Bに近い  
+1.Aに近い  
+1.Aに近い  
+4.Bに近い  
+1.Aに近い  
+4.Bに近い  
+
+私は子どもたちを主体的に発展させる教育を重視し、失敗や挑戦を許容しながらも、学習者が自ら考え、発信できる場を広く設け、自己肯定感を高める姿勢を重視しています。</pre>
+</div>
+<div class="card" id="t007">
+<h2>試行 7 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 00:54:39　モデルID：openai/gpt-oss-20b</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.14</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>1</td><td>1</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>4</td><td>1</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>1</td><td>4</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>1</td><td>4</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>1.Aに近い  
+4.Bに近い  
+1.Aに近い  
+1.Aに近い  
+4.Bに近い  
+1.Aに近い  
+4.Bに近い  
+
+私は子どもたちを主体的に発展させる教育を重視し、失敗や挑戦を許容しながらも、学習者が自ら考え、発信できる場を広く設け、自己肯定感を高める姿勢を重視しています。</pre>
+</div>
+<div class="card" id="t008">
+<h2>試行 8 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 00:54:46　モデルID：openai/gpt-oss-20b</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：4.00</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>1</td><td>4</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>1</td><td>4</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>4
+1
+1
+1
+4
+1
+4
+
+私は生徒の主体性と自発的な学びを重視し、失敗を経験として許容し説明責任を育む方針に近いです。子どもは自分の可能性を育む環境で発見を楽しむべきであり、教師は示すよりも支える姿勢で導きます。失敗を恐れず挑戦させ、教室では議論や発表の機会を多く取ることで思考と表現を養います。学習は指示だけでなく自ら発見する過程が重要で、反復練習よりも問いを立てる時間が効果的です。生徒が問題を起こした際は共感と温かい指導で傷つけず成長へ導き、短所より長所を称賛し伸ばすことで自信とモチベーションを高めます。</pre>
+</div>
+<div class="card" id="t009">
+<h2>試行 9 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 00:54:53　モデルID：openai/gpt-oss-20b</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.57</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>4</td><td>1</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>1</td><td>4</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>1</td><td>4</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1　4.Bに近い  
+Q2　4.Bに近い  
+Q3　1.Aに近い  
+Q4　1.Aに近い  
+Q5　4.Bに近い  
+Q6　1.Aに近い  
+Q7　4.Bに近い  
+
+**回答理由**  
+Q1では、子どもが自らの可能性を発見し伸ばす環境を作ることを重視し、単なる「大人になるためのスキル訓練」よりも支援的な姿勢をとる。  
+Q2では、失敗から学ぶ機会は大事だが、過度な失敗は自己効力感を下げるため、事前に注意や指導で失敗を最小限に抑える方針を選ぶ。  
+Q3では、子どもが自分の考えを整理し、他者の視点と比較・検討できる議論の時間を重視する。  
+Q4では、強制的に学習させるより、子どもの内発的動機づけを促し自発的に学びに取り組む環境を整える。  
+Q5では、正しい答えを示すのではなく、子どもが自分で探求し解決策を見つけられるサポートを優先する。  
+Q6では、問題行動を起こした子どもに対してはまず感情に寄り添い、理解を深めた上で必要なら一定の規律を示す方針。  
+Q7では、短所ばかり指摘するより長所を認め、肯定的に伸ばすことで自尊感情とモチベーションの向上を図る。</pre>
+</div>
+<div class="card" id="t010">
+<h2>試行 10 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 00:55:07　モデルID：openai/gpt-oss-20b</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.86</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>1</td><td>4</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>1</td><td>4</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>2.どちらかといえばBに近い
+1.Aに近い
+1.Aに近い
+1.Aに近い
+4.Bに近い
+1.Aに近い
+4.Bに近い
+
+私は子どもの成長を重視し、個々の可能性を広げる支援に偏る一方で、失敗を経験させ学びを促す実践を大切にします。授業では発表・議論を通じて思考力を伸ばし、主体的学習を支援し、教師は正しい答えを押し付けずに子どもが自ら解く力を育てる役割を担います。感情面では、問題を起こした子どもには共感と理解を示しつつ、長所を褒め育てることで内在的動機を高め、弱点に対しては踏み込んだ注意よりも建設的なサポートを重視します。これらの観点を総合すると、質問ごとに最も近い立場を上記のように選びました。</pre>
+</div>
+<div class="card" id="t011">
+<h2>試行 11 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 00:55:18　モデルID：openai/gpt-oss-20b</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：2.86</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>2</td><td>2</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>2</td><td>3</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>3</td><td>3</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>3</td><td>3</td><td></td></tr></table>
+<pre>2
+2
+2
+2
+3
+2
+3
+
+回答理由: 私は子ども教育を「発見と自己成長」を重視し、子どもの主体性と創造性を育みつつ、必要に応じてサポートや導きを行うバランスの取れたアプローチを取ることが有効だと考えます。  
+- Q1では大人になるための基礎的な学びと子どもの可能性を開花させる指導を両立させるためAに近い選択肢を選びました。  
+- Q2では失敗を通じて学ぶ経験を大切にし、子どもにやらせる方針が重要と判断しました。  
+- Q3では議論や発表で考えを深める時間を重視し、対話的学びを奨励します。  
+- Q4では自発的な学習を支援する姿勢が長期的な学びに繋がると考え、強制よりも支援を選びました。  
+- Q5では子どもが自ら解き方を見つけられるように支援する姿勢をとることで、探究心と問題解決力を育てるためBに近いと判断しました。  
+- Q6では子どもの気持ちに寄り添いながら指導を行うことで、学習へのモチベーションを保ち、協調性を養うと考えました。  
+- Q7では長所をほめて伸ばすことで自尊心と自己効力感を高め、継続的な成長を促すためBに近い選択をしました。</pre>
+</div>
+<div class="card" id="t012">
+<h2>試行 12 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 00:55:20　モデルID：openai/gpt-oss-20b</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.14</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>1</td><td>1</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>4</td><td>1</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>1</td><td>4</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>1</td><td>4</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>1.Aに近い  
+4.Bに近い  
+1.Aに近い  
+1.Aに近い  
+4.Bに近い  
+1.Aに近い  
+4.Bに近い  
+
+私は子どもたちを主体的に発展させる教育を重視し、失敗や挑戦を許容しながらも、学習者が自ら考え、発信できる場を広く設け、自己肯定感を高める姿勢を重視しています。</pre>
+</div>
+<div class="card" id="t013">
+<h2>試行 13 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 00:55:28　モデルID：openai/gpt-oss-20b</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.86</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>1</td><td>4</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>3</td><td>3</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>1</td><td>4</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>4
+1
+1
+1
+3
+1
+4
+
+Q1は子どもの可能性を伸ばす方が重要だと考えるのでB。Q2は失敗から学ぶ経験が大切と思いA。Q3は討論で思考力を養うのでA。Q4は自発的学習を支援する方が効果的と感じるのでA。Q5では子どもが自分で答えを導く力を重視しB。Q6は情緒的サポートが必要と判断しA。Q7は長所を伸ばす方がやる気につながると考えてB。</pre>
+</div>
+<div class="card" id="t014">
+<h2>試行 14 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 00:55:30　モデルID：openai/gpt-oss-20b</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.14</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>1</td><td>1</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>4</td><td>1</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>1</td><td>4</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>1</td><td>4</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>1.Aに近い  
+4.Bに近い  
+1.Aに近い  
+1.Aに近い  
+4.Bに近い  
+1.Aに近い  
+4.Bに近い  
+
+私は子どもたちを主体的に発展させる教育を重視し、失敗や挑戦を許容しながらも、学習者が自ら考え、発信できる場を広く設け、自己肯定感を高める姿勢を重視しています。</pre>
+</div>
+<div class="card" id="t015">
+<h2>試行 15 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 00:55:34　モデルID：openai/gpt-oss-20b</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.00</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>2</td><td>3</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>3</td><td>3</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>3</td><td>3</td><td></td></tr></table>
+<pre>3
+2
+2
+2
+3
+2
+3
+
+理由：子どもの創造性や主体性を尊重し、失敗を通じて学ぶ機会を提供することを重視しています。また、固定的な正解よりも探究を通じて自ら答えを見つけるプロセスを重んじ、学びへの自発性を高めるよう努めます。感情的な共感を重視し、指導は相手の気持ちを理解しつつ、規律と必要な指導は適度に挟み込むことでバランスを取ります。最後に、子どもの長所を褒めて伸ばすことで自己肯定感を育み、短所に対しては過度な指摘ではなく、改善の動機付けを行います。</pre>
+</div>
+<div class="card" id="t016">
+<h2>試行 16 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 00:55:47　モデルID：openai/gpt-oss-20b</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.57</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>1</td><td>4</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>3</td><td>3</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>1</td><td>4</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>3.どちらかといえばBに近い  
+2.どちらかといえばAに近い  
+1.Aに近い  
+1.Aに近い  
+3.どちらかといえばBに近い  
+1.Aに近い  
+4.Bに近い  
+
+回答理由  
+Q1：子どもの個性や可能性を最大限に引き出すことが、結果的に幅広い社会で必要とされるスキルや価値を培うと考えるため。  
+Q2：失敗は学びの機会であり、挑戦を恐れない姿勢を育むため、できるだけ子どもに試させる方が有効だと判断したため。  
+Q3：子どもの思考や感情を表に出す時間を増やすことで、協働的な学びや批判的思考を促進すると信じるため。  
+Q4：自発性が持続的な学びへの動機づけになると考えるため、強制的な学習よりも自ら進む学習を支援する方針が適切だと判断したため。  
+Q5：子ども自身が問題を解決する力を養うことが長期的な学習効果につながると判断し、教員はあくまで支援役にとどめる方向を選んだため。  
+Q6：子どもの感情や状況に寄り添うことで、内面からの改善意欲を促し、より良い学びの動機付けになると考えるため。  
+Q7：悪い点ばかり指摘すると自尊心が低下しやすいため、長所を伸ばすことで自信とモチベーションを高める方が実践的だと感じたため。</pre>
+</div>
+<div class="card" id="t017">
+<h2>試行 17 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 00:56:07　モデルID：openai/gpt-oss-20b</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：4.00</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>1</td><td>4</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>1</td><td>4</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>4.Bに近い  
+1.Aに近い  
+1.Aに近い  
+1.Aに近い  
+4.Bに近い  
+1.Aに近い  
+4.Bに近い  
+
+子どもが主体的に学び、失敗を恐れずに挑戦できる環境を重視し、教えるよりも支える姿勢を採ります。個々の可能性や長所を伸ばすことに焦点を当て、失敗や問題行動が起きた際は共感と適切な指導で扱い、学びを深める議論や自己発見の時間を優先します。こうしたアプローチこそが子どもの自律性と成長を促進すると考えます。</pre>
+</div>
+<div class="card" id="t018">
+<h2>試行 18 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 00:56:52　モデルID：openai/gpt-oss-20b</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：2.71</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>4</td><td>1</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>4</td><td>1</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>4</td><td>1</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1: 4  
+Q2: 1  
+Q3: 4  
+Q4: 4  
+Q5: 4  
+Q6: 4  
+Q7: 4  
+
+私は子どもたちが自らの可能性を発展させ、失敗を恐れずに挑戦し、自立的に学び、自己主導で問題解決できるよう支援することを重視します。したがって、Aの「大人になるための訓練」「失敗しないように注意する」よりも、Bの「可能性の開花」「失敗を許容し推奨する」「生徒の発表・議論を重視」「自発的な学習を支援」「子どもが自ら答えを見つける手助け」「共感的指導」「長所を褒めて伸ばす」方針に近いと考えています。</pre>
+</div>
+<div class="card" id="t019">
+<h2>試行 19 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 00:56:54　モデルID：openai/gpt-oss-20b</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：2.71</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>4</td><td>1</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>4</td><td>1</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>4</td><td>1</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1: 4  
+Q2: 1  
+Q3: 4  
+Q4: 4  
+Q5: 4  
+Q6: 4  
+Q7: 4  
+
+私は子どもたちが自らの可能性を発展させ、失敗を恐れずに挑戦し、自立的に学び、自己主導で問題解決できるよう支援することを重視します。したがって、Aの「大人になるための訓練」「失敗しないように注意する」よりも、Bの「可能性の開花」「失敗を許容し推奨する」「生徒の発表・議論を重視」「自発的な学習を支援」「子どもが自ら答えを見つける手助け」「共感的指導」「長所を褒めて伸ばす」方針に近いと考えています。</pre>
+</div>
+<div class="card" id="t020">
+<h2>試行 20 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 00:57:01　モデルID：openai/gpt-oss-20b</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：4.00</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>1</td><td>4</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>1</td><td>4</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>4.Bに近い  
+1.Aに近い  
+1.Aに近い  
+1.Aに近い  
+4.Bに近い  
+1.Aに近い  
+4.Bに近い  
+
+理由：  
+子どもの潜在能力を伸ばすサポートが大切だと考えるため、Q1・Q5・Q7はBに近い選択とした。失敗を恐れず挑戦させる姿勢を重視するためQ2ではAに近い。討論や発表で考えを深めることを重視したためQ3・Q4ではAに近い。生徒の感情に寄り添うことを優先したためQ6ではAに近い。</pre>
+</div>
+<div class="card" id="t021">
+<h2>試行 21 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:00:36　モデルID：openai/gpt-oss-20b</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：4.00</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>1</td><td>4</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>1</td><td>4</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>4
+1
+1
+1
+4
+1
+4
+
+**回答理由**  
+①「子どもの持っている可能性が開花するのを支援する」方向へ寄せており、Bに最も近いと判断（4）。  
+②失敗から学ぶ余地を与える方が教育的効果が高いと考え、Aが主流（1）。  
+③子ども自身の考えを表現させる時間を多く取る姿勢に該当、Aとして1。  
+④自発性を尊重し、支援型学習を重視するためAに近い（1）。  
+⑤子どもが自ら解き方を見つけられるように促す方が自主性を育むのでBに近い（4）。  
+⑥問題行動に対しては共感と理解を優先し、感情面的なサポートを行う方が有効と判断（1）。  
+⑦短所ではなく長所を伸ばすことに焦点を当て、AよりもBに寄せる（4）。</pre>
+</div>
+<div class="card" id="t022">
+<h2>試行 22 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:02:34　モデルID：openai/gpt-oss-20b</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：4.00</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>1</td><td>4</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>1</td><td>4</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>4.Bに近い  
+1.Aに近い  
+1.Aに近い  
+1.Aに近い  
+4.Bに近い  
+1.Aに近い  
+4.Bに近い  
+
+【回答理由】  
+子どもたちは自らの興味・関心を発見し、試行錯誤を通じて学びます。  
+- Q1 では「大人になるための訓練」よりも、子どもの潜在力を拡げる支援が重要と考えます。  
+- Q2 では失敗から学ぶ機会を奪わないため、多少の失敗を許容し経験を積ませるほうが成長に繋がると考えます。  
+- Q3 では発言と議論の場を多くとることで、思考の柔軟性と対話力を育てる方策が効果的です。  
+- Q4 では自発的学習を尊重し、やる気の源を自分で見つけさせる姿勢が長期的な学習意欲を育みます。  
+- Q5 では子どもが自ら解決策を模索できるようにサポートし、自己効力感を高める方針が望ましいです。  
+- Q6 では失敗したときに共感と理解で接することで、子どもの自己肯定感を守り、再挑戦の意欲を保ちます。  
+- Q7 では強みを伸ばし、ポジティブなフィードバックで自信とモチベーションを高める方が、長期的な成長につながります。  
+総じて、子ども中心・自己主導の学びと、共感的かつ建設的な指導を重視しています。</pre>
+</div>
+<div class="card" id="t023">
+<h2>試行 23 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:02:36　モデルID：openai/gpt-oss-20b</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：4.00</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>1</td><td>4</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>1</td><td>4</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>4.Bに近い  
+1.Aに近い  
+1.Aに近い  
+1.Aに近い  
+4.Bに近い  
+1.Aに近い  
+4.Bに近い  
+
+【回答理由】  
+子どもたちは自らの興味・関心を発見し、試行錯誤を通じて学びます。  
+- Q1 では「大人になるための訓練」よりも、子どもの潜在力を拡げる支援が重要と考えます。  
+- Q2 では失敗から学ぶ機会を奪わないため、多少の失敗を許容し経験を積ませるほうが成長に繋がると考えます。  
+- Q3 では発言と議論の場を多くとることで、思考の柔軟性と対話力を育てる方策が効果的です。  
+- Q4 では自発的学習を尊重し、やる気の源を自分で見つけさせる姿勢が長期的な学習意欲を育みます。  
+- Q5 では子どもが自ら解決策を模索できるようにサポートし、自己効力感を高める方針が望ましいです。  
+- Q6 では失敗したときに共感と理解で接することで、子どもの自己肯定感を守り、再挑戦の意欲を保ちます。  
+- Q7 では強みを伸ばし、ポジティブなフィードバックで自信とモチベーションを高める方が、長期的な成長につながります。  
+総じて、子ども中心・自己主導の学びと、共感的かつ建設的な指導を重視しています。</pre>
+</div>
+<div class="card" id="t024">
+<h2>試行 24 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:03:04　モデルID：openai/gpt-oss-20b</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：4.00</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>1</td><td>4</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>1</td><td>4</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>4.Bに近い  
+1.Aに近い  
+1.Aに近い  
+1.Aに近い  
+4.Bに近い  
+1.Aに近い  
+4.Bに近い  
+
+**回答理由**  
+Q1：子どもの潜在性を開花させ、創発的な発達を支援する方が、個々の生き生きとした成長を促すと考えるため、Bに寄りがちです。  
+Q2：失敗を恐れずチャレンジさせることで、問題解決スキルや自立心を育むことが重要と考えるため、Aに近いです。  
+Q3：発表や議論を通じて思考を深め、対人コミュニケーションを養うことが社会性を向上させるとみなすので、Aに近いです。  
+Q4：自発的学習を促し、内発的動機付けを高めることで長期的な学びの習慣を築けると考えるため、Aに寄ります。  
+Q5：子ども自身が答えを見つけるプロセスを大切にし、探究心を育むことが学びを深めると考えるため、Bに近いです。  
+Q6：問題行動に対しても子どもの感情に寄り添い、理解と共感を通じて行動改善を促す方が信頼関係を築けると判断するので、Aに寄ります。  
+Q7：長所を称賛し伸ばすことで自己肯定感とやる気を高め、健全な成長を促すと考えるため、Bに近いです。</pre>
+</div>
+<div class="card" id="t025">
+<h2>試行 25 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:03:22　モデルID：openai/gpt-oss-20b</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.71</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>1</td><td>4</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>4  
+2  
+2  
+1  
+4  
+1  
+4  
+
+**回答理由**  
+1. **Q1**：子どもの潜在性を開花させることに重きを置くBの方が、個人の可能性に対して柔軟に対応できると考えるため。  
+2. **Q2**：失敗を経験しながら学ぶことで、自律性と問題解決力を育むAのアプローチを好む。  
+3. **Q3**：子どもの考えを発表し議論する時間を重視することで、批判的思考と自己表現を促進できるのでA寄りと判断。  
+4. **Q4**：学習は自発的に行う方が内発的動機付けが高まり、長期的な継続に繋がると考え、Aを選択。  
+5. **Q5**：子どもが自ら考え解く力を養う方が創造性と自信につながるため、Bを支持。  
+6. **Q6**：問題を起こした子どもに対して共感で指導することで、信頼関係を壊さず改善に導けると判断し、Aを選択。  
+7. **Q7**：長所をほめて伸ばすことで自己肯定感が高まり、子どものモチベーション維持に効果的と考えるためBを選択。</pre>
+</div>
+<div class="card" id="t026">
+<h2>試行 26 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:03:27　モデルID：openai/gpt-oss-20b</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：4.00</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>1</td><td>4</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>1</td><td>4</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>4.Bに近い  
+1.Aに近い  
+1.Aに近い  
+1.Aに近い  
+4.Bに近い  
+1.Aに近い  
+4.Bに近い  
+
+理由：私は子どもの自主性や創造性を尊重し、失敗を学びの機会と捉える教育観を持っています。成長のために必要なスキルは学習者自身が試行錯誤しながら身につけるべきであり、実践や議論を通じて自ら答えを導くプロセスを重視します。また、子どもが困難に直面した際は感情に寄り添いながら指導し、成功体験を称えることで、自信と長所を伸ばす環境を整えることが重要だと考えています。</pre>
+</div>
+<div class="card" id="t027">
+<h2>試行 27 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:03:38　モデルID：openai/gpt-oss-20b</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：4.00</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>1</td><td>4</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>1</td><td>4</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>4.Bに近い  
+1.Aに近い  
+1.Aに近い  
+1.Aに近い  
+4.Bに近い  
+1.Aに近い  
+4.Bに近い  
+
+理由：子どもを主体的に学び、探求し、思考を発展させる環境を重視する考えに近いからです。失敗や挑戦を経験させ、発言の機会を多く取ることで自律性と創造性を育み、強制や一方的な指導を避けます。また、正しい答えを押し付けずに子どもの発見を支援し、問題行動にも理解と寄り添いを優先します。さらに、短所より長所を強調し、肯定的なフィードバックでやる気と自尊心を高めます。</pre>
+</div>
+<div class="card" id="t028">
+<h2>試行 28 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:03:58　モデルID：openai/gpt-oss-20b</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.71</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>1</td><td>4</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1: 4.Bに近い  
+Q2: 2.Aに近い  
+Q3: 2.Aに近い  
+Q4: 1.Aに近い  
+Q5: 4.Bに近い  
+Q6: 1.Aに近い  
+Q7: 4.Bに近い  
+
+  
+**回答理由**  
+私は子どもを主体に育てる教育を重視します。  
+- 子どもの可能性を開花させること（Q1）を優先し、学びのプロセスにおいては失敗を恐れず自律的に挑戦させる姿勢（Q2、Q3）が重要だと考えています。  
+- 自発的な学びを支える方針（Q4）は、子どもが自ら意味を見出す力を育てるため不可欠であり、教師が正しい答えを示すよりも子どもの探求をサポートする方が長期的な学びにつながります（Q5）。  
+- 子どもがミスをした際には、その感情や背景に寄り添い、温かい関わりを通じて自己肯定感を育む方針（Q6）が、健全な発達を促進すると考えます。  
+- 最後に、短所よりも長所を褒めて伸ばすアプローチ（Q7）は、子どもの自尊心とポジティブな動機づけに寄与します。  
+全体として、子どもの自主性、創造性、感情的サポートを重視し、教師はファシリテーターとして役割を果たすことが理想的だと捉えています。</pre>
+</div>
+<div class="card" id="t029">
+<h2>試行 29 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:04:13　モデルID：openai/gpt-oss-20b</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.14</span>　不整合1件</div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>2</td><td>2</td><td>【不整合】</td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>3</td><td>3</td><td></td></tr></table>
+<pre>4  
+2  
+2  
+1  
+2  
+2  
+3  
+
+私は子どもの個性と主体性を重視し、学びが自己発見と成長につながる環境を作ることが大切だと考えます。  
+Q1では「子どもの持っている可能性が開花するのを支援する」Bに最も近いため4を選び、  
+Q2では試行錯誤を奨励し失敗を学びの一部と捉えるAに近いので2。  
+Q3では子どもが考えを発表して議論する時間を重視するAに近いため2、  
+Q4では自発的な学習を支援するAに最も近い1、  
+Q5では子どもが自分で答えを見つけやすくする支援を重視しBに近いので2。  
+Q6では情緒的に寄り添うAに近いと判断し2、  
+Q7では長所をほめて刺激するBに近いので3を選びました。</pre>
+</div>
+<div class="card" id="t030">
+<h2>試行 30 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:04:24　モデルID：openai/gpt-oss-20b</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：4.00</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>1</td><td>4</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>1</td><td>4</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>4.Bに近い  
+1.Aに近い  
+1.Aに近い  
+1.Aに近い  
+4.Bに近い  
+1.Aに近い  
+4.Bに近い  
+
+私の考えでは、子どもが自らの可能性を発見し、失敗を恐れずに学びながら自立していくことを最も重視します。したがって「子どもの持っている可能性が開花するのを支援する」「多少失敗しても子どもにやらせる」「議論の時間を多く取る」「自発的な学習を支援する」「子どもが自分で答えを見つけられるように支援する」「問題を起こした子の気持ちに寄り添う」「長所を称えて伸ばす」方針に近い選択肢を選びました。これにより、子どもが主体的に学び、創造的かつ自律的な成長を促す教育の姿勢を示しています。</pre>
+</div>
+<div class="card" id="t031">
+<h2>試行 31 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:04:34　モデルID：openai/gpt-oss-20b</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.86</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>1</td><td>4</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>1</td><td>4</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>3  
+1  
+1  
+1  
+4  
+1  
+4  
+
+【回答理由】  
+Q1: 子どもが将来可能性を最大限に伸ばせるようサポートする方が大切だと考えるので、B に近い。  
+Q2: 失敗は学習の機会と捉え、子どもに挑戦させる方が自己効力感を育むと感じるため、A が近い。  
+Q3: 子どもの思考を言語化し、対話を重視することで創造性と批判的思考を促進できると考えるので、A。  
+Q4: 自発性の育成は長期的な学びの基盤になるため、A に傾く。  
+Q5: 選択した解法を子ども自身が考える力を養うほうが、深い理解と問題解決力につながると信じるので、B が近い。  
+Q6: 子どもの感情に共感した指導を行うことで、信頼関係を築き、改善の向上を促すとみなすため、A。  
+Q7: 強みに注目し肯定的フィードバックを行うことで、自己肯定感とモチベーションを高められると考えるから、B。</pre>
+</div>
+<div class="card" id="t032">
+<h2>試行 32 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:04:40　モデルID：openai/gpt-oss-20b</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：4.00</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>1</td><td>4</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>1</td><td>4</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>4.Bに近い  
+1.Aに近い  
+1.Aに近い  
+1.Aに近い  
+4.Bに近い  
+1.Aに近い  
+4.Bに近い  
+
+回答理由：  
+私は子どもの潜在能力を最大限に引き出すことを重視し、失敗を経験から学ばせる自由度、相互議論を通じた思考力育成、そして自主的な学びを支援する方針に近いと考えています。教師は子どもが自ら答えや解き方を発見できる環境を整え、問題が起きても感情に寄り添い、適切に対応することで自尊心と責任感を育む方が効果的だと考えます。短所だけでなく長所を褒めることで自信を高め、継続的な成長を促すと信じます。</pre>
+</div>
+<div class="card" id="t033">
+<h2>試行 33 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:04:52　モデルID：openai/gpt-oss-20b</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.57</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>1</td><td>4</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1: 3.どちらかといえばBに近い  
+Q2: 2.どちらかといえばAに近い  
+Q3: 1.Aに近い  
+Q4: 1.Aに近い  
+Q5: 4.Bに近い  
+Q6: 2.どちらかといえばAに近い  
+Q7: 4.Bに近い  
+
+【回答理由】  
+- **Q1**：子どもの可能性を開花させる支援は、長期的に自立した大人になるために必要な力を育てる。（B寄り）  
+- **Q2**：失敗から学ぶ経験は創造性や自己効力感を育むので、多少の失敗を許容しつつ指導する方が有効。（A寄り）  
+- **Q3**：アイデアの発表や討議は批判的思考や対人スキルを発達させるため重要で、実践よりも議論を優先させるべき。（A固く）  
+- **Q4**：自発性を育てることで責任感と内発的動機が増し、学びに対する持続力が高まる。強制的手段は逆効果。（A固く）  
+- **Q5**：子どもが自ら解法を探求できる環境は創造性と解決力を伸ばす。教師はファシリテーターとして導くべき。（B極端）  
+- **Q6**：感情的支援は子どもの自己肯定感を守り、学びへの継続的な関与につながる。厳しい対応はあくまで必要に応じて。  
+- **Q7**：長所を褒めて伸ばす方が内発的動機を高め、短所指摘よりもポジティブな成長を促す。（B極端）</pre>
+</div>
+<div class="card" id="t034">
+<h2>試行 34 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:05:13　モデルID：openai/gpt-oss-20b</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.57</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>1</td><td>4</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>4</td><td>1</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1 4  
+Q2 1  
+Q3 1  
+Q4 1  
+Q5 4  
+Q6 4  
+Q7 4  
+
+**回答理由**  
+私は子どもたちを主体的かつ自律的に育てることを重視し、学びを楽しんで自らの可能性に気づかせることをまず優先します。Q1では「子どもの持っている可能性が開花するのを支援する」Bが、個人の長所や創造力を最大限に引き出すため最適であると判断し、そこでBに近い答えを選びました。Q2に関しては失敗を恐れず挑戦する経験が成長に不可欠だと考え、Aで示されている「多少失敗してもやらせる」方針に近い方針を採り、Aに近い選択肢を選びました。  
+Q3では、子ども自身が考えを発表し、同級生と議論する時間を確保することで批判的思考と表現力を培えると考え、Aに近い選択をしました。Q4も同様に、子どもの興味・関心を尊重し、自己主導的な学びを支援する A 構成を好みました。  
+Q5では教師が正答を示すより、子ども自身が問題を解くプロセスを探求するようサポートするBの方が、探究心と自信を育むとみなし、Bに近い選択です。Q6は、怒鳴りや厳罰よりも子どもの感情に寄り添いながら対策を考えることで、学びへの恐怖を減らし、ポジティブな行動変容を促すと考え、Bに近い回答としました。最後にQ7では、欠点ばかり指摘せず、長所を認めて伸ばすことが子どもの自尊心とやる気を高めると確信し、B に近い選択をしました。これらの選択は、子どもが主体的に学び、社会的かつ認知的に成長するための教育理念に基づいています。</pre>
+</div>
+<div class="card" id="t035">
+<h2>試行 35 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:05:22　モデルID：openai/gpt-oss-20b</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.57</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>1</td><td>4</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>3
+2
+2
+1
+4
+1
+4
+
+私は子どもの自主性と成長を重視します。大人になるための必要なスキルよりも、子どもの可能性を引き出す方が大切だと考え、失敗を恐れず挑戦させて学習の機会を与えるべきです。対話や議論を通じて思考を深め、学びを自らの意思で組織できるよう支援することが重要です。学習は強制されるよりも自発的に行う方がより持続的な成果につながると信じています。また、教える側は正しい答えを一方的に示すよりも、子どもが自ら解決策を見出せるように導く方が効果的であると考えます。困っている子どもには共感し支援し、厳格すぎる処罰よりも理解と対話で対処することが適切だと思います。さらに、短所を指摘するよりも長所を認めて伸ばすことで、子どもの自尊心とやる気を育むと考えています。</pre>
+</div>
+<div class="card" id="t036">
+<h2>試行 36 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:05:26　モデルID：openai/gpt-oss-20b</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：4.00</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>1</td><td>4</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>1</td><td>4</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>4. Bに近い  
+1. Aに近い  
+1. Aに近い  
+1. Aに近い  
+3. Bに近い  
+1. Aに近い  
+3. Bに近い  
+
+私は子どもが自らの可能性を育み、失敗を学びの一部ととらえ、発話と議論を通じて思考を深め、自由に学びを選択できる環境を作ることを重視します。したがって、Aは「一人前の大人になるための訓練」を重視し、強制的な学びや失敗回避を主張する立場、Bは子どもの内発的な成長を支援し、失敗を通じて学び、自己発見を促す立場と解釈しました。私の考えは約束や指摘よりもサポートと励ましを優先し、失敗を恐れず挑戦させることに重点を置いているため、Bで示される「子どもの可能性の開花」を重視する立場の方に近いと判断しました。</pre>
+</div>
+<div class="card" id="t037">
+<h2>試行 37 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:05:33　モデルID：openai/gpt-oss-20b</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.00</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>2</td><td>3</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>3</td><td>3</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>3</td><td>3</td><td></td></tr></table>
+<pre>3  
+2  
+2  
+2  
+3  
+2  
+3  
+
+【回答理由】  
+私は子どもを主体的に成長させる教育を重視しており、学びを自由に体験して失敗から学ぶ機会を与えることが重要だと考えています。したがって、子どもの可能性を支援し、失敗を恐れさせず発表や議論の時間を確保し、自己決定を促す学習環境を好みます。知識や技能の習得は必要ですが、探求や自発的学習を優先する方針を取るため、賛同する側は A もしくは A に近い立場です。一方、感情に寄り添い、失敗を伴う行動に対しては厳格な叱責ではなく、共感と支援を優先します。また、長所を褒めて伸ばすことで自尊心を育む方針に共感します。以上の観点から、各質問に対して上記の選択肢を選びました。</pre>
+</div>
+<div class="card" id="t038">
+<h2>試行 38 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:05:47　モデルID：openai/gpt-oss-20b</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.71</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>3</td><td>2</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>1</td><td>4</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>4.Bに近い  
+1.Aに近い  
+3.どちらかといえばBに近い  
+1.Aに近い  
+4.Bに近い  
+1.Aに近い  
+4.Bに近い  
+
+  
+**回答理由**  
+①子どもの可能性を開花させる支援を重視し、成長過程を自発的に導く方針を取るためBに近い。  
+②失敗は学びの源であると考え、子どもに挑戦させることを推奨するのでAに近い。  
+③知識・技能の身につける反復練習を重視しつつ、発表や議論も必要と評価するため、Bにやや近い。  
+④自発的学習を支援し、強制よりも自立を促す姿勢が強く働くのでAに近い。  
+⑤子どもが自ら答えを見つける力を育むことを重視するため、Bに近い。  
+⑥子どもの気持ちに寄り添うことでより良い解決が生まれると考え、Aに近い。  
+⑦長所を肯定し伸ばすことでモチベーションと自尊心を高める方針を取るためBに近い。</pre>
+</div>
+<div class="card" id="t039">
+<h2>試行 39 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:06:52　モデルID：openai/gpt-oss-20b</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.29</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>3</td><td>2</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>2</td><td>3</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>3</td><td>3</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>1</td><td>4</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>4  
+3  
+2  
+2  
+3  
+1  
+4  
+
+理由：  
+子どもを自己主体的に学び、発表や議論を通じて自ら考える力を育てることを重視しています。失敗を恐れず挑戦できる環境を提供し、学びの過程で得られる対話や問いかけを大切にします。学習しようという内発的動機を支援し、知識や技能は自然な形で身につけることと考えます。問題が起きたときは子どもの感情に寄り添い、根本原因に対する理解を促しながら励ます方針です。短所ではなく長所に注目し、称賛や励ましで子どもの自尊心とやる気を伸ばすことが重要だと考えています。</pre>
+</div>
+<div class="card" id="t040">
+<h2>試行 40 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:07:03　モデルID：openai/gpt-oss-20b</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.86</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>1</td><td>4</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>1</td><td>4</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>3  
+1  
+1  
+1  
+4  
+1  
+4  
+
+私は子どもたちの「可能性を開花させること」を重視し、失敗を通じて学びを深める環境を作ることを好みます。討論や自発的な学習を多く取り入れ、子どもが自ら探究し考える力を育てます。教師はできる限り解き方や正解を示すのではなく、子どもが自分で発見できるようサポートします。問題行動に対しては共感と適切なガイドを重視し、子どもの長所を褒めて伸ばすことで自尊心やモチベーションを高めることを信じています。</pre>
+</div>
+<div class="card" id="t041">
+<h2>試行 41 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:07:06　モデルID：openai/gpt-oss-20b</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.86</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>1</td><td>4</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>1</td><td>4</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>3
+1
+1
+1
+4
+1
+4
+
+私は子どもたちの個性と自律的な学びを重視し、失敗から学ぶ経験を大切にすると同時に、教師は模範を示すよりも子ども自身が答えを探る過程を支援する方針を取るため、B側に偏ります。失敗を避けることよりも挑戦させる方が成長につながると考え、討議や自主学習を優先します。最後に、問題が発生した際は共感と適切な指導を行い、短所より長所を伸ばすことで子どもの自尊心とやる気を育てます。</pre>
+</div>
+<div class="card" id="t042">
+<h2>試行 42 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:07:15　モデルID：openai/gpt-oss-20b</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：4.00</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>1</td><td>4</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>1</td><td>4</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>4  
+1  
+1  
+1  
+4  
+1  
+4  
+
+理由：  
+私は子どもの主体性と自律性を尊重し、失敗を恐れず挑戦する機会を与える教育を重視します。したがって、成長を支援する側に近い B を選ぶケースは、子どもの潜在能力を開花させることや、子どもの長所を伸ばすことなどに結びつきます。一方で、子どもが主体的に学び、考えを発表する時間を大切にし、失敗経験から学ばせることで自信と創造力を育む方針（A）を選ぶケースも多くあります。結果として、質問ごとに A か B かを明確に区分し、最も近い選択肢（完全に A なら 1、完全に B なら 4）としました。</pre>
+</div>
+<div class="card" id="t043">
+<h2>試行 43 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:07:16　モデルID：openai/gpt-oss-20b</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.29</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>3</td><td>2</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>2</td><td>3</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>3</td><td>3</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>1</td><td>4</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>4  
+3  
+2  
+2  
+3  
+1  
+4  
+
+理由：  
+子どもを自己主体的に学び、発表や議論を通じて自ら考える力を育てることを重視しています。失敗を恐れず挑戦できる環境を提供し、学びの過程で得られる対話や問いかけを大切にします。学習しようという内発的動機を支援し、知識や技能は自然な形で身につけることと考えます。問題が起きたときは子どもの感情に寄り添い、根本原因に対する理解を促しながら励ます方針です。短所ではなく長所に注目し、称賛や励ましで子どもの自尊心とやる気を伸ばすことが重要だと考えています。</pre>
+</div>
+<div class="card" id="t044">
+<h2>試行 44 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:07:27　モデルID：openai/gpt-oss-20b</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.00</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>2</td><td>3</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>3</td><td>3</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>3</td><td>2</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>3  
+2  
+2  
+2  
+3  
+3  
+4  
+
+**回答理由**  
+Q1 では子どもが自らの可能性を探求できる環境を重視したいため“B”に近いと考えました。  
+Q2 は失敗を通じて学ぶ機会を与える方が子どもの成長につながるため、“A”に近い選択にしました。  
+Q3 では子どもの思考を発表・議論させる時間を増やすことで主体性と批判的思考を育てる重要性を感じ、A側合致です。  
+Q4 は自発的な学習欲を育む方策が学びの持続に寄与すると見て、A側に該当します。  
+Q5 は子ども自身が答えを見つけられるよう支援する方が探究心を養うと考え、B側が好ましいです。  
+Q6 は問題行動に対して共感と対話を優先し、子どもとの信頼関係を築くことを重視したため A側です。  
+Q7 は強調すべきは子どもの長所とその伸長で、肯定的フィードバックがモチベーションを高めると判断し B側を選びました。</pre>
+</div>
+<div class="card" id="t045">
+<h2>試行 45 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:07:40　モデルID：openai/gpt-oss-20b</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.57</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>2</td><td>3</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>3</td><td>3</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>1</td><td>4</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1 4.Bに近い  
+Q2 1.Aに近い  
+Q3 2.どちらかといえばAに近い  
+Q4 2.どちらかといえばAに近い  
+Q5 3.どちらかといえばBに近い  
+Q6 1.Aに近い  
+Q7 4.Bに近い  
+
+---
+
+私は子どもたちの主体性と創造性を尊重し、失敗から学ばせることを重視する教育立場を好みます。具体的には、子どもの可能性を引き出すために自由な発言や表現の時間を確保し（Q1, Q3, Q4）、自ら答えを見つけるプロセスを支援し（Q5）、失敗や間違いに対しては温かく寄り添う姿勢で導きます（Q6）。同時に、実践的な反復練習も重要だと認識し、必要に応じて指導方法を調整します。短所より長所を伸ばすアプローチ（Q7）を採用し、子どもの自尊心と自信を育むことによって、学びへの積極的な姿勢を育てることを目指しています。</pre>
+</div>
+<div class="card" id="t046">
+<h2>試行 46 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:07:42　モデルID：openai/gpt-oss-20b</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.29</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>3</td><td>2</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>2</td><td>3</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>3</td><td>3</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>1</td><td>4</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>4  
+3  
+2  
+2  
+3  
+1  
+4  
+
+理由：  
+子どもを自己主体的に学び、発表や議論を通じて自ら考える力を育てることを重視しています。失敗を恐れず挑戦できる環境を提供し、学びの過程で得られる対話や問いかけを大切にします。学習しようという内発的動機を支援し、知識や技能は自然な形で身につけることと考えます。問題が起きたときは子どもの感情に寄り添い、根本原因に対する理解を促しながら励ます方針です。短所ではなく長所に注目し、称賛や励ましで子どもの自尊心とやる気を伸ばすことが重要だと考えています。</pre>
+</div>
+<div class="card" id="t047">
+<h2>試行 47 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:07:50　モデルID：openai/gpt-oss-20b</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：4.00</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>1</td><td>4</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>1</td><td>4</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>4.Bに近い  
+1.Aに近い  
+1.Aに近い  
+1.Aに近い  
+4.Bに近い  
+1.Aに近い  
+4.Bに近い  
+
+理由：  
+私は子どもの自律性と可能性を最大限に引き出す教育を重視しています。したがって、子どもの力やアイデアを育む方針（B）を支持し、失敗を通じて学ぶ機会を与える方針（A）を取り入れています。主体的な思考と議論の時間を十分に確保し、自己主導で知識や技能を身につける環境を整えることが重要だと考えます。また、子どもの感情に寄り添いながらも、自己探究を促す指導方法を採用し、短所よりも長所を強調し発展させる姿勢を大切にしています。</pre>
+</div>
+<div class="card" id="t048">
+<h2>試行 48 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:07:59　モデルID：openai/gpt-oss-20b</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.57</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>1</td><td>4</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>3</td><td>3</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>3  
+1  
+1  
+1  
+3  
+2  
+4  
+
+**回答理由**  
+Q1では「子どもの潜在能力を伸ばすこと」が、個人の発達や創造性に直結すると考えるため、Bに近い選択（3）。Q2では失敗を経験に変えることで自己効力感を育むことが重要だと考え、子どもに失敗を許すAへ強く傾き（1）。Q3では思考力と表現力を強化するため、議論や発表の時間を多く取るAを支持（1）。Q4では自主性を育むことが長期的な学習効果につながると考え、A（1）を選択。Q5では子どもが自ら答えを見つけるプロセスが学びを深めるため、Bに近い（3）。Q6では子どもの感情に寄り添うことで信頼関係を築き、学習意欲を高めると判断し、Aに近い（2）。Q7では長所を伸ばすことが子どもの自尊心とモチベーションに寄与すると考え、Bへ強く傾いた（4）。</pre>
+</div>
+<div class="card" id="t049">
+<h2>試行 49 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:08:22　モデルID：openai/gpt-oss-20b</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.43</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>4</td><td>1</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>1</td><td>4</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>4  
+4  
+2  
+1  
+4  
+1  
+4  
+
+私は生徒の主体性と自発性を重視し、学びの過程での失敗や感情に寄り添う姿勢を優先します。Q1では子供の潜在的な可能性を開花させることが重要と考え、Q2では失敗を恐れず体験させるよりも、安全で計画的な学習を優先します。Q3では議論・発表を通じて思考力を育む方が価値があると判断し、Q4では自発的な学習を支援する姿勢を選びました。Q5では子ども自身が問題解決を体験できるよう、答えを示すより支援する方針を選択。Q6では子供の気持ちに共感する指導を選び、Q7では長所を褒めて伸ばす方が自己肯定感を高め、健全な成長に寄与すると考えました。これらの選択は、子どもが自ら学び、成長することを最大限に支援する教育理念に基づいています。</pre>
+</div>
+<div class="card" id="t050">
+<h2>試行 50 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:08:39　モデルID：openai/gpt-oss-20b</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.00</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>2</td><td>3</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>3</td><td>3</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>3</td><td>3</td><td></td></tr></table>
+<pre>Q1 3.どちらかといえばBに近い  
+Q2 2.どちらかといえばAに近い  
+Q3 2.どちらかといえばAに近い  
+Q4 2.どちらかといえばAに近い  
+Q5 3.どちらかといえばBに近い  
+Q6 2.どちらかといえばAに近い  
+Q7 3.どちらかといえばBに近い  
+
+**回答理由**  
+子どもを主体とした立場を重視しています。そのため、成人として必要な知識や技能は大切ですが、子どもの持つ可能性を開花させることを第一に考えます。失敗は成長の教材と捉え、挑戦させることが重要です。議論や対話の場を多く設け、子どもが自発的に考えを整理できる環境を整えます。自発的な学習を支援し、教える側は解答を示すよりも子どもが自ら思考し解決策を見つけられるように導きます。問題行動には共感を示しつつ、必要に応じて毅然とした態度も取ります。フィードバックは改善点よりも長所を伸ばす肯定的な褒め方を重視します。これらは、子どもの自立と自尊心を支える教育哲学に沿った選択です。</pre>
+</div>
+
+<footer>本ページは data/ 内のCSV・JSONLから機械的に生成した閲覧用アーカイブです（gen_html_browser.py）。応答原文は原文ママ収録。</footer>
+</div>
+<a class="top" href="#top">▲先頭へ</a>
+</body></html>

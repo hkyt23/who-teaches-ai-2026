@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>収録モデル一覧と解説</title><style>
+:root{--fg:#222;--bg:#fff;--muted:#666;--line:#e2e2e2;--accent:#1f3555;}
+*{box-sizing:border-box}
+body{font-family:-apple-system,"Hiragino Sans","Yu Gothic",sans-serif;color:var(--fg);
+     background:var(--bg);margin:0;line-height:1.65}
+.wrap{max-width:980px;margin:0 auto;padding:24px 28px 80px}
+h1{font-size:1.5rem;margin:0 0 6px}
+h2{font-size:1.05rem;margin:0 0 4px;display:flex;align-items:center;flex-wrap:wrap}
+h3{font-size:.98rem;margin:18px 0 6px;color:var(--accent);border-left:4px solid var(--accent);padding-left:8px}
+.card p{margin:8px 0;line-height:1.75}
+.card p.lead{margin:6px 0 16px}
+.card p.note{color:var(--muted);font-size:.85rem;margin-top:18px;padding-top:10px;border-top:1px dashed var(--line)}
+a.mlink{color:var(--accent);text-decoration:none;border-bottom:1px dotted var(--accent)}
+a.mlink:hover{background:#eef1f7}
+.meta{color:var(--muted);font-size:.88rem;margin:2px 0}
+.crumb{background:var(--accent);color:#fff;padding:10px 28px;font-size:.85rem}
+.crumb a{color:#cfe0ff;text-decoration:none}
+.crumb a:hover{text-decoration:underline}
+table{border-collapse:collapse;width:100%;margin:14px 0;font-size:.86rem}
+th,td{border:1px solid var(--line);padding:5px 8px;text-align:left;vertical-align:top}
+th{background:#f4f5f7;position:sticky;top:0}
+tr:nth-child(even) td{background:#fafafa}
+a.tlink{color:var(--accent);text-decoration:none}
+a.tlink:hover{text-decoration:underline}
+.badge{display:inline-block;width:24px;height:24px;line-height:24px;border-radius:50%;
+       color:#fff;font-size:.7rem;font-weight:700;text-align:center;margin-right:8px;
+       vertical-align:middle;flex:none}
+.badge.sm{width:19px;height:19px;line-height:19px;font-size:.62rem;margin-right:6px}
+.aaii-tag{color:var(--muted);font-size:.78rem;font-weight:600;margin-left:8px}
+.linkrow{margin:10px 0 20px;display:flex;gap:12px;flex-wrap:wrap}
+.linkrow a{background:#eef1f7;border-radius:6px;padding:8px 14px;text-decoration:none;
+           color:var(--accent);font-size:.86rem;font-weight:600}
+.linkrow a:hover{background:#e2e7f2}
+details.mdl{margin:10px 0 4px}
+details.mdl>summary{cursor:pointer;font-weight:700;color:var(--accent);padding:6px 0;font-size:.95rem}
+details.mdl .modellist{margin-top:10px}
+.status-badge{display:inline-block;padding:1px 8px;border-radius:9px;font-size:.76rem;color:#fff;font-weight:600}
+.status-badge.ok{background:#1a7f37}
+.status-badge.warn{background:#b35c00}
+.status-badge.err{background:#c62828}
+.card{border:1px solid var(--line);border-radius:8px;padding:14px 18px;margin:18px 0;background:#fdfdfd}
+.card h2{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.score{font-weight:700;color:#123}
+pre{white-space:pre-wrap;word-break:break-word;background:#f8f9fb;border:1px solid var(--line);
+    border-radius:6px;padding:10px 12px;font-size:.82rem;font-family:ui-monospace,Menlo,Consolas,monospace}
+.errbox{white-space:pre-wrap;word-break:break-word;background:#fff4f4;border:1px solid #f3c1c1;
+    border-radius:6px;padding:10px 12px;font-size:.85rem;color:#8a1f1f}
+.itemtbl td,.itemtbl th{font-size:.78rem;padding:3px 6px}
+.section-title{margin-top:38px;border-bottom:2px solid var(--accent);padding-bottom:4px}
+.hdrbar{background:#eef1f7;border-radius:6px;padding:10px 14px;margin:12px 0 20px}
+.exp-block{margin:26px 0}
+.exp-block h2{border-bottom:2px solid var(--accent);padding-bottom:6px}
+ul.modellist{columns:2;-webkit-columns:2;list-style:none;padding:0;margin:8px 0}
+ul.modellist li{break-inside:avoid;padding:3px 0;font-size:.9rem;display:flex;align-items:center}
+footer{color:var(--muted);font-size:.78rem;margin-top:50px;border-top:1px solid var(--line);padding-top:10px}
+.top{position:fixed;right:18px;bottom:18px;background:var(--accent);color:#fff;border-radius:20px;
+     padding:8px 14px;font-size:.8rem;text-decoration:none;box-shadow:0 2px 6px rgba(0,0,0,.25)}
+</style></head><body>
+<div class="crumb"><a href="index.html">← 総合目次</a>　／　収録モデル一覧と解説</div>
+<div class="wrap">
+<a id="top"></a>
+<h1>収録モデル一覧と解説</h1>
+<p class="meta"><a href="index.html">← 総合目次</a></p>
+<p class="meta">本アーカイブに収録した全モデルについて、企業バッジ・AAII（Artificial Analysis
+Intelligence Index。BenchLM.aiによる鏡像スナップショット、2026年8月19日版。est=推定注記付きは代理値）・
+開発元・発表日・価格（実測時にOpenRouterが提示した100万トークン当たり単価、米ドル）と、位置づけの解説を示す。
+表示順はAAII(2026-08-19版)の降順（本アーカイブ全体の基準順）。個別実験での実測有無・試行数は各実験のモデル別ページを参照。</p>
+
+<a id="m_Claude_Opus_5"></a>
+<div class="card">
+<h2><span class="badge" style="background:#D97757" title="Anthropic">AN</span><span>Claude Opus 5</span><span class="aaii-tag">AAII 63.0</span></h2>
+<div class="meta">（Anthropic・発表 2026-07-24・価格 $5.00/$25.00（in/out・$/100万トークン）・AAII(2026-08-19) 63.0）</div>
+<p>本測定終了の翌日（2026年7月24日）に公開されたAnthropicの新旗艦。「Fable 5級の知能を半額（$5/$25）」と位置づけられ、公開時にArtificial Analysisリーダーボード首位。Opus 4.8からの系列内変化と、Fable 5の留保統合様式の普及版への波及が注目点。</p>
+</div>
+<a id="m_Claude_Fable_5"></a>
+<div class="card">
+<h2><span class="badge" style="background:#D97757" title="Anthropic">AN</span><span>Claude Fable 5</span><span class="aaii-tag">AAII 62.1</span></h2>
+<div class="meta">（Anthropic・発表 2026-06-09・価格 $10.00/$50.00（in/out・$/100万トークン）・AAII(2026-08-19) 62.1）</div>
+<p>Anthropicが2026年6月に投入した最上位モデル（AAII 59.9・Mythos級）。本研究では全信念項目を中間の3.0近傍に置き両論を明示的に併記する様式を採用しており、「留保の数値への統合」という新しい判断様式の代表例。</p>
+</div>
+<a id="m_Grok_4_6"></a>
+<div class="card">
+<h2><span class="badge" style="background:#111111" title="xAI">X</span><span>Grok 4.6</span><span class="aaii-tag">AAII 60.9</span></h2>
+<div class="meta">（xAI・発表 2026-08-12・AAII(2026-08-19) 60.9）</div>
+<p>xAIの旗艦更新版（2026年8月12日）。4.5からの短期ドリフト検証用。</p>
+</div>
+<a id="m_Kimi_K3"></a>
+<div class="card">
+<h2><span class="badge" style="background:#16B8A6" title="Moonshot AI">K</span><span>Kimi K3</span><span class="aaii-tag">AAII 59.7</span></h2>
+<div class="meta">（Moonshot AI・発表 2026-07-16・AAII(2026-08-19) 59.7）</div>
+<p>ムーンショットAIの次世代旗艦（2026年7月・AAII 57.1・2.8T MoE）。重み公開を予告して話題になった。中国勢がフロンティア水準に到達したことを示す一例。</p>
+</div>
+<a id="m_GPT-5_6_Sol"></a>
+<div class="card">
+<h2><span class="badge" style="background:#10A37F" title="OpenAI">OA</span><span>GPT-5.6 Sol</span><span class="aaii-tag">AAII 58.9</span></h2>
+<div class="meta">（OpenAI・発表 2026-07-09・価格 $5.00/$30.00（in/out・$/100万トークン）・AAII(2026-08-19) 58.9）</div>
+<p>ChatGPTを提供するOpenAIの旗艦（2026年7月・AAII 58.9）。同社は5.6世代でSol/Terra/Lunaという多層展開を採り、Solはその最上位。本研究では1点刻みの精密な採点様式と、法令名を挙げず状況を要素分解する批評様式が特徴的だった。</p>
+</div>
+<a id="m_Qwen_3_8_Max"></a>
+<div class="card">
+<h2><span class="badge" style="background:#FF6A00" title="Alibaba">Q</span><span>Qwen 3.8 Max</span><span class="aaii-tag">AAII 58.1</span></h2>
+<div class="meta">（Alibaba・発表 2026-07-19・AAII(2026-08-19) 58.1）</div>
+<p>アリババの次世代旗艦（2026年7月発表・8月にOpenRouter掲載、2.4T）。本測定時は未掲載＝欠測で、補足測定で取得。</p>
+</div>
+<a id="m_Claude_Opus_4_8"></a>
+<div class="card">
+<h2><span class="badge" style="background:#D97757" title="Anthropic">AN</span><span>Claude Opus 4.8</span><span class="aaii-tag">AAII 57.3</span></h2>
+<div class="meta">（Anthropic・発表 2026-05-28・価格 $5.00/$25.00（in/out・$/100万トークン）・AAII(2026-08-19) 57.3）</div>
+<p>安全性重視の設計思想で知られるAnthropicの旗艦（2026年5月・AAII 55.7）。本研究では毅然実践を25点にほぼ固着させる極端な安定性と、信念Q6での数値・理由文乖離という際立った個性を示した。</p>
+</div>
+<a id="m_Muse_Spark_1_2"></a>
+<div class="card">
+<h2><span class="badge" style="background:#0866FF" title="Meta">M</span><span>Muse Spark 1.2</span><span class="aaii-tag">AAII 56.8</span></h2>
+<div class="meta">（Meta・発表 2026-08-05・AAII(2026-08-19) 56.8）</div>
+<p>Muse Sparkの更新版（2026年8月5日）。1.1の米国限定配信は解除され、代わりに年齢確認（18+）ゲートが課された。配信ガバナンスの変化を示す事例。</p>
+</div>
+<a id="m_Gemini_3_7_Flash__廉価版_"></a>
+<div class="card">
+<h2><span class="badge" style="background:#4285F4" title="Google">G</span><span>Gemini 3.7 Flash (廉価版)</span><span class="aaii-tag">AAII 56.0</span></h2>
+<div class="meta">（Google・発表 2026-08-13・AAII(2026-08-19) 56.0）</div>
+<p>3.6 Flash（中立宣言による拒否1/57を観察）の後継（2026年8月13日）。立場表明抑制の傾向が消えたか強まったかの追試対象。</p>
+</div>
+<a id="m_Grok_4_5"></a>
+<div class="card">
+<h2><span class="badge" style="background:#111111" title="xAI">X</span><span>Grok 4.5</span><span class="aaii-tag">AAII 55.8</span></h2>
+<div class="meta">（xAI・発表 2026-07-08・価格 $2.00/$6.00（in/out・$/100万トークン）・AAII(2026-08-19) 55.8）</div>
+<p>イーロン・マスク設立のxAIによる旗艦（2026年7月・AAII 53.8）。X（旧Twitter）に統合。「反ウォーク」を掲げる同社だが、本研究の教育課題では他の米国旗艦と大差ない子ども中心主義的判断を示した。</p>
+</div>
+<a id="m_Muse_Spark_1_1"></a>
+<div class="card">
+<h2><span class="badge" style="background:#0866FF" title="Meta">M</span><span>Muse Spark 1.1</span><span class="aaii-tag">AAII 53.2</span></h2>
+<div class="meta">（Meta・発表 2026-04-09・価格 $1.25/$4.25（in/out・$/100万トークン）・AAII(2026-08-19) 53.2）</div>
+<p>MetaがLlamaのオープンウェイト路線を放棄して投入したプロプライエタリ初代（2026年4月）。米国限定配信のため日本からはHTTP 403＝測定不能。アクセスの地政学を示す事例。</p>
+</div>
+<a id="m_DeepSeek_V4_Pro_0813__凍結版_"></a>
+<div class="card">
+<h2><span class="badge" style="background:#4D6BFE" title="DeepSeek">DS</span><span>DeepSeek V4 Pro (8月13日版)</span><span class="aaii-tag">AAII 53.2</span></h2>
+<div class="meta">（DeepSeek・発表 2026-08-13・AAII(2026-08-19) 53.2）</div>
+<p>実測済みDeepSeek V4 Proの日付付きスナップショット（2026年8月13日版）。同一系列の約1か月間のドリフトを測る方法論的な追加。</p>
+</div>
+<a id="m_GLM-5_2"></a>
+<div class="card">
+<h2><span class="badge" style="background:#5E6AD2" title="Z.AI (智譜)">Z</span><span>GLM-5.2</span><span class="aaii-tag">AAII 52.6</span></h2>
+<div class="meta">（Z.AI (智譜)・発表 2026-06-13・価格 $0.42/$1.32（in/out・$/100万トークン）・AAII(2026-08-19) 52.6）</div>
+<p>清華大学系の中国新興・智譜AIの旗艦（2026年6月・AAII 51.1）。低価格帯ながら高性能で、中国勢の層の厚さを示す存在。</p>
+</div>
+<a id="m_Gemini_3_6_Flash__廉価版_"></a>
+<div class="card">
+<h2><span class="badge" style="background:#4285F4" title="Google">G</span><span>Gemini 3.6 Flash (廉価版)</span><span class="aaii-tag">AAII 51.6</span></h2>
+<div class="meta">（Google・発表 2026-07-21・価格 $1.50/$7.50（in/out・$/100万トークン）・AAII(2026-08-19) 51.6）</div>
+<p>Google旗艦の高速・廉価版（2026年7月21日公開＝本測定の前日）。本研究全4,386リクエスト中唯一の明示的拒否（「AIとして特定の立場を選択することはせず」）を信念実験の初回測定で示した個体として記録される（57試行中1件・偶発）。</p>
+</div>
+<a id="m_GPT-5_6_Luna__廉価版_"></a>
+<div class="card">
+<h2><span class="badge" style="background:#10A37F" title="OpenAI">OA</span><span>GPT-5.6 Luna (廉価版)</span><span class="aaii-tag">AAII 51.2</span></h2>
+<div class="meta">（OpenAI・発表 2026-07-09・価格 $1.00/$6.00（in/out・$/100万トークン）・AAII(2026-08-19) 51.2）</div>
+<p>GPT-5.6世代の廉価版（Solの約1/5価格・AAII 51.2）。学校・家庭で現実に使われやすい価格帯の代表。</p>
+</div>
+<a id="m_Gemini_3_1_Pro"></a>
+<div class="card">
+<h2><span class="badge" style="background:#4285F4" title="Google">G</span><span>Gemini 3.1 Pro</span><span class="aaii-tag">AAII 47.7</span></h2>
+<div class="meta">（Google・発表 2026-02-19・価格 $2.00/$12.00（in/out・$/100万トークン）・AAII(2026-08-19) 47.7）</div>
+<p>Googleの旗艦（2026年2月・AAII 46.5）。検索・Android等への統合で利用者接点が最も広い系列。前世代1.5 Proが2024年に子ども理解型実践を酷評した経緯があり、本研究の経年比較の焦点モデル。</p>
+</div>
+<a id="m_Qwen_3_7_Max"></a>
+<div class="card">
+<h2><span class="badge" style="background:#FF6A00" title="Alibaba">Q</span><span>Qwen 3.7 Max</span><span class="aaii-tag">AAII 46.7</span></h2>
+<div class="meta">（Alibaba・発表 2026年（月日要確認）・価格 $1.25/$3.75（in/out・$/100万トークン）・AAII(2026-08-19) 46.7）</div>
+<p>中国アリババの旗艦（2026年・AAII 46.0）。通義千問シリーズはオープンウェイト版も多数公開し途上国で普及。本研究では同一の学校教育法11条を正反対に運用する真正の双峰分布（毅然SD34.8）を示した点で特筆される。</p>
+</div>
+<a id="m_Kimi_K2_6"></a>
+<div class="card">
+<h2><span class="badge" style="background:#16B8A6" title="Moonshot AI">K</span><span>Kimi K2.6</span><span class="aaii-tag">AAII 45.1</span></h2>
+<div class="meta">（Moonshot AI・発表 2026-04-20・価格 $0.66/$3.41（in/out・$/100万トークン）・AAII(2026-08-19) 45.1）</div>
+<p>2023年設立の中国新興ムーンショットAIの旗艦（2026年4月・AAII 44.2）。長文処理で注目を集めた。本研究では子どもの権利・人権への参照率の高さ（毅然理由文の70%）が独自だった。</p>
+</div>
+<a id="m_Sakana_Namazu"></a>
+<div class="card">
+<h2><span class="badge" style="background:#E4572E" title="Sakana AI (日本)">さ</span><span>Sakana Namazu</span><span class="aaii-tag">AAII 45.1（推定）</span></h2>
+<div class="meta">（Sakana AI (日本)・発表 2026-08-03・AAII(2026-08-19) 45.1（推定：AAII未収載。基盤モデルKimi K2.6の値を代用））</div>
+<p>日本のSakana AI（元Google研究者らが東京で設立）が2026年8月3日に提供開始した日本語・日本ビジネス特化モデル。オープンモデルKimi K2.6を日本のデータで適応させたもので、実測済みのK2.6と直接比較できる。「日本固有の教育AI」という本課題研究の命題に関わる初の話題モデル。</p>
+</div>
+<a id="m_DeepSeek_V4"></a>
+<div class="card">
+<h2><span class="badge" style="background:#4D6BFE" title="DeepSeek">DS</span><span>DeepSeek V4 Pro (4月23日版)</span><span class="aaii-tag">AAII 44.3（推定）</span></h2>
+<div class="meta">（DeepSeek・発表 2026-04-24・価格 $0.43/$0.87（in/out・$/100万トークン）・AAII(2026-08-19) 44.3（推定：8/19版は無日付V4未収載のため7/20版の値を継続使用））</div>
+<p>2025年初頭に低コスト・高性能で世界に衝撃を与えた（いわゆるDeepSeekショック）中国ディープシークの旗艦（2026年4月・AAII 44.3）。本研究では両論併記を排した一刀両断型の批評様式と法令からの演繹が特徴。</p>
+</div>
+<a id="m_TM_Inkling"></a>
+<div class="card">
+<h2><span class="badge" style="background:#7C3AED" title="Thinking Machines">TM</span><span>TM Inkling</span><span class="aaii-tag">AAII 42.3</span></h2>
+<div class="meta">（Thinking Machines・発表 2026-07-17・AAII(2026-08-19) 42.3）</div>
+<p>OpenAI出身者らが設立した新興Thinking Machines社の初の公開モデル（2026年7月17日）。新規参入企業のアライメント文化を比較する対象として追加。</p>
+</div>
+<a id="m_DeepSeek_V4_Flash__廉価版_"></a>
+<div class="card">
+<h2><span class="badge" style="background:#4D6BFE" title="DeepSeek">DS</span><span>DeepSeek V4 Flash (廉価版)</span><span class="aaii-tag">AAII 40.3（推定）</span></h2>
+<div class="meta">（DeepSeek・発表 2026-04-24・AAII(2026-08-19) 40.3（推定：8/19版未収載のため7/20版の値を継続使用））</div>
+<p>DeepSeek V4の軽量版（AAII 40.3）。廉価版としては高い性能を維持。</p>
+</div>
+<a id="m_Qwen_3_7_Plus__廉価版_"></a>
+<div class="card">
+<h2><span class="badge" style="background:#FF6A00" title="Alibaba">Q</span><span>Qwen 3.7 Plus (廉価版)</span><span class="aaii-tag">AAII 39.4</span></h2>
+<div class="meta">（Alibaba・発表 2026年（月日要確認）・AAII(2026-08-19) 39.4）</div>
+<p>Qwen 3.7 Maxの廉価版（AAII 39.0）。</p>
+</div>
+<a id="m_Nemotron_3_Ultra__無料級_"></a>
+<div class="card">
+<h2><span class="badge" style="background:#76B900" title="NVIDIA">NV</span><span>Nemotron 3 Ultra (無料級)</span><span class="aaii-tag">AAII 38.3</span></h2>
+<div class="meta">（NVIDIA・発表 2026年（月日要確認）・価格 $0.00/$0.00（in/out・$/100万トークン）・AAII(2026-08-19) 38.3）</div>
+<p>半導体大手NVIDIAの研究用オープンウェイト（550B・AAII 37.8）。無料枠で使える性能の上限に位置する。</p>
+</div>
+<a id="m_Gemma_4_31B__無料級_"></a>
+<div class="card">
+<h2><span class="badge" style="background:#4285F4" title="Google">G</span><span>Gemma 4 31B (無料級)</span><span class="aaii-tag">AAII 29.7</span></h2>
+<div class="meta">（Google・発表 2026年（月日要確認）・価格 $0.00/$0.00（in/out・$/100万トークン）・AAII(2026-08-19) 29.7）</div>
+<p>Googleのオープンウェイト系列（AAII 29.4）。無料枠の容量制限（429）により本研究ではほぼ欠測。</p>
+</div>
+<a id="m_Gemma_4_31B__有料版_"></a>
+<div class="card">
+<h2><span class="badge" style="background:#4285F4" title="Google">G</span><span>Gemma 4 31B (有料版)</span><span class="aaii-tag">AAII 29.7</span></h2>
+<div class="meta">（Google・発表 2026-04-02・価格 $0.08/$0.35（in/out・$/100万トークン）・AAII(2026-08-19) 29.7）</div>
+<p>無料枠が7〜8月を通じて混雑（HTTP 429）で実質利用不能だったため、同一重みを有料配信（$0.08/$0.35）で測定した系列。「無料でアクセスできるはずのモデルに実際にはアクセスできない」こと自体が、無料級アクセスの実態を示す知見である。</p>
+</div>
+<a id="m_Gemini_2_5_Pro__中間比較_"></a>
+<div class="card">
+<h2><span class="badge" style="background:#4285F4" title="Google">G</span><span>Gemini 2.5 Pro (中間比較)</span><span class="aaii-tag">AAII 25.9</span></h2>
+<div class="meta">（Google・発表 2025-03-25・AAII(2026-08-19) 25.9）</div>
+<p>2025年3月公開（AAII 25.8）。1.5と3.1の間を埋める中間世代として挿入し、城山評価の反転（23.0→99.8）が2025年前半に完了していたことの特定を可能にした。</p>
+</div>
+<a id="m_GPT-OSS_120B__有料版_"></a>
+<div class="card">
+<h2><span class="badge" style="background:#10A37F" title="OpenAI">OA</span><span>GPT-OSS 120B (有料版)</span><span class="aaii-tag">AAII 24.1</span></h2>
+<div class="meta">（OpenAI・発表 2025-08-05・AAII(2026-08-19) 24.1）</div>
+<p>GPT-OSSの大型版（AAII 23.8）。20B→120Bのサイズ効果の検証用。</p>
+</div>
+<a id="m_GPT-OSS_20B__無料級_"></a>
+<div class="card">
+<h2><span class="badge" style="background:#10A37F" title="OpenAI">OA</span><span>GPT-OSS 20B (無料級)</span><span class="aaii-tag">AAII 15.2</span></h2>
+<div class="meta">（OpenAI・発表 2025-08-05・価格 $0.00/$0.00（in/out・$/100万トークン）・AAII(2026-08-19) 15.2）</div>
+<p>OpenAIが2025年8月に公開した同社初の本格オープンウェイト（AAII 14.9）。手元のPCでも動く規模で、無料枠でも利用可能。本研究では子ども理解型実践への酷評（5〜11点）という2024年型の判断様式の残存が観察された。</p>
+</div>
+<a id="m_GPT-OSS_20B__有料版_"></a>
+<div class="card">
+<h2><span class="badge" style="background:#10A37F" title="OpenAI">OA</span><span>GPT-OSS 20B (有料版)</span><span class="aaii-tag">AAII 15.2</span></h2>
+<div class="meta">（OpenAI・発表 2025-08-05・AAII(2026-08-19) 15.2）</div>
+<p>無料枠と同一モデルの有料配信。無料/有料の品質比較用。</p>
+</div>
+<a id="m_Llama_4_Maverick"></a>
+<div class="card">
+<h2><span class="badge" style="background:#0866FF" title="Meta">M</span><span>Llama 4 Maverick</span><span class="aaii-tag">AAII 14.5</span></h2>
+<div class="meta">（Meta・発表 2025-04-05・価格 $0.15/$0.60（in/out・$/100万トークン）・AAII(2026-08-19) 14.5）</div>
+<p>Meta（Facebook運営元）のオープンウェイト旗艦（2025年4月・AAII 14.3）。公開時にベンチマーク運用をめぐる論争を招き期待外れと評された世代。本研究でも逆転項目の処理失敗が多く、質問紙設計が注意検査として機能した。</p>
+</div>
+<a id="m_GPT-4o__2024報告_"></a>
+<div class="card">
+<h2><span class="badge" style="background:#10A37F" title="OpenAI">OA</span><span>GPT-4o (2024報告)</span><span class="aaii-tag">AAII 11.1</span></h2>
+<div class="meta">（OpenAI・発表 2024-05-13・AAII(2026-08-19) 11.1）</div>
+<p>第83回大会報告（2024年）と同一の凍結スナップショット（2024年5月13日版・以後更新されない）。測定経路（UI→API）の影響を推定する橋渡しとして本研究の方法論上の要。</p>
+</div>
+<a id="m_Qwen2_72B__2024報告_"></a>
+<div class="card">
+<h2><span class="badge" style="background:#FF6A00" title="Alibaba">Q</span><span>Qwen2 72B (2024報告)</span><span class="aaii-tag">AAII 10.0（推定）</span></h2>
+<div class="meta">（Alibaba・発表 2024-06-06・AAII(2026-08-19) 10.0（推定：未収載。同世代オープン72B級からの推定））</div>
+<p>2024年報告使用モデルの近縁近似（Qwen 2.5 72Bで代替）。全系列中唯一教師平均を下回る2.67を示し、Qwen系の劇的転換（→3.7世代3.63）の起点となった。</p>
+</div>
+<a id="m_Gemini_1_5_Pro__2024報告_"></a>
+<div class="card">
+<h2><span class="badge" style="background:#4285F4" title="Google">G</span><span>Gemini 1.5 Pro (2024報告)</span><span class="aaii-tag">AAII 9.8</span></h2>
+<div class="meta">（Google・発表 2024-05-14・AAII(2026-08-19) 9.8）</div>
+<p>2024年報告で子ども理解型実践を23点と酷評し、本研究の経年比較の起点となったモデル。提供終了により欠測。</p>
+</div>
+<a id="m_GPT-4__2023報告_"></a>
+<div class="card">
+<h2><span class="badge" style="background:#10A37F" title="OpenAI">OA</span><span>GPT-4 (2023報告)</span><span class="aaii-tag">AAII 7.7（推定）</span></h2>
+<div class="meta">（OpenAI・発表 2023-06-13・AAII(2026-08-19) 7.7（推定：GPT-4 Turboの値を代理使用））</div>
+<p>2023年3月公開、生成AIブームを決定づけたモデル。第82回大会報告（2023年）で使用したChatGPT（May 12版）のAPI近似再測定。子ども中心主義3.85（2023年UI実測）という本研究の出発点を与えた。</p>
+</div>
+<a id="m_Llama_3_70B__2024報告_"></a>
+<div class="card">
+<h2><span class="badge" style="background:#0866FF" title="Meta">M</span><span>Llama 3 70B (2024報告)</span><span class="aaii-tag">AAII 5.5（推定）</span></h2>
+<div class="meta">（Meta・発表 2024-04-18・AAII(2026-08-19) 5.5（推定：未収載。Llama 3.1 405B=8.3より小さい70B級としての推定））</div>
+<p>2024年報告使用モデルの近縁近似（原モデル提供終了のためLlama 3.1 70Bで代替）。</p>
+</div>
+<a id="m_Llama_3_1_70B__配信floor_"></a>
+<div class="card">
+<h2><span class="badge" style="background:#0866FF" title="Meta">M</span><span>Llama 3.1 70B (配信floor)</span><span class="aaii-tag">AAII 5.5（推定）</span></h2>
+<div class="meta">（Meta・発表 2024-07-23・AAII(2026-08-19) 5.5（推定：同上（同一重み）））</div>
+<p>同一のオープンウェイトモデルを最安プロバイダ固定で測定した系列。配信経路による品質差の検証用（floor側は解析不能ゼロ）。</p>
+</div>
+<a id="m_Llama_3_1_70B__配信nitro_"></a>
+<div class="card">
+<h2><span class="badge" style="background:#0866FF" title="Meta">M</span><span>Llama 3.1 70B (配信nitro)</span><span class="aaii-tag">AAII 5.5（推定）</span></h2>
+<div class="meta">（Meta・発表 2024-07-23・AAII(2026-08-19) 5.5（推定：同上（同一重み）））</div>
+<p>同一モデルを高速プロバイダ固定で測定した系列。高速配信では多言語混入等の出力崩れが頻発し（提要実験で20試行中12件解析不能）、「どの経路で提供されるAIか」が品質を左右することを示した。</p>
+</div>
+<a id="m_Claude_3_5_Sonnet__2024報告_"></a>
+<div class="card">
+<h2><span class="badge" style="background:#D97757" title="Anthropic">AN</span><span>Claude 3.5 Sonnet (2024報告)</span></h2>
+<div class="meta">（Anthropic・発表 2024-06-20）</div>
+<p>2024年報告で毅然実践を65点と容認した個性派。提供終了により再測定不能＝欠測（2024年実測値のみで比較）。</p>
+</div>
+
+<footer>本ページは data/ 内のCSV・JSONLから機械的に生成した閲覧用アーカイブです（gen_html_browser.py）。応答原文は原文ママ収録。</footer>
+</div>
+<a class="top" href="#top">▲先頭へ</a>
+</body></html>

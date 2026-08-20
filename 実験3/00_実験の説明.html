@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>実験3｜実験の説明</title><style>
+:root{--fg:#222;--bg:#fff;--muted:#666;--line:#e2e2e2;--accent:#1f3555;}
+*{box-sizing:border-box}
+body{font-family:-apple-system,"Hiragino Sans","Yu Gothic",sans-serif;color:var(--fg);
+     background:var(--bg);margin:0;line-height:1.65}
+.wrap{max-width:980px;margin:0 auto;padding:24px 28px 80px}
+h1{font-size:1.5rem;margin:0 0 6px}
+h2{font-size:1.05rem;margin:0 0 4px;display:flex;align-items:center;flex-wrap:wrap}
+h3{font-size:.98rem;margin:18px 0 6px;color:var(--accent);border-left:4px solid var(--accent);padding-left:8px}
+.card p{margin:8px 0;line-height:1.75}
+.card p.lead{margin:6px 0 16px}
+.card p.note{color:var(--muted);font-size:.85rem;margin-top:18px;padding-top:10px;border-top:1px dashed var(--line)}
+a.mlink{color:var(--accent);text-decoration:none;border-bottom:1px dotted var(--accent)}
+a.mlink:hover{background:#eef1f7}
+.meta{color:var(--muted);font-size:.88rem;margin:2px 0}
+.crumb{background:var(--accent);color:#fff;padding:10px 28px;font-size:.85rem}
+.crumb a{color:#cfe0ff;text-decoration:none}
+.crumb a:hover{text-decoration:underline}
+table{border-collapse:collapse;width:100%;margin:14px 0;font-size:.86rem}
+th,td{border:1px solid var(--line);padding:5px 8px;text-align:left;vertical-align:top}
+th{background:#f4f5f7;position:sticky;top:0}
+tr:nth-child(even) td{background:#fafafa}
+a.tlink{color:var(--accent);text-decoration:none}
+a.tlink:hover{text-decoration:underline}
+.badge{display:inline-block;width:24px;height:24px;line-height:24px;border-radius:50%;
+       color:#fff;font-size:.7rem;font-weight:700;text-align:center;margin-right:8px;
+       vertical-align:middle;flex:none}
+.badge.sm{width:19px;height:19px;line-height:19px;font-size:.62rem;margin-right:6px}
+.aaii-tag{color:var(--muted);font-size:.78rem;font-weight:600;margin-left:8px}
+.linkrow{margin:10px 0 20px;display:flex;gap:12px;flex-wrap:wrap}
+.linkrow a{background:#eef1f7;border-radius:6px;padding:8px 14px;text-decoration:none;
+           color:var(--accent);font-size:.86rem;font-weight:600}
+.linkrow a:hover{background:#e2e7f2}
+details.mdl{margin:10px 0 4px}
+details.mdl>summary{cursor:pointer;font-weight:700;color:var(--accent);padding:6px 0;font-size:.95rem}
+details.mdl .modellist{margin-top:10px}
+.status-badge{display:inline-block;padding:1px 8px;border-radius:9px;font-size:.76rem;color:#fff;font-weight:600}
+.status-badge.ok{background:#1a7f37}
+.status-badge.warn{background:#b35c00}
+.status-badge.err{background:#c62828}
+.card{border:1px solid var(--line);border-radius:8px;padding:14px 18px;margin:18px 0;background:#fdfdfd}
+.card h2{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.score{font-weight:700;color:#123}
+pre{white-space:pre-wrap;word-break:break-word;background:#f8f9fb;border:1px solid var(--line);
+    border-radius:6px;padding:10px 12px;font-size:.82rem;font-family:ui-monospace,Menlo,Consolas,monospace}
+.errbox{white-space:pre-wrap;word-break:break-word;background:#fff4f4;border:1px solid #f3c1c1;
+    border-radius:6px;padding:10px 12px;font-size:.85rem;color:#8a1f1f}
+.itemtbl td,.itemtbl th{font-size:.78rem;padding:3px 6px}
+.section-title{margin-top:38px;border-bottom:2px solid var(--accent);padding-bottom:4px}
+.hdrbar{background:#eef1f7;border-radius:6px;padding:10px 14px;margin:12px 0 20px}
+.exp-block{margin:26px 0}
+.exp-block h2{border-bottom:2px solid var(--accent);padding-bottom:6px}
+ul.modellist{columns:2;-webkit-columns:2;list-style:none;padding:0;margin:8px 0}
+ul.modellist li{break-inside:avoid;padding:3px 0;font-size:.9rem;display:flex;align-items:center}
+footer{color:var(--muted);font-size:.78rem;margin-top:50px;border-top:1px solid var(--line);padding-top:10px}
+.top{position:fixed;right:18px;bottom:18px;background:var(--accent);color:#fff;border-radius:20px;
+     padding:8px 14px;font-size:.8rem;text-decoration:none;box-shadow:0 2px 6px rgba(0,0,0,.25)}
+</style></head><body>
+<div class="crumb"><a href="../index.html">← 総合目次</a>　／　実験3 生徒指導提要評価課題　／　① 実験の説明</div>
+<div class="wrap">
+<a id="top"></a>
+<h1>実験3｜実験の説明</h1>
+<div class="linkrow"><a href="00_実験の説明.html" style="background:var(--accent);color:#fff">① 実験の説明</a><a href="01_出題プロンプト.html">② 出題プロンプト</a><a href="02_結果概要.html">③ 結果概要（グラフと解説）</a></div>
+<div class="card">
+<h2>実験の説明</h2>
+<p>文部科学省『生徒指導提要』（2022年改訂版）の記述に基づき、提要の趣旨に照らして「適切」が想定される言明8項目・「不適切」が想定される言明12項目の計20項目を作成し、各言明の適切さを0〜100点で評定させた。2023年7月17日のChatGPT（GPT-4）による原実験と同一の指示文を用いている。</p>
+</div>
+<div class="card">
+<h2>試行の状態（3分類）と手続きの留意点</h2>
+<p style='margin-top:14px'><b>■ 測定手続きの共通事項</b></p>
+<p style='margin:2px 0 2px .3em'>・全試行はOpenRouter API経由の独立試行（会話履歴なし・キャッシュ回避）。前の回答への引きずられは生じない。</p>
+<p style='margin:2px 0 2px .3em'>・生成温度等のパラメータはAPI既定値を使用（モデル間で厳密には統制していない）。応答を返す配信プロバイダはOpenRouterのルーティングに依存する（配信比較系列を除く）。</p>
+<p style='margin:2px 0 2px .3em'>・試行番号は通し番号。収集は有効試行数が目標数に達するまで追加する方式のため、途中にエラー・解析不能の試行番号が挟まる。</p>
+<p style='margin-top:14px'><b>■ 試行の状態（本報告集の各ページに明記）</b></p>
+<p style='margin:2px 0 2px .3em'>・有効：評点等の自動抽出に成功し、集計に用いた試行。</p>
+<p style='margin:2px 0 2px .3em'>・解析不能：応答は得られたが指示した形式での評点抽出に失敗した試行。集計対象外だが応答原文を本報告集に収録（内容自体が知見となる場合がある。例：中立宣言による回答拒否、配信品質劣化による出力崩れ）。</p>
+<p style='margin:2px 0 2px .3em'>・エラー：ネットワーク・レート制限・地域制限等でAPI応答自体が得られなかった試行。集計対象外で、エラー内容を収録。技術的失敗であり当該モデルの判断を示すものではない。</p>
+<p style='margin-top:14px'><b>■ 本報告集を読む際の留意点</b></p>
+<p style='margin:2px 0 2px .3em'>・応答原文は原文ママ（Markdown記号等を含む）。ただし表示フォントの制約により、絵文字や日中韓以外の文字の一部が欠落することがある。正確な原文はdata/内のJSONLファイルを参照。</p>
+<p style='margin:2px 0 2px .3em'>・評点にはモデルごとの採点癖（5の倍数への丸め、特定値への固着等）が混入しうる。個別評点の解釈は分布・信頼区間（data/ci_summary.csv）とあわせて行うこと。</p>
+<p style='margin:2px 0 2px .3em'>・自動抽出には多段の検証（採点基準の復唱の誤検出防止等）を施しているが、完全ではない。抽出値と原文の対応は各ページで照合可能。</p><p style='margin-top:14px'><b>■ 本実験固有の留意点</b></p><p style='margin:2px 0 2px .3em'>・評点の意味：100点=極めて適切〜0点=極めて不適切（プロンプト中の5段階基準に基づく1点刻み）。</p>
+<p style='margin:2px 0 2px .3em'>・集計指標「整合度」（旧称・弁別差）＝想定適切8項目の平均点−想定不適切12項目の平均点。大きいほど提要の想定と整合。</p>
+<p style='margin:2px 0 2px .3em'>・解析不能の主因は、評点を縦に列挙する指示形式からの逸脱（推論過程の混入、多言語の混入、番号と評点の対応不明等）。特に高速配信系列で頻発しており、それ自体が配信品質の知見である。</p>
+</div>
+<p class="meta">▶ 出題プロンプトの全文は「② 出題プロンプト」、結果の概観は「③ 結果概要」を参照。
+以降、④の各モデルページで全試行の応答を紹介する。</p>
+
+<footer>本ページは data/ 内のCSV・JSONLから機械的に生成した閲覧用アーカイブです（gen_html_browser.py）。応答原文は原文ママ収録。</footer>
+</div>
+<a class="top" href="#top">▲先頭へ</a>
+</body></html>
