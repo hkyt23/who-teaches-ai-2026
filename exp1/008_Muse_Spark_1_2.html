@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>実験1 教育信念質問紙｜Muse Spark 1.2</title><style>
+:root{--fg:#222;--bg:#fff;--muted:#666;--line:#e2e2e2;--accent:#1f3555;}
+*{box-sizing:border-box}
+body{font-family:-apple-system,"Hiragino Sans","Yu Gothic",sans-serif;color:var(--fg);
+     background:var(--bg);margin:0;line-height:1.65}
+.wrap{max-width:980px;margin:0 auto;padding:24px 28px 80px}
+h1{font-size:1.5rem;margin:0 0 6px}
+h2{font-size:1.05rem;margin:0 0 4px;display:flex;align-items:center;flex-wrap:wrap}
+h3{font-size:.98rem;margin:18px 0 6px;color:var(--accent);border-left:4px solid var(--accent);padding-left:8px}
+.card p{margin:8px 0;line-height:1.75}
+.card p.lead{margin:6px 0 16px}
+.card p.note{color:var(--muted);font-size:.85rem;margin-top:18px;padding-top:10px;border-top:1px dashed var(--line)}
+a.mlink{color:var(--accent);text-decoration:none;border-bottom:1px dotted var(--accent)}
+a.mlink:hover{background:#eef1f7}
+.meta{color:var(--muted);font-size:.88rem;margin:2px 0}
+.crumb{background:var(--accent);color:#fff;padding:10px 28px;font-size:.85rem}
+.crumb a{color:#cfe0ff;text-decoration:none}
+.crumb a:hover{text-decoration:underline}
+table{border-collapse:collapse;width:100%;margin:14px 0;font-size:.86rem}
+th,td{border:1px solid var(--line);padding:5px 8px;text-align:left;vertical-align:top}
+th{background:#f4f5f7;position:sticky;top:0}
+tr:nth-child(even) td{background:#fafafa}
+a.tlink{color:var(--accent);text-decoration:none}
+a.tlink:hover{text-decoration:underline}
+.badge{display:inline-block;width:24px;height:24px;line-height:24px;border-radius:50%;
+       color:#fff;font-size:.7rem;font-weight:700;text-align:center;margin-right:8px;
+       vertical-align:middle;flex:none}
+.badge.sm{width:19px;height:19px;line-height:19px;font-size:.62rem;margin-right:6px}
+.aaii-tag{color:var(--muted);font-size:.78rem;font-weight:600;margin-left:8px}
+.linkrow{margin:10px 0 20px;display:flex;gap:12px;flex-wrap:wrap}
+.linkrow a{background:#eef1f7;border-radius:6px;padding:8px 14px;text-decoration:none;
+           color:var(--accent);font-size:.86rem;font-weight:600}
+.linkrow a:hover{background:#e2e7f2}
+details.mdl{margin:10px 0 4px}
+details.mdl>summary{cursor:pointer;font-weight:700;color:var(--accent);padding:6px 0;font-size:.95rem}
+details.mdl .modellist{margin-top:10px}
+.status-badge{display:inline-block;padding:1px 8px;border-radius:9px;font-size:.76rem;color:#fff;font-weight:600}
+.status-badge.ok{background:#1a7f37}
+.status-badge.warn{background:#b35c00}
+.status-badge.err{background:#c62828}
+.card{border:1px solid var(--line);border-radius:8px;padding:14px 18px;margin:18px 0;background:#fdfdfd}
+.card h2{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.score{font-weight:700;color:#123}
+pre{white-space:pre-wrap;word-break:break-word;background:#f8f9fb;border:1px solid var(--line);
+    border-radius:6px;padding:10px 12px;font-size:.82rem;font-family:ui-monospace,Menlo,Consolas,monospace}
+.errbox{white-space:pre-wrap;word-break:break-word;background:#fff4f4;border:1px solid #f3c1c1;
+    border-radius:6px;padding:10px 12px;font-size:.85rem;color:#8a1f1f}
+.itemtbl td,.itemtbl th{font-size:.78rem;padding:3px 6px}
+.section-title{margin-top:38px;border-bottom:2px solid var(--accent);padding-bottom:4px}
+.hdrbar{background:#eef1f7;border-radius:6px;padding:10px 14px;margin:12px 0 20px}
+.exp-block{margin:26px 0}
+.exp-block h2{border-bottom:2px solid var(--accent);padding-bottom:6px}
+ul.modellist{columns:2;-webkit-columns:2;list-style:none;padding:0;margin:8px 0}
+ul.modellist li{break-inside:avoid;padding:3px 0;font-size:.9rem;display:flex;align-items:center}
+footer{color:var(--muted);font-size:.78rem;margin-top:50px;border-top:1px solid var(--line);padding-top:10px}
+.top{position:fixed;right:18px;bottom:18px;background:var(--accent);color:#fff;border-radius:20px;
+     padding:8px 14px;font-size:.8rem;text-decoration:none;box-shadow:0 2px 6px rgba(0,0,0,.25)}
+</style></head><body>
+<div class="crumb"><a href="../index.html">← 総合目次</a>　／　実験1 教育信念質問紙　／　Muse Spark 1.2</div>
+<div class="wrap">
+<a id="top"></a>
+<h1><span class="badge" style="background:#0866FF" title="Meta">M</span><span>Muse Spark 1.2</span><span class="aaii-tag">AAII 56.8</span></h1>
+<p class="meta">実験1 教育信念質問紙</p>
+<p class="meta">▶ <a class="tlink" href="00_about.html">① 実験の説明</a>
+<a class="tlink" href="01_prompt.html">② 出題プロンプト</a>
+<a class="tlink" href="02_results.html">③ 結果概要</a></p>
+<div class="hdrbar">実測モデルID：meta/muse-spark-1.2　／　収録試行：全50（有効50・対象外0）</div>
+<h2>試行一覧</h2>
+<table><tr><th>番号</th><th>状態</th><th>7項目平均</th></tr><tr><td><a class="tlink" href="#t001">1</a></td><td><span class="status-badge ok">有効</span></td><td>3.57</td></tr><tr><td><a class="tlink" href="#t002">2</a></td><td><span class="status-badge ok">有効</span></td><td>3.71</td></tr><tr><td><a class="tlink" href="#t003">3</a></td><td><span class="status-badge ok">有効</span></td><td>3.71</td></tr><tr><td><a class="tlink" href="#t004">4</a></td><td><span class="status-badge ok">有効</span></td><td>3.57</td></tr><tr><td><a class="tlink" href="#t005">5</a></td><td><span class="status-badge ok">有効</span></td><td>3.71</td></tr><tr><td><a class="tlink" href="#t006">6</a></td><td><span class="status-badge ok">有効</span></td><td>3.43</td></tr><tr><td><a class="tlink" href="#t007">7</a></td><td><span class="status-badge ok">有効</span></td><td>3.57</td></tr><tr><td><a class="tlink" href="#t008">8</a></td><td><span class="status-badge ok">有効</span></td><td>3.57</td></tr><tr><td><a class="tlink" href="#t009">9</a></td><td><span class="status-badge ok">有効</span></td><td>3.57</td></tr><tr><td><a class="tlink" href="#t010">10</a></td><td><span class="status-badge ok">有効</span></td><td>3.57</td></tr><tr><td><a class="tlink" href="#t011">11</a></td><td><span class="status-badge ok">有効</span></td><td>3.57</td></tr><tr><td><a class="tlink" href="#t012">12</a></td><td><span class="status-badge ok">有効</span></td><td>3.71</td></tr><tr><td><a class="tlink" href="#t013">13</a></td><td><span class="status-badge ok">有効</span></td><td>3.57</td></tr><tr><td><a class="tlink" href="#t014">14</a></td><td><span class="status-badge ok">有効</span></td><td>3.29</td></tr><tr><td><a class="tlink" href="#t015">15</a></td><td><span class="status-badge ok">有効</span></td><td>3.71</td></tr><tr><td><a class="tlink" href="#t016">16</a></td><td><span class="status-badge ok">有効</span></td><td>3.57</td></tr><tr><td><a class="tlink" href="#t017">17</a></td><td><span class="status-badge ok">有効</span></td><td>3.57</td></tr><tr><td><a class="tlink" href="#t018">18</a></td><td><span class="status-badge ok">有効</span></td><td>3.57</td></tr><tr><td><a class="tlink" href="#t019">19</a></td><td><span class="status-badge ok">有効</span></td><td>3.71</td></tr><tr><td><a class="tlink" href="#t020">20</a></td><td><span class="status-badge ok">有効</span></td><td>3.57</td></tr><tr><td><a class="tlink" href="#t021">21</a></td><td><span class="status-badge ok">有効</span></td><td>3.71</td></tr><tr><td><a class="tlink" href="#t022">22</a></td><td><span class="status-badge ok">有効</span></td><td>3.57</td></tr><tr><td><a class="tlink" href="#t023">23</a></td><td><span class="status-badge ok">有効</span></td><td>3.71</td></tr><tr><td><a class="tlink" href="#t024">24</a></td><td><span class="status-badge ok">有効</span></td><td>3.71</td></tr><tr><td><a class="tlink" href="#t025">25</a></td><td><span class="status-badge ok">有効</span></td><td>3.71</td></tr><tr><td><a class="tlink" href="#t026">26</a></td><td><span class="status-badge ok">有効</span></td><td>3.43</td></tr><tr><td><a class="tlink" href="#t027">27</a></td><td><span class="status-badge ok">有効</span></td><td>3.57</td></tr><tr><td><a class="tlink" href="#t028">28</a></td><td><span class="status-badge ok">有効</span></td><td>3.43</td></tr><tr><td><a class="tlink" href="#t029">29</a></td><td><span class="status-badge ok">有効</span></td><td>3.71</td></tr><tr><td><a class="tlink" href="#t030">30</a></td><td><span class="status-badge ok">有効</span></td><td>3.86</td></tr><tr><td><a class="tlink" href="#t031">31</a></td><td><span class="status-badge ok">有効</span></td><td>3.14</td></tr><tr><td><a class="tlink" href="#t032">32</a></td><td><span class="status-badge ok">有効</span></td><td>3.71</td></tr><tr><td><a class="tlink" href="#t033">33</a></td><td><span class="status-badge ok">有効</span></td><td>3.00</td></tr><tr><td><a class="tlink" href="#t034">34</a></td><td><span class="status-badge ok">有効</span></td><td>3.71</td></tr><tr><td><a class="tlink" href="#t035">35</a></td><td><span class="status-badge ok">有効</span></td><td>3.57</td></tr><tr><td><a class="tlink" href="#t036">36</a></td><td><span class="status-badge ok">有効</span></td><td>3.29</td></tr><tr><td><a class="tlink" href="#t037">37</a></td><td><span class="status-badge ok">有効</span></td><td>3.71</td></tr><tr><td><a class="tlink" href="#t038">38</a></td><td><span class="status-badge ok">有効</span></td><td>3.71</td></tr><tr><td><a class="tlink" href="#t039">39</a></td><td><span class="status-badge ok">有効</span></td><td>3.57</td></tr><tr><td><a class="tlink" href="#t040">40</a></td><td><span class="status-badge ok">有効</span></td><td>3.71</td></tr><tr><td><a class="tlink" href="#t041">41</a></td><td><span class="status-badge ok">有効</span></td><td>3.57</td></tr><tr><td><a class="tlink" href="#t042">42</a></td><td><span class="status-badge ok">有効</span></td><td>3.57</td></tr><tr><td><a class="tlink" href="#t043">43</a></td><td><span class="status-badge ok">有効</span></td><td>3.43</td></tr><tr><td><a class="tlink" href="#t044">44</a></td><td><span class="status-badge ok">有効</span></td><td>3.71</td></tr><tr><td><a class="tlink" href="#t045">45</a></td><td><span class="status-badge ok">有効</span></td><td>3.71</td></tr><tr><td><a class="tlink" href="#t046">46</a></td><td><span class="status-badge ok">有効</span></td><td>3.57</td></tr><tr><td><a class="tlink" href="#t047">47</a></td><td><span class="status-badge ok">有効</span></td><td>3.00</td></tr><tr><td><a class="tlink" href="#t048">48</a></td><td><span class="status-badge ok">有効</span></td><td>3.71</td></tr><tr><td><a class="tlink" href="#t049">49</a></td><td><span class="status-badge ok">有効</span></td><td>3.71</td></tr><tr><td><a class="tlink" href="#t050">50</a></td><td><span class="status-badge ok">有効</span></td><td>3.57</td></tr></table>
+
+<div class="card" id="t001">
+<h2>試行 1 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-08-19 06:14:03　モデルID：meta/muse-spark-1.2</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.57</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>2</td><td>3</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1 4.Bに近い
+Q2 1.Aに近い
+Q3 2.どちらかといえばAに近い
+Q4 2.どちらかといえばAに近い
+Q5 4.Bに近い
+Q6 2.どちらかといえばAに近い
+Q7 4.Bに近い
+回答理由：Q1は子どもを一方的に型にはめるのではなく、一人ひとりの個性や可能性を伸ばすことが自立した大人への成長に繋がると考えるためBを選択。Q2は失敗から学ぶ経験が主体性や問題解決能力を育てるためAを選択。Q3は基礎的な知識・技能の定着も重要だが、自分の考えを表現し他者と議論する中で思考力や協調性が深まるためどちらかといえばAを選択。Q4は強制的な学習は一時的な効果に留まりやすく、自発的な意欲を支えることで継続的な学びにつながるためどちらかといえばAを選択。Q5は答えを教えるだけでは応用力が身につかず、自ら試行錯誤して見つける過程が大切なためBを選択。Q6は問題行動の背景にある気持ちに寄り添い、信頼関係を築いた上で指導することが再発防止と成長に有効と考えるためどちらかといえばAを選択。Q7は短所の矯正も必要だが、長所を認めて伸ばすことで自己肯定感が高まり、結果として短所の改善にも繋がるためBを選択。</pre>
+</div>
+<div class="card" id="t002">
+<h2>試行 2 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-08-19 06:15:13　モデルID：meta/muse-spark-1.2</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.71</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1 4.Bに近い
+Q2 1.Aに近い
+Q3 2.どちらかといえばAに近い
+Q4 1.Aに近い
+Q5 4.Bに近い
+Q6 2.どちらかといえばAに近い
+Q7 4.Bに近い
+理由：子どもの自律性と可能性を尊重し、自ら考え試行錯誤する経験を通じて学ぶことが、将来生きて働く力になると考えるため。知識の反復も必要だが議論や発見の時間を優先し、失敗から学ばせることを重視する。問題行動に対しては頭ごなしに叱るのではなく背景の気持ちに寄り添った上で指導することが根本的な解決につながり、短所の矯正より長所を伸ばすことで自己肯定感と意欲が高まると考えるため。</pre>
+</div>
+<div class="card" id="t003">
+<h2>試行 3 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-08-19 06:15:21　モデルID：meta/muse-spark-1.2</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.71</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1 4.Bに近い
+Q2 1.Aに近い
+Q3 2.どちらかといえばAに近い
+Q4 1.Aに近い
+Q5 4.Bに近い
+Q6 2.どちらかといえばAに近い
+Q7 4.Bに近い
+回答理由：子どもの自律性と主体性を尊重し、可能性を引き出す支援を中心に考える立場である。失敗も含めた経験を通じて学ぶことで思考力や問題解決能力が育つと考え、知識の詰め込みや強制よりも自発的な学びや議論を重視する。教師の役割は正解を教え込むことではなく、子ども自身が試行錯誤して答えを見つけられるよう伴走することだと考える。問題行動に対しても頭ごなしに叱責するより背景にある気持ちに寄り添うことで信頼関係を築き、持続的な成長につながると考える。短所の矯正より長所を伸ばすことで自己肯定感を高め、学ぶ意欲を引き出せると判断したため。</pre>
+</div>
+<div class="card" id="t004">
+<h2>試行 4 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-08-19 06:15:30　モデルID：meta/muse-spark-1.2</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.57</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>2</td><td>3</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1：4.Bに近い
+Q2：1.Aに近い
+Q3：2.どちらかといえばAに近い
+Q4：2.どちらかといえばAに近い
+Q5：4.Bに近い
+Q6：2.どちらかといえばAに近い
+Q7：4.Bに近い
+回答理由：教育の中心は子ども自身の可能性や主体性を引き出すことにあると考えたため、Q1・Q4・Q5・Q7はB・Aの支援的、伴走的な立場を選択した。Q2は失敗を経験すること自体が学びにつながるため自らやらせることを重視した。Q3は議論や思考を深める時間を重視しつつも基礎的な知識・技能の定着も必要なためどちらかといえばAとした。Q6は問題行動の背景にある気持ちに寄り添い信頼関係を築くことが根本的な解決につながると考え、どちらかといえばAを選択したが、集団の安全や規範を守るための毅然とした対応も必要だと考えている。</pre>
+</div>
+<div class="card" id="t005">
+<h2>試行 5 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-08-19 06:15:46　モデルID：meta/muse-spark-1.2</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.71</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1 4.Bに近い
+Q2 1.Aに近い
+Q3 2.どちらかといえばAに近い
+Q4 1.Aに近い
+Q5 4.Bに近い
+Q6 2.どちらかといえばAに近い
+Q7 4.Bに近い
+理由：全体として子どもの主体性や自律性を尊重し、内発的な動機づけを大切にする考え方を重視しました。Q1は可能性を引き出す支援、Q2は失敗から学ぶ経験の価値を、Q4・Q5は自ら考え答えを見つける力が将来の生きる力につながると考えたためです。Q3は議論や思考する時間を重視しつつも基礎の定着も必要なためA寄り、Q6は問題行動の背景にある気持ちに寄り添うことで根本的な解決につながると考えA寄り、Q7は長所を伸ばすことで自信と意欲が育ち短所も補われると考えBとしました。</pre>
+</div>
+<div class="card" id="t006">
+<h2>試行 6 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-08-19 06:16:03　モデルID：meta/muse-spark-1.2</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.43</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>2</td><td>3</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1 3.どちらかといえばBに近い
+Q2 1.Aに近い
+Q3 2.どちらかといえばAに近い
+Q4 2.どちらかといえばAに近い
+Q5 4.Bに近い
+Q6 2.どちらかといえばAに近い
+Q7 4.Bに近い
+回答理由：全体として子どもの主体性や可能性を尊重し伴走して支援する教育観を重視したため。Q1は教え込むより可能性の開花を支援したい、Q2は失敗から学ぶ経験が自立につながる、Q3は知識の定着も大切だが思考力や表現力を育む議論をやや優先したい、Q4は強制的な学習より自発的な意欲が持続的な学びを生む、Q5は答えを与えるより自分で見つける過程を支援したい、Q6は毅然とした対応も必要だがまず背景や気持ちに寄り添い理解することが再発防止につながる、Q7は短所の矯正より長所を褒めて伸ばすことで自己肯定感と学習意欲が高まると考えたため。</pre>
+</div>
+<div class="card" id="t007">
+<h2>試行 7 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-08-19 06:16:15　モデルID：meta/muse-spark-1.2</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.57</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>2</td><td>3</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>4.Bに近い
+1.Aに近い
+2.どちらかといえばAに近い
+2.どちらかといえばAに近い
+4.Bに近い
+2.どちらかといえばAに近い
+4.Bに近い
+理由：Q1は子どもを型にはめるのではなく一人ひとりの可能性や個性を開花させる支援を重視したため。Q2は失敗から学ぶ経験が自立と挑戦する力を育てると考えるため。Q3は知識の定着も重要だが、自ら考え対話する時間が思考力や表現力を育てるため、ややA寄りとした。Q4は強制的な学習は一時的な効果に留まり、学ぶ意欲そのものを損なうため自発性を尊重した。Q5は答えを与えるより試行錯誤を通じて自分で見つける過程が深い理解につながると考えるため。Q6は問題行動の背景にある気持ちに寄り添い信頼関係を築くことが根本的な解決につながるが、必要に応じて毅然とした対応も必要と考えるためややA寄りとした。Q7は短所の矯正より長所を認め伸ばすことで自己肯定感が高まり、結果として短所の改善にもつながると考えるため。</pre>
+</div>
+<div class="card" id="t008">
+<h2>試行 8 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-08-19 06:16:26　モデルID：meta/muse-spark-1.2</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.57</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>2</td><td>3</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>4.Bに近い
+1.Aに近い
+2.どちらかといえばAに近い
+2.どちらかといえばAに近い
+4.Bに近い
+2.どちらかといえばAに近い
+4.Bに近い
+子どもの主体性や可能性を尊重し、失敗も含めた経験や対話を通して自ら考え学ぶ力を育てることを重視したため。知識の習得や規律も重要だが、強制や矯正よりも寄り添い支えることで長所を伸ばし、自己肯定感と自発的な成長を促したいと考えた。</pre>
+</div>
+<div class="card" id="t009">
+<h2>試行 9 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-08-19 06:16:41　モデルID：meta/muse-spark-1.2</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.57</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>2</td><td>3</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>4.Bに近い
+1.Aに近い
+2.どちらかといえばAに近い
+2.どちらかといえばAに近い
+4.Bに近い
+2.どちらかといえばAに近い
+4.Bに近い
+理由：子どもを大人の価値観で一方的に訓練するのではなく、一人ひとりが持つ可能性や個性を引き出し、自ら考え行動する力を育てることが長期的な成長につながると考えるため。失敗を恐れず挑戦させる経験や、考えを発表し議論する対話的な学びを大切にし、答えを直接教えるよりも自分で見つける過程を支援したい。また短所を直すことより長所を伸ばすことで自信と学習意欲が高まると考える。問題行動についても頭ごなしに指導するより背景にある気持ちに寄り添うことで本質的な解決につながると考え、上記の選択とした。</pre>
+</div>
+<div class="card" id="t010">
+<h2>試行 10 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-08-19 06:16:56　モデルID：meta/muse-spark-1.2</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.57</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>4.Bに近い
+2.どちらかといえばAに近い
+2.どちらかといえばAに近い
+1.Aに近い
+4.Bに近い
+2.どちらかといえばAに近い
+4.Bに近い
+理由：子どもの主体性や可能性を尊重し自ら考え試行錯誤しながら学ぶことを重視したため、Q1は支援する立場、Q2は失敗から学ばせること、Q3は議論や思考を深める時間、Q4は自発的な学び、Q5は自分で答えを見つける支援、Q6は問題行動の背景にある気持ちに寄り添うことを優先しつつも毅然さも必要と考え、Q7は長所を伸ばすことで短所も補えると考えて選択した。</pre>
+</div>
+<div class="card" id="t011">
+<h2>試行 11 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-08-19 06:17:25　モデルID：meta/muse-spark-1.2</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.57</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>2</td><td>3</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1 4.Bに近い
+Q2 1.Aに近い
+Q3 2.どちらかといえばAに近い
+Q4 2.どちらかといえばAに近い
+Q5 4.Bに近い
+Q6 2.どちらかといえばAに近い
+Q7 4.Bに近い
+理由は、子ども一人ひとりの主体性や可能性を尊重し、自ら考え失敗から学ぶ経験を通して生きる力を育むことが重要だと考えるためです。知識の詰め込みや強制的な指導ではなく、対話や探究、長所を伸ばす支援を中心にしつつ、必要に応じて基礎の定着や背景への共感的な理解を添える指導が理想だと考えました。</pre>
+</div>
+<div class="card" id="t012">
+<h2>試行 12 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-08-19 06:17:37　モデルID：meta/muse-spark-1.2</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.71</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>4.Bに近い
+1.Aに近い
+2.どちらかといえばAに近い
+1.Aに近い
+4.Bに近い
+2.どちらかといえばAに近い
+4.Bに近い
+回答理由は、子どもの自主性や可能性を尊重し、自ら考え失敗から学ぶことで主体的に成長してほしいと考えるためです。知識の詰め込みや強制的な指導よりも、対話や探究を通じて思考力を育み、長所を褒めて伸ばすことで自己肯定感を高めたいです。また問題行動に対しても頭ごなしに叱るのではなく背景にある気持ちに寄り添うことが根本的な解決につながると考えました。</pre>
+</div>
+<div class="card" id="t013">
+<h2>試行 13 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-08-19 06:17:46　モデルID：meta/muse-spark-1.2</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.57</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>2</td><td>3</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1 4.Bに近い
+Q2 1.Aに近い
+Q3 2.どちらかといえばAに近い
+Q4 2.どちらかといえばAに近い
+Q5 4.Bに近い
+Q6 2.どちらかといえばAに近い
+Q7 4.Bに近い
+回答理由：子ども一人ひとりの可能性や主体性を尊重し、自ら考え試行錯誤する経験を通じて学びを深めることが、生きる力や思考力の育成につながると考えるため。知識の習得や基礎練習も重要だが、一方的に教え込むのではなく対話や発見を重視し、失敗から学ぶ姿勢や自発的な学習意欲を支えたい。問題行動に対しては頭ごなしに叱るのではなく背景にある気持ちに寄り添った上で指導することが再発防止と信頼関係につながり、短所の矯正よりも長所を伸ばすことで自信と意欲を引き出せると考えるため。</pre>
+</div>
+<div class="card" id="t014">
+<h2>試行 14 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-08-19 06:17:59　モデルID：meta/muse-spark-1.2</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.29</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>2</td><td>3</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1 3.どちらかといえばBに近い
+Q2 2.どちらかといえばAに近い
+Q3 2.どちらかといえばAに近い
+Q4 2.どちらかといえばAに近い
+Q5 4.Bに近い
+Q6 2.どちらかといえばAに近い
+Q7 4.Bに近い
+理由：Q1は自律的な成長を尊重しつつ基本的な躾も必要と考えB寄り、Q2は失敗から学ぶ経験を重視しつつ安全への配慮も必要なためA寄り、Q3は思考力や表現力を育てる議論の時間をやや重視、Q4は自発性を大切にしながら学習習慣の定着も図りたいためA寄り、Q5は自ら考える力を育てる支援を重視、Q6は背景に寄り添うことで再発防止につながると考えA寄り、Q7は長所を伸ばすことで自信と意欲が育つと考えBとした。</pre>
+</div>
+<div class="card" id="t015">
+<h2>試行 15 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-08-19 06:18:08　モデルID：meta/muse-spark-1.2</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.71</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1 4.Bに近い
+Q2 1.Aに近い
+Q3 2.どちらかといえばAに近い
+Q4 1.Aに近い
+Q5 4.Bに近い
+Q6 2.どちらかといえばAに近い
+Q7 4.Bに近い
+理由：子どもの自律性や主体性、内発的な学習意欲を尊重し、可能性を引き出す支援を重視したため。失敗も学びの重要な過程と捉え自分で考え答えを見つける経験や議論を通じた思考力・表現力の育成を優先し、短所の矯正よりも長所を伸ばすことで自己肯定感を高め、問題行動に対しても背景にある気持ちに寄り添いながら本質的な成長につなげる指導が望ましいと考えた。</pre>
+</div>
+<div class="card" id="t016">
+<h2>試行 16 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-08-19 06:18:18　モデルID：meta/muse-spark-1.2</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.57</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>2</td><td>3</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1 4.Bに近い
+Q2 1.Aに近い
+Q3 2.どちらかといえばAに近い
+Q4 2.どちらかといえばAに近い
+Q5 4.Bに近い
+Q6 2.どちらかといえばAに近い
+Q7 4.Bに近い
+回答理由：子どもの主体性や自律性、可能性を尊重することを基本としつつ、基礎的な知識・技能の定着も重要と考えたため。Q1は訓練よりも可能性の開花を支援する方が長期的な成長につながる、Q2は失敗から学ぶ経験が生きる力を育てる、Q3は議論を重視しつつも反復練習も一定の価値がある、Q4は自発的な学びが理想だが学習習慣の定着には働きかけも必要、Q5は自分で考え抜く力を育てる支援を重視、Q6は問題行動の背景にある気持ちに寄り添うことで根本的な解決につながる、Q7は長所を伸ばすことで自己肯定感が高まり短所も改善されると考えたため。</pre>
+</div>
+<div class="card" id="t017">
+<h2>試行 17 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-08-19 06:18:28　モデルID：meta/muse-spark-1.2</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.57</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>2</td><td>3</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1 4.Bに近い
+Q2 1.Aに近い
+Q3 2.どちらかといえばAに近い
+Q4 2.どちらかといえばAに近い
+Q5 4.Bに近い
+Q6 2.どちらかといえばAに近い
+Q7 4.Bに近い
+回答理由は、教育の目的は大人から一方的に型を教え込むことではなく子ども自身の可能性や主体性を引き出すことにあると考えたためです。失敗を恐れずに挑戦させることで主体的な学びや思考力が育ち、知識の反復よりも議論や探究の時間が深い理解につながると判断しました。学習は強制ではなく自発性を支援し、答えを直接示すよりも自分で見つける過程を支援することが長期的な成長に有効と考えます。問題行動に対しては頭ごなしに厳しくするより背景にある気持ちに寄り添い信頼関係を築くことが改善につながり、指導全体としても短所の矯正より長所を褒めて伸ばすことで自己肯定感と意欲を高められると考えたため上記の選択としました。</pre>
+</div>
+<div class="card" id="t018">
+<h2>試行 18 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-08-19 06:18:44　モデルID：meta/muse-spark-1.2</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.57</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1：3.どちらかといえばBに近い
+Q2：1.Aに近い
+Q3：2.どちらかといえばAに近い
+Q4：1.Aに近い
+Q5：4.Bに近い
+Q6：2.どちらかといえばAに近い
+Q7：4.Bに近い
+回答理由：全体として子どもの主体性や可能性を尊重する考えを重視したため。Q1は訓練よりも可能性の開花を支援することを、Q2は失敗から学ぶ経験を大切にするためあえて任せることを、Q3とQ4とQ5は自ら考え議論し答えを見つける自発的な学びが知識の定着や思考力につながると考えたため、Q6は問題行動の背景にある気持ちに寄り添うことが根本的な解決や成長につながると考えたため、Q7は短所の矯正より長所を伸ばすことで自信と意欲が育つと考えたため。</pre>
+</div>
+<div class="card" id="t019">
+<h2>試行 19 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-08-19 06:18:57　モデルID：meta/muse-spark-1.2</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.71</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>4.Bに近い
+1.Aに近い
+2.どちらかといえばAに近い
+1.Aに近い
+4.Bに近い
+2.どちらかといえばAに近い
+4.Bに近い
+理由：教育の根底には子どもの主体性や可能性を尊重する姿勢が重要だと考えるため、教え込みや強制よりも自発的な学びや試行錯誤を支援することを重視した。失敗から学ぶ経験や、自ら答えを見つける過程、考えを表現し議論する活動は、知識の習得だけでなく思考力や生きる力を育むと考える。問題行動に対しては頭ごなしに叱るよりも背景にある気持ちに寄り添うことが根本的な解決につながり、指導においても短所の矯正より長所を伸ばすことで自己肯定感を高めることが成長を促すと判断した。</pre>
+</div>
+<div class="card" id="t020">
+<h2>試行 20 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-08-19 06:19:07　モデルID：meta/muse-spark-1.2</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.57</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>2</td><td>3</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>4.Bに近い
+1.Aに近い
+2.どちらかといえばAに近い
+2.どちらかといえばAに近い
+4.Bに近い
+2.どちらかといえばAに近い
+4.Bに近い
+回答理由：子どもの自主性や主体性を尊重し、内在する可能性を引き出す支援的な関わりを重視したため。失敗を含めた体験を通じて自ら学ぶことが成長につながると考え、知識の詰め込みや強制よりも対話や自発的な探究、自身で答えを見つける過程を大切にしたい。問題行動に対しては頭ごなしに叱るのではなく背景にある気持ちに寄り添うことで本質的な解決につながると考え、指導全般においても短所の是正より長所を伸ばすことで自己肯定感と意欲を育てたい。</pre>
+</div>
+<div class="card" id="t021">
+<h2>試行 21 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-08-19 06:19:16　モデルID：meta/muse-spark-1.2</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.71</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1 4.Bに近い
+Q2 1.Aに近い
+Q3 2.どちらかといえばAに近い
+Q4 1.Aに近い
+Q5 4.Bに近い
+Q6 2.どちらかといえばAに近い
+Q7 4.Bに近い
+理由：Q1は子どもが自ら成長する力を信じ可能性を引き出す支援を重視したためB、Q2は失敗自体が学びとなり主体性や問題解決能力が育つためA、Q3は知識・技能の定着も重要だが自ら考え表現し合う時間が思考力を育てると考えどちらかといえばA、Q4は強制では一時的な成果しか得られず自発的な意欲が継続的な学びにつながるためA、Q5は答えを教えるより自ら見つける過程で深い理解が得られるためB、Q6は毅然とした指導も必要だがまず背景にある気持ちに寄り添い信頼関係を築くことで指導が届くと考えどちらかといえばA、Q7は短所の是正より長所を伸ばすことで自信と意欲が高まり結果として短所も補われると考えBを選択した。</pre>
+</div>
+<div class="card" id="t022">
+<h2>試行 22 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-08-19 06:19:25　モデルID：meta/muse-spark-1.2</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.57</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>2</td><td>3</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1 4.Bに近い
+Q2 1.Aに近い
+Q3 2.どちらかといえばAに近い
+Q4 2.どちらかといえばAに近い
+Q5 4.Bに近い
+Q6 2.どちらかといえばAに近い
+Q7 4.Bに近い
+回答理由：Q1は子どもを型にはめて訓練するよりも、一人ひとりが持つ多様な可能性を引き出す支援を重視したためB。Q2は失敗を恐れず挑戦する経験が主体性や問題解決能力を育てると考えA。Q3は基礎的な反復練習も必要だが、自分の考えを表現し他者と議論する中で深い思考力が育つため、どちらかといえばA。Q4は強制による学習は一時的な効果に留まり、自発的な意欲を支える方が長期的な学びにつながるため、どちらかといえばA。Q5は答えを与えるよりも、自ら試行錯誤して見つける過程が真の理解につながるためB。Q6は毅然とした対応で集団の規範を示すことも必要だが、まずは問題行動の背景にある気持ちに寄り添い、信頼関係の中で指導することが再発防止に有効と考え、どちらかといえばA。Q7は短所の矯正よりも長所を認めて伸ばすことで自己肯定感が高まり、結果として短所も補われると考えB。</pre>
+</div>
+<div class="card" id="t023">
+<h2>試行 23 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-08-19 06:19:35　モデルID：meta/muse-spark-1.2</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.71</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1 4.Bに近い
+Q2 1.Aに近い
+Q3 2.どちらかといえばAに近い
+Q4 1.Aに近い
+Q5 4.Bに近い
+Q6 2.どちらかといえばAに近い
+Q7 4.Bに近い
+理由：Q1は子どもを型にはめて訓練するよりも、一人一人が持つ個性や可能性を引き出し自ら成長する力を支援することが、変化の激しい社会を生きる力になると考えるためBとした。Q2は失敗を恐れて指示を細かく与えるよりも、多少の失敗を経験させながら試行錯誤させる方が主体性や問題解決能力が育つと考えるためAとした。Q3は基礎的な反復練習も必要だが、自分の考えを表現し他者と議論する経験が思考力や協調性を育てるためどちらかといえばAとした。Q4は強制的な学習は一時的な効果しかなく、自発的な学びを支援する方が長期的な学習意欲や自律性につながると考えるためAとした。Q5は正解を教え込むよりも、子ども自身が考え試す過程を支援することで深い理解と応用力が身につくと考えるためBとした。Q6は毅然とした指導も状況により必要だが、まず問題の背景にある気持ちに寄り添い理解することで根本的な解決と信頼関係につながると考えるためどちらかといえばAとした。Q7は短所の矯正も大切だが、長所を認めほめて伸ばすことで自己肯定感が高まり、結果として短所の克服にもつながると考えるためBとした。</pre>
+</div>
+<div class="card" id="t024">
+<h2>試行 24 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-08-19 06:19:48　モデルID：meta/muse-spark-1.2</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.71</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1 4.Bに近い
+Q2 1.Aに近い
+Q3 2.どちらかといえばAに近い
+Q4 1.Aに近い
+Q5 4.Bに近い
+Q6 2.どちらかといえばAに近い
+Q7 4.Bに近い
+回答理由：全体として子どもの主体性と自律的な成長を尊重する考えを重視した。Q1では大人の型にはめるのではなく可能性の開花を支援したいと考え、Q2やQ5でも失敗を通じて自ら考え答えを見つける経験が深い学びにつながると考えた。Q3とQ4では反復や強制よりも対話や自発的な学びが意欲と理解を高めると判断した。Q6は問題行動の背景にある気持ちに寄り添うことで根本的な成長を促せると考えつつも規律も必要と捉え、Q7では短所の矯正より長所を伸ばすことで自己肯定感と意欲が高まると考えたため。</pre>
+</div>
+<div class="card" id="t025">
+<h2>試行 25 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-08-19 06:20:03　モデルID：meta/muse-spark-1.2</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.71</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1 4.Bに近い
+Q2 1.Aに近い
+Q3 2.どちらかといえばAに近い
+Q4 1.Aに近い
+Q5 4.Bに近い
+Q6 2.どちらかといえばAに近い
+Q7 4.Bに近い
+理由は、子どもの主体性や可能性を尊重し失敗も含めた経験から自ら学ぶ力を育てることを最も重視したため。知識や技能の習得も大切だが、反復より考え議論し自分で答えを見つける過程が深い理解につながり、自発的な学びや長所を伸ばす指導が将来的な成長に有効と考えた。問題行動についても厳しく断罪するより気持ちに寄り添い背景を理解した上で指導する方が、自律的な改善につながると判断したため。</pre>
+</div>
+<div class="card" id="t026">
+<h2>試行 26 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-08-19 06:20:13　モデルID：meta/muse-spark-1.2</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.43</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>2</td><td>3</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1 3.どちらかといえばBに近い
+Q2 1.Aに近い
+Q3 2.どちらかといえばAに近い
+Q4 2.どちらかといえばAに近い
+Q5 4.Bに近い
+Q6 2.どちらかといえばAに近い
+Q7 4.Bに近い
+回答理由：全体として子どもの主体性や自律性を尊重し、可能性を引き出す支援的な指導を重視したため。Q1は訓練よりも個々の可能性の開花を、Q2は失敗から学ぶ経験を大切にしたいと考えた。Q3は基礎的な反復も必要だが議論や表現を通じた思考力の育成を優先し、Q4は強制よりも自発的な学びの意欲を育てることが長期的な成長につながると判断した。Q5は答えを与えるより自力で見つける過程を支援すべきと考え、Q6は毅然とした指導の必要性も認めつつ問題行動の背景にある気持ちに寄り添うことを起点とすべきと考え、Q7は短所の矯正より長所を伸ばすことで自己肯定感と意欲を高められると考えたため。</pre>
+</div>
+<div class="card" id="t027">
+<h2>試行 27 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-08-19 06:20:21　モデルID：meta/muse-spark-1.2</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.57</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>2</td><td>3</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1 4.Bに近い
+Q2 1.Aに近い
+Q3 2.どちらかといえばAに近い
+Q4 2.どちらかといえばAに近い
+Q5 4.Bに近い
+Q6 2.どちらかといえばAに近い
+Q7 4.Bに近い
+回答理由：子どもの主体性や自律性を尊重し、可能性を引き出す支援的な関わりを重視したため。失敗も学びの機会と捉えて挑戦させ、知識の詰め込みよりも考えを表現し対話する中で自ら答えを見つける力を育てることが、長期的な成長につながると考える。規律や基礎の定着も重要だが、強制や短所の矯正よりも、自発性を支え長所を伸ばすこと、問題行動の背景にある気持ちに寄り添うことが、子どもとの信頼関係と学ぶ意欲を育むと判断した。</pre>
+</div>
+<div class="card" id="t028">
+<h2>試行 28 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-08-19 06:20:37　モデルID：meta/muse-spark-1.2</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.43</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>2</td><td>3</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>3</td><td>3</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1 4.Bに近い
+Q2 1.Aに近い
+Q3 2.どちらかといえばAに近い
+Q4 2.どちらかといえばAに近い
+Q5 3.どちらかといえばBに近い
+Q6 2.どちらかといえばAに近い
+Q7 4.Bに近い
+回答理由：全体として子ども主体の教育観を重視した。Q1は子ども一人ひとりが持つ可能性を尊重し引き出すことが自立した大人への成長につながると考えるためB、Q2は失敗から学ぶ経験が主体性や課題解決力を育てるためA、Q3とQ4は基礎的な知識・技能の定着も必要だが、考えを表現し議論する活動や自発的な学びが深い理解と学習意欲を生むためどちらかといえばA、Q5は自ら答えを見つける過程を大切にしたいが発達段階に応じて教師の適切な示唆も必要と考えどちらかといえばB、Q6は問題行動の背景にある気持ちに寄り添い信頼関係を築いた上で指導することが再発防止と成長に有効と考えるためどちらかといえばA、Q7は長所を認め褒めて伸ばすことで自己肯定感が高まり短所の改善にもつながるためBを選択した。</pre>
+</div>
+<div class="card" id="t029">
+<h2>試行 29 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-08-19 06:20:53　モデルID：meta/muse-spark-1.2</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.71</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>4.Bに近い
+1.Aに近い
+2.どちらかといえばAに近い
+1.Aに近い
+4.Bに近い
+2.どちらかといえばAに近い
+4.Bに近い
+理由：全体として子どもの主体性や自律性を尊重し、可能性を引き出す支援的な指導を重視したため。Q1は訓練よりも可能性の開花を、Q2は失敗から学ぶ経験を大切にしたいと考えAを選択。Q3は基礎の反復も必要だが考える力や表現力を育てる議論をやや重視、Q4は強制的な学習は一時的な効果しかなく自発的な学びが定着につながると考えAを選択。Q5は自ら考える過程を支援することが理解を深めると考えBを選択。Q6は毅然とした指導も場合により必要だがまず気持ちに寄り添い背景を理解することが問題の根本解決になると考えどちらかといえばAを選択。Q7は短所の矯正より長所を伸ばすことで自信と意欲が育ち結果的に短所も改善されると考えBを選択した。</pre>
+</div>
+<div class="card" id="t030">
+<h2>試行 30 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-08-19 06:21:10　モデルID：meta/muse-spark-1.2</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.86</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>1</td><td>4</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1 4.Bに近い
+Q2 1.Aに近い
+Q3 1.Aに近い
+Q4 1.Aに近い
+Q5 4.Bに近い
+Q6 2.どちらかといえばAに近い
+Q7 4.Bに近い
+回答理由：Q1は子どもを型にはめて訓練するよりも、一人ひとりが持つ可能性や個性を引き出し自ら成長する力を支援することが長期的な自立につながると考えるため。Q2は失敗を恐れず挑戦する経験が主体性や問題解決能力を育てるため、細かく管理して失敗を防ぐより経験を優先したいため。Q3は知識の暗記や反復も基礎として必要だが、自分の考えを表現し他者と議論する中で思考力や多様な視点が養われると考えるため。Q4は強制された学習は一時的な効果しかなく、自発的な学びの意欲を育てることが生涯学び続ける基盤になるため。Q5は正解を一方的に示すより、子ども自身が試行錯誤して答えにたどり着く過程にこそ深い理解と探究心が生まれるため。Q6は規律や毅然とした対応も必要だが、問題行動の背景にある気持ちに寄り添い理解することが根本的な解決と信頼関係の構築につながるため、Aに近いとした。Q7は短所の矯正も必要だが、長所を認めて伸ばすことで自己肯定感が高まり、結果として短所も補われると考えるため。</pre>
+</div>
+<div class="card" id="t031">
+<h2>試行 31 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-08-19 06:21:23　モデルID：meta/muse-spark-1.2</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.14</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>2</td><td>3</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>3</td><td>3</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>3</td><td>2</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1 4.Bに近い
+Q2 2.どちらかといえばAに近い
+Q3 2.どちらかといえばAに近い
+Q4 2.どちらかといえばAに近い
+Q5 3.どちらかといえばBに近い
+Q6 3.どちらかといえばBに近い
+Q7 4.Bに近い
+回答理由：Q1は子どもが本来持つ可能性や主体性を信じ、それが開花するように支援することが長期的な成長につながると考えるためBを選定。Q2は失敗から学ぶ経験が生きる力になるため基本は任せて見守りたいが、安全確保や大きなつまずきは防ぐ配慮も必要なのでどちらかといえばA。Q3は知識・技能の定着も重要だが、考えを言語化し議論する中で思考力や協働性が育まれることをより重視するためどちらかといえばA。Q4は強制的な学習は一時的効果に留まりやすく、自発的な学びの意欲を支える方が継続的な学力につながるためどちらかといえばA。Q5は教師が答えを示すことも効率的だが、子ども自身が試行錯誤して解き方を見つける過程が深い理解を生むためどちらかといえばB。Q6は気持ちへの寄り添いも大切だが、集団生活の規範を守るため問題行動には毅然とした指導で境界を示すことも必要と考えどちらかといえばB。Q7は短所の指摘よりも長所を認め伸ばすことで自己肯定感と意欲が高まり、結果として短所も補われると考えるためB。</pre>
+</div>
+<div class="card" id="t032">
+<h2>試行 32 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-08-19 06:21:33　モデルID：meta/muse-spark-1.2</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.71</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1 4.Bに近い
+Q2 1.Aに近い
+Q3 2.どちらかといえばAに近い
+Q4 1.Aに近い
+Q5 4.Bに近い
+Q6 2.どちらかといえばAに近い
+Q7 4.Bに近い
+回答理由：Q1は子どもが本来持つ可能性を開花させることが長期的な成長につながると考えるためB、Q2は失敗から学ぶ経験が自立心と問題解決能力を育てるためA、Q3は知識の定着も重要だが自分の考えを表現し議論する中で思考力や協働性が深まるためどちらかといえばA、Q4は自発的な学びが内発的動機づけとなり持続的な学習につながるためA、Q5は正答を与えるより自ら発見する過程が真の理解を生むためB、Q6は問題行動の背景にある気持ちに寄り添うことで根本的な解決と信頼関係の構築になると考えるためどちらかといえばA、Q7は短所の矯正より長所を伸ばすことで自信と意欲が高まり結果として短所も補われると考えるためBを選択した。</pre>
+</div>
+<div class="card" id="t033">
+<h2>試行 33 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-08-19 06:21:45　モデルID：meta/muse-spark-1.2</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.00</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>2</td><td>2</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>2</td><td>3</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>3</td><td>3</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>2.どちらかといえばAに近い
+2.どちらかといえばAに近い
+2.どちらかといえばAに近い
+2.どちらかといえばAに近い
+3.どちらかといえばBに近い
+2.どちらかといえばAに近い
+4.Bに近い
+理由：問1は可能性の支援を重視しつつも社会で生きるための基本的な躾や訓練も必要と考えたため、問2と問4は失敗から学ぶ経験や自発性を大切にしたいため、問3は知識の定着も重要だが考える力を育む議論の時間をより重視したいため、問5は自分で答えを見つける力を育てたいが基礎の提示も必要と考えたため、問6は毅然とした態度も時に必要だがまずは気持ちに寄り添い背景を理解することが再発防止につながると考えたため、問7は短所の修正より長所を伸ばすことで自信と意欲が高まり結果的に短所も改善されると考えたため。</pre>
+</div>
+<div class="card" id="t034">
+<h2>試行 34 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-08-19 06:21:56　モデルID：meta/muse-spark-1.2</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.71</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1 4.Bに近い
+Q2 1.Aに近い
+Q3 2.どちらかといえばAに近い
+Q4 1.Aに近い
+Q5 4.Bに近い
+Q6 2.どちらかといえばAに近い
+Q7 4.Bに近い
+理由：子どもの主体性や持っている可能性を尊重し、自ら考え試行錯誤する経験を通して学ぶことが、長期的な成長や学習意欲につながると考えるため。知識の定着のための練習や毅然とした指導も必要だが、強制や短所の指摘よりも、支援や対話、長所を伸ばす関わりを中心にすることが望ましいと判断した。</pre>
+</div>
+<div class="card" id="t035">
+<h2>試行 35 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-08-19 06:22:08　モデルID：meta/muse-spark-1.2</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.57</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>2</td><td>3</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1 4.Bに近い
+Q2 1.Aに近い
+Q3 2.どちらかといえばAに近い
+Q4 2.どちらかといえばAに近い
+Q5 4.Bに近い
+Q6 2.どちらかといえばAに近い
+Q7 4.Bに近い
+回答理由：子どもの主体性と可能性を尊重し、自ら考え試行錯誤する経験を通して学びを深めることが成長につながると考えるため。知識の詰め込みや強制的な指導ではなく、対話や探究を重視し、成功体験だけでなく失敗から学ぶ機会を大切にしたい。問題行動に対しても頭ごなしに否定するのではなく背景にある気持ちに寄り添った上で指導し、短所の矯正よりも長所を認め伸ばすことで自己肯定感を育みたい。</pre>
+</div>
+<div class="card" id="t036">
+<h2>試行 36 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-08-19 06:22:20　モデルID：meta/muse-spark-1.2</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.29</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>2</td><td>3</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>3</td><td>3</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>4.Bに近い
+2.どちらかといえばAに近い
+2.どちらかといえばAに近い
+2.どちらかといえばAに近い
+3.どちらかといえばBに近い
+2.どちらかといえばAに近い
+4.Bに近い
+回答理由は、子どもの自主性や主体性、持って生まれた可能性を最大限に尊重し伸ばすことを教育の根幹に置くべきと考えたためです。そのため多少の失敗は成長の糧として経験させることや、対話や議論を通じた思考力の育成、自発的な学びの支援を重視しました。一方で基礎的な知識や技能の習得、課題を抱えた子どもへの寄り添いと適切な指導の両立も必要と考え、極端な放任ではなく支援的に伴走する立場を選び、長所を伸ばすことで自己肯定感を高め短所も自然に補えると判断しました。</pre>
+</div>
+<div class="card" id="t037">
+<h2>試行 37 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-08-19 06:22:30　モデルID：meta/muse-spark-1.2</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.71</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>4.Bに近い
+1.Aに近い
+2.どちらかといえばAに近い
+1.Aに近い
+4.Bに近い
+2.どちらかといえばAに近い
+4.Bに近い
+理由：Q1は子どもを型にはめて訓練するよりも、一人ひとりが持つ可能性を開花させる支援こそが自立につながると考えるためBを選択。Q2は失敗を恐れず挑戦する経験が自主性や問題解決能力を育てるためAを選択。Q3は基礎的な反復も必要だが、自分の考えを表現し他者と議論する中で思考力や主体性が深まると考えるためどちらかといえばAを選択。Q4は強制された学習では継続せず、自発的な意欲を支援することが学びの定着につながるためAを選択。Q5は正解を一方的に与えるよりも、子ども自身が試行錯誤して答えを見つける過程が深い理解につながるためBを選択。Q6は毅然とした指導も場面により必要だが、問題行動の背景にある気持ちに寄り添い理解することが根本的な解決につながるためどちらかといえばAを選択。Q7は短所の矯正よりも長所を認め褒めて伸ばすことで自己肯定感が高まり、結果的に短所の改善にもつながるためBを選択。</pre>
+</div>
+<div class="card" id="t038">
+<h2>試行 38 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-08-19 06:22:41　モデルID：meta/muse-spark-1.2</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.71</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1 4.Bに近い
+Q2 1.Aに近い
+Q3 2.どちらかといえばAに近い
+Q4 1.Aに近い
+Q5 4.Bに近い
+Q6 2.どちらかといえばAに近い
+Q7 4.Bに近い
+回答理由：子どもは教え込まれる対象ではなく自ら育つ主体であるという考えを基本にしているため。失敗も含めた主体的な経験や対話・議論を通じて考える力が育ち、自ら答えを見つける過程が深い理解と学習意欲につながると考える。また短所の矯正よりも長所を伸ばすことで自己肯定感が高まり、問題行動についても背景にある気持ちに寄り添って理解することが本質的な成長と信頼関係につながると考えるため。</pre>
+</div>
+<div class="card" id="t039">
+<h2>試行 39 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-08-19 06:22:55　モデルID：meta/muse-spark-1.2</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.57</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>2</td><td>3</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1 4.Bに近い
+Q2 1.Aに近い
+Q3 2.どちらかといえばAに近い
+Q4 2.どちらかといえばAに近い
+Q5 4.Bに近い
+Q6 2.どちらかといえばAに近い
+Q7 4.Bに近い
+理由：教育は大人が一方的に教え込むのではなく子どもの主体性や可能性を引き出すことだと考えるため。Q1・Q5・Q7は子どもの自律的な探求と長所を伸ばす支援を重視しBを選択、Q2は失敗から学ぶ経験を大切にするためAを選択した。Q3・Q4は対話や自発的な学びを中心にしつつも基礎の定着や最低限の習慣づけも必要なため「どちらかといえばA」とした。Q6は毅然とした指導も時には必要だが、まずは背景や気持ちに寄り添い信頼関係を築くことが問題の根本的な解決と成長につながると考えるためA寄りとした。</pre>
+</div>
+<div class="card" id="t040">
+<h2>試行 40 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-08-19 06:23:06　モデルID：meta/muse-spark-1.2</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.71</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1 4.Bに近い
+Q2 1.Aに近い
+Q3 2.どちらかといえばAに近い
+Q4 1.Aに近い
+Q5 4.Bに近い
+Q6 2.どちらかといえばAに近い
+Q7 4.Bに近い
+理由：子どもの主体性や自発性を尊重し、可能性を引き出す支援的な関わりを重視したため。失敗を恐れず挑戦させることで学びを深め、議論や自ら考える経験を通して思考力や生きる力を育てたい。知識の習得も大切だが、一方的に教え込むよりも自分で答えを見つける過程を大切にし、問題行動に対しても頭ごなしに叱るのではなく背景にある気持ちに寄り添った上で指導し、短所の矯正より長所を褒めて伸ばすことで自己肯定感を高めたいと考えた。</pre>
+</div>
+<div class="card" id="t041">
+<h2>試行 41 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-08-19 06:23:21　モデルID：meta/muse-spark-1.2</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.57</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>2</td><td>3</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1 4.Bに近い
+Q2 1.Aに近い
+Q3 2.どちらかといえばAに近い
+Q4 2.どちらかといえばAに近い
+Q5 4.Bに近い
+Q6 2.どちらかといえばAに近い
+Q7 4.Bに近い
+理由は、子ども一人ひとりの可能性や主体性を尊重し、自ら考え失敗から学ぶ経験を大切にしたいと考えるためです。知識を一方的に教え込むことや強制的な訓練よりも、対話や探究、試行錯誤を通じた自発的な学びの方が、深い理解や生きる力につながると考えます。また、問題が起きた際には頭ごなしに叱るよりも背景にある気持ちに寄り添い、短所の矯正よりも長所を認めて伸ばすことで自己肯定感と自律性を育むことが重要だと考えるためです。</pre>
+</div>
+<div class="card" id="t042">
+<h2>試行 42 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-08-19 06:23:40　モデルID：meta/muse-spark-1.2</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.57</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>2</td><td>3</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>4.Bに近い
+1.Aに近い
+2.どちらかといえばAに近い
+2.どちらかといえばAに近い
+4.Bに近い
+2.どちらかといえばAに近い
+4.Bに近い
+回答理由：子どもの主体性や自発性を尊重し、可能性を自ら開花させる過程を支援することが長期的な成長につながると考えるため。失敗を恐れず挑戦させることや対話・議論を通じた思考の深まりを重視しつつ、基礎的な知識の定着も必要に応じて補うのが望ましいと判断した。問題行動については背景や気持ちに寄り添うことで根本的な解決と再発防止につながり、短所の矯正よりも長所を認めて伸ばすことで自己肯定感と意欲を高められると考えたため。</pre>
+</div>
+<div class="card" id="t043">
+<h2>試行 43 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-08-19 06:23:58　モデルID：meta/muse-spark-1.2</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.43</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>2</td><td>3</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1 4.Bに近い
+Q2 2.どちらかといえばAに近い
+Q3 2.どちらかといえばAに近い
+Q4 2.どちらかといえばAに近い
+Q5 4.Bに近い
+Q6 2.どちらかといえばAに近い
+Q7 4.Bに近い
+回答理由：子どもの自主性や主体性を尊重し、持って生まれた可能性や好奇心を伸ばすことを教育の中心に置きたいと考えたため。多少の失敗は学びの機会と捉え、試行錯誤させながら見守ること、議論や発表を通じて自ら考える力を育てること、自発的な学びを支援することを重視する。答えを一方的に教えるのではなく子ども自身が見つけ出す過程を支援し、問題行動に対しても背景にある気持ちに寄り添った上で指導し、短所の矯正よりも長所を褒めて伸ばすことで自己肯定感と意欲を高めたい。ただし基礎的な知識・技能の習得や集団生活における規律も重要であるため、状況に応じて適切に補い支える柔軟な指導が必要だと考える。</pre>
+</div>
+<div class="card" id="t044">
+<h2>試行 44 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-08-19 06:24:09　モデルID：meta/muse-spark-1.2</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.71</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1 4.Bに近い
+Q2 1.Aに近い
+Q3 2.どちらかといえばAに近い
+Q4 1.Aに近い
+Q5 4.Bに近い
+Q6 2.どちらかといえばAに近い
+Q7 4.Bに近い
+回答理由：Q1は子どもを型にはめて訓練するよりも、一人ひとりが持つ個性や可能性を引き出し自律的に成長する力を育てることが、変化の激しい社会を生きる上で重要と考えたためBとした。Q2は細かく指示して失敗を避けさせるよりも、多少の失敗を経験させながら自分で考えて行動する経験が主体性や問題解決能力を育てると考えたためAとした。Q3は基礎的な反復練習も必要だが、自分の考えを表現し他者と議論する中で思考力や言語化する力がより深まると考え、どちらかといえばAとした。Q4は強制的な学習は短期的には成果が出ても学習意欲を損なう恐れがあり、自発的な学びを支援することで生涯にわたる学習の基盤が築かれると考えたためAとした。Q5は正解を一方的に与えるよりも、子ども自身が試行錯誤して答えを見つける過程を支援することが真の理解につながると考えたためBとした。Q6は毅然とした指導も必要な場面はあるが、問題行動の背景にある気持ちに寄り添い信頼関係を築いた上で指導する方が本質的な改善につながると考え、どちらかといえばAとした。Q7は短所の矯正も大切だが、長所を認め褒めて伸ばすことで自己肯定感が高まり、結果として短所も補われると考えたためBとした。</pre>
+</div>
+<div class="card" id="t045">
+<h2>試行 45 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-08-19 06:24:20　モデルID：meta/muse-spark-1.2</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.71</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1 4.Bに近い
+Q2 1.Aに近い
+Q3 2.どちらかといえばAに近い
+Q4 1.Aに近い
+Q5 4.Bに近い
+Q6 2.どちらかといえばAに近い
+Q7 4.Bに近い
+理由は、子どもの主体性や可能性を尊重し自ら考え挑戦する力を育てることを最も重視したためです。失敗も学びの機会と捉え、対話や自発的な探究を通じて自ら答えを見つける過程を大切にし、問題行動に対しても背景にある気持ちに寄り添いつつ指導し、長所を伸ばすことで自信と成長を促したいと考えたからです。</pre>
+</div>
+<div class="card" id="t046">
+<h2>試行 46 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-08-19 06:24:34　モデルID：meta/muse-spark-1.2</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.57</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>2</td><td>3</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1 4.Bに近い
+Q2 1.Aに近い
+Q3 2.どちらかといえばAに近い
+Q4 2.どちらかといえばAに近い
+Q5 4.Bに近い
+Q6 2.どちらかといえばAに近い
+Q7 4.Bに近い
+回答理由：Q1は子ども一人ひとりが持つ個性や可能性を尊重し、それを開花させる支援こそが教育の本質と考えるため。Q2は失敗を通じて学ぶ経験が自立や挑戦する力を育てると考えるため。Q3は知識の定着も重要だが、自分の考えを表現し他者と議論する中で思考力や協調性が育つことを重視するため。Q4は強制的な学習は一時的効果に留まり、自発的な学びの意欲を支える方が長期的な成長につながるため。Q5は正答を与えるより、自ら試行錯誤して答えを見つける過程で真の理解と問題解決能力が身につくため。Q6は問題行動の背景にある気持ちに寄り添い理解することが、再発防止と信頼関係の構築に不可欠と考えるため。Q7は短所の矯正よりも長所を認め伸ばすことで自己肯定感が高まり、結果的に短所の改善にもつながるため。</pre>
+</div>
+<div class="card" id="t047">
+<h2>試行 47 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-08-19 06:24:45　モデルID：meta/muse-spark-1.2</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.00</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>2</td><td>3</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>3</td><td>3</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>3</td><td>3</td><td></td></tr></table>
+<pre>Q1 3.どちらかといえばBに近い
+Q2 2.どちらかといえばAに近い
+Q3 2.どちらかといえばAに近い
+Q4 2.どちらかといえばAに近い
+Q5 3.どちらかといえばBに近い
+Q6 2.どちらかといえばAに近い
+Q7 3.どちらかといえばBに近い
+理由：Q1は子どもが本来持つ可能性を引き出し自ら成長していく力を信じて支援したいためB、Q2は失敗を恐れず挑戦する中でしか得られない学びや主体性を大切にしたいためA、Q3は基礎的な知識・技能の習得も必要だが自分で考え表現し他者と対話する力をより重視したいためA、Q4は強制的な学習では持続的な意欲につながらないため自発的な学びを支援したいためA、Q5は正解を教えるより自ら試行錯誤して答えを見つける過程で思考力が育つと考えるためB、Q6は毅然とした指導も必要な場面はあるがまずは問題の背景にある気持ちに寄り添い信頼関係を築くことが根本的な解決につながると考えるためA、Q7は短所の矯正よりも長所を認め伸ばすことで自己肯定感と意欲が高まり結果として短所も改善されると考えるためBを選択した。</pre>
+</div>
+<div class="card" id="t048">
+<h2>試行 48 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-08-19 06:24:55　モデルID：meta/muse-spark-1.2</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.71</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>4.Bに近い
+1.Aに近い
+2.どちらかといえばAに近い
+1.Aに近い
+4.Bに近い
+2.どちらかといえばAに近い
+4.Bに近い
+回答理由：Q1は子ども自身の可能性を引き出すことが主体的な成長につながると考えたためB、Q2は失敗から学ぶ経験が自立と挑戦する力を育てるためA、Q3は知識の暗記よりも考えを表現し議論する力がこれからの社会で重要と考えA寄り、Q4は強制的な学習は一時的な効果しかなく自発的な学びが継続的な学習意欲を生むためA、Q5は自ら答えを見つける過程で思考力と問題解決能力が養われるためB、Q6は問題行動の背景にある気持ちに寄り添うことで根本的な解決と信頼関係の構築につながるためA寄り、Q7は短所の矯正よりも長所を伸ばすことで自己肯定感と個性が育つと考えたためBを選択した。</pre>
+</div>
+<div class="card" id="t049">
+<h2>試行 49 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-08-19 06:25:03　モデルID：meta/muse-spark-1.2</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.71</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1 4.Bに近い
+Q2 1.Aに近い
+Q3 2.どちらかといえばAに近い
+Q4 1.Aに近い
+Q5 4.Bに近い
+Q6 2.どちらかといえばAに近い
+Q7 4.Bに近い
+理由：子どもの主体性や内発的な動機づけを最も重視するため、可能性を開花させる支援や失敗から学ぶ経験、自ら考え答えを見つける過程を大切にしたいと考えた。知識の定着のための反復も必要だが、発表や議論による思考の深化をより優先し、問題行動に対しても頭ごなしに叱るのではなく背景にある気持ちに寄り添った上で指導すべきと考え、長所を伸ばすことで短所も補われると判断したため。</pre>
+</div>
+<div class="card" id="t050">
+<h2>試行 50 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-08-19 06:25:13　モデルID：meta/muse-spark-1.2</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.57</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>2</td><td>3</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1 4.Bに近い
+Q2 1.Aに近い
+Q3 2.どちらかといえばAに近い
+Q4 2.どちらかといえばAに近い
+Q5 4.Bに近い
+Q6 2.どちらかといえばAに近い
+Q7 4.Bに近い
+回答理由：子どもの自主性や可能性を尊重し、自ら考え試行錯誤する経験を通じて学びを深めることが重要だと考えるため。失敗を恐れず挑戦させることや、対話・議論を通じて思考力を育てること、長所を伸ばす指導を重視する。一方で基礎的な知識・技能の定着や集団生活の規律も必要なため、Q3とQ4はA寄りとしつつもバランスを考慮した。問題行動に対しては頭ごなしに厳しくするよりも背景にある気持ちに寄り添い、信頼関係を築きながら指導することが根本的な解決につながると考える。</pre>
+</div>
+
+<footer>本ページは data/ 内のCSV・JSONLから機械的に生成した閲覧用アーカイブです（gen_html_browser.py）。応答原文は原文ママ収録。</footer>
+</div>
+<a class="top" href="#top">▲先頭へ</a>
+</body></html>

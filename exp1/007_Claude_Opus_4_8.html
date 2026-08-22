@@ -1,0 +1,1312 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>実験1 教育信念質問紙｜Claude Opus 4.8</title><style>
+:root{--fg:#222;--bg:#fff;--muted:#666;--line:#e2e2e2;--accent:#1f3555;}
+*{box-sizing:border-box}
+body{font-family:-apple-system,"Hiragino Sans","Yu Gothic",sans-serif;color:var(--fg);
+     background:var(--bg);margin:0;line-height:1.65}
+.wrap{max-width:980px;margin:0 auto;padding:24px 28px 80px}
+h1{font-size:1.5rem;margin:0 0 6px}
+h2{font-size:1.05rem;margin:0 0 4px;display:flex;align-items:center;flex-wrap:wrap}
+h3{font-size:.98rem;margin:18px 0 6px;color:var(--accent);border-left:4px solid var(--accent);padding-left:8px}
+.card p{margin:8px 0;line-height:1.75}
+.card p.lead{margin:6px 0 16px}
+.card p.note{color:var(--muted);font-size:.85rem;margin-top:18px;padding-top:10px;border-top:1px dashed var(--line)}
+a.mlink{color:var(--accent);text-decoration:none;border-bottom:1px dotted var(--accent)}
+a.mlink:hover{background:#eef1f7}
+.meta{color:var(--muted);font-size:.88rem;margin:2px 0}
+.crumb{background:var(--accent);color:#fff;padding:10px 28px;font-size:.85rem}
+.crumb a{color:#cfe0ff;text-decoration:none}
+.crumb a:hover{text-decoration:underline}
+table{border-collapse:collapse;width:100%;margin:14px 0;font-size:.86rem}
+th,td{border:1px solid var(--line);padding:5px 8px;text-align:left;vertical-align:top}
+th{background:#f4f5f7;position:sticky;top:0}
+tr:nth-child(even) td{background:#fafafa}
+a.tlink{color:var(--accent);text-decoration:none}
+a.tlink:hover{text-decoration:underline}
+.badge{display:inline-block;width:24px;height:24px;line-height:24px;border-radius:50%;
+       color:#fff;font-size:.7rem;font-weight:700;text-align:center;margin-right:8px;
+       vertical-align:middle;flex:none}
+.badge.sm{width:19px;height:19px;line-height:19px;font-size:.62rem;margin-right:6px}
+.aaii-tag{color:var(--muted);font-size:.78rem;font-weight:600;margin-left:8px}
+.linkrow{margin:10px 0 20px;display:flex;gap:12px;flex-wrap:wrap}
+.linkrow a{background:#eef1f7;border-radius:6px;padding:8px 14px;text-decoration:none;
+           color:var(--accent);font-size:.86rem;font-weight:600}
+.linkrow a:hover{background:#e2e7f2}
+details.mdl{margin:10px 0 4px}
+details.mdl>summary{cursor:pointer;font-weight:700;color:var(--accent);padding:6px 0;font-size:.95rem}
+details.mdl .modellist{margin-top:10px}
+.status-badge{display:inline-block;padding:1px 8px;border-radius:9px;font-size:.76rem;color:#fff;font-weight:600}
+.status-badge.ok{background:#1a7f37}
+.status-badge.warn{background:#b35c00}
+.status-badge.err{background:#c62828}
+.card{border:1px solid var(--line);border-radius:8px;padding:14px 18px;margin:18px 0;background:#fdfdfd}
+.card h2{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.score{font-weight:700;color:#123}
+pre{white-space:pre-wrap;word-break:break-word;background:#f8f9fb;border:1px solid var(--line);
+    border-radius:6px;padding:10px 12px;font-size:.82rem;font-family:ui-monospace,Menlo,Consolas,monospace}
+.errbox{white-space:pre-wrap;word-break:break-word;background:#fff4f4;border:1px solid #f3c1c1;
+    border-radius:6px;padding:10px 12px;font-size:.85rem;color:#8a1f1f}
+.itemtbl td,.itemtbl th{font-size:.78rem;padding:3px 6px}
+.section-title{margin-top:38px;border-bottom:2px solid var(--accent);padding-bottom:4px}
+.hdrbar{background:#eef1f7;border-radius:6px;padding:10px 14px;margin:12px 0 20px}
+.exp-block{margin:26px 0}
+.exp-block h2{border-bottom:2px solid var(--accent);padding-bottom:6px}
+ul.modellist{columns:2;-webkit-columns:2;list-style:none;padding:0;margin:8px 0}
+ul.modellist li{break-inside:avoid;padding:3px 0;font-size:.9rem;display:flex;align-items:center}
+footer{color:var(--muted);font-size:.78rem;margin-top:50px;border-top:1px solid var(--line);padding-top:10px}
+.top{position:fixed;right:18px;bottom:18px;background:var(--accent);color:#fff;border-radius:20px;
+     padding:8px 14px;font-size:.8rem;text-decoration:none;box-shadow:0 2px 6px rgba(0,0,0,.25)}
+</style></head><body>
+<div class="crumb"><a href="../index.html">← 総合目次</a>　／　実験1 教育信念質問紙　／　Claude Opus 4.8</div>
+<div class="wrap">
+<a id="top"></a>
+<h1><span class="badge" style="background:#D97757" title="Anthropic">AN</span><span>Claude Opus 4.8</span><span class="aaii-tag">AAII 57.3</span></h1>
+<p class="meta">実験1 教育信念質問紙</p>
+<p class="meta">▶ <a class="tlink" href="00_about.html">① 実験の説明</a>
+<a class="tlink" href="01_prompt.html">② 出題プロンプト</a>
+<a class="tlink" href="02_results.html">③ 結果概要</a></p>
+<div class="hdrbar">実測モデルID：anthropic/claude-opus-4.8　／　収録試行：全50（有効50・対象外0）</div>
+<h2>試行一覧</h2>
+<table><tr><th>番号</th><th>状態</th><th>7項目平均</th></tr><tr><td><a class="tlink" href="#t001">1</a></td><td><span class="status-badge ok">有効</span></td><td>3.57</td></tr><tr><td><a class="tlink" href="#t002">2</a></td><td><span class="status-badge ok">有効</span></td><td>3.57</td></tr><tr><td><a class="tlink" href="#t003">3</a></td><td><span class="status-badge ok">有効</span></td><td>3.57</td></tr><tr><td><a class="tlink" href="#t004">4</a></td><td><span class="status-badge ok">有効</span></td><td>3.43</td></tr><tr><td><a class="tlink" href="#t005">5</a></td><td><span class="status-badge ok">有効</span></td><td>3.57</td></tr><tr><td><a class="tlink" href="#t006">6</a></td><td><span class="status-badge ok">有効</span></td><td>3.43</td></tr><tr><td><a class="tlink" href="#t007">7</a></td><td><span class="status-badge ok">有効</span></td><td>3.57</td></tr><tr><td><a class="tlink" href="#t008">8</a></td><td><span class="status-badge ok">有効</span></td><td>3.57</td></tr><tr><td><a class="tlink" href="#t009">9</a></td><td><span class="status-badge ok">有効</span></td><td>3.57</td></tr><tr><td><a class="tlink" href="#t010">10</a></td><td><span class="status-badge ok">有効</span></td><td>3.57</td></tr><tr><td><a class="tlink" href="#t011">11</a></td><td><span class="status-badge ok">有効</span></td><td>3.57</td></tr><tr><td><a class="tlink" href="#t012">12</a></td><td><span class="status-badge ok">有効</span></td><td>3.43</td></tr><tr><td><a class="tlink" href="#t013">13</a></td><td><span class="status-badge ok">有効</span></td><td>3.57</td></tr><tr><td><a class="tlink" href="#t014">14</a></td><td><span class="status-badge ok">有効</span></td><td>3.57</td></tr><tr><td><a class="tlink" href="#t015">15</a></td><td><span class="status-badge ok">有効</span></td><td>3.57</td></tr><tr><td><a class="tlink" href="#t016">16</a></td><td><span class="status-badge ok">有効</span></td><td>3.57</td></tr><tr><td><a class="tlink" href="#t017">17</a></td><td><span class="status-badge ok">有効</span></td><td>3.57</td></tr><tr><td><a class="tlink" href="#t018">18</a></td><td><span class="status-badge ok">有効</span></td><td>3.57</td></tr><tr><td><a class="tlink" href="#t019">19</a></td><td><span class="status-badge ok">有効</span></td><td>3.57</td></tr><tr><td><a class="tlink" href="#t020">20</a></td><td><span class="status-badge ok">有効</span></td><td>3.57</td></tr><tr><td><a class="tlink" href="#t021">21</a></td><td><span class="status-badge ok">有効</span></td><td>3.57</td></tr><tr><td><a class="tlink" href="#t022">22</a></td><td><span class="status-badge ok">有効</span></td><td>3.43</td></tr><tr><td><a class="tlink" href="#t023">23</a></td><td><span class="status-badge ok">有効</span></td><td>3.57</td></tr><tr><td><a class="tlink" href="#t024">24</a></td><td><span class="status-badge ok">有効</span></td><td>3.57</td></tr><tr><td><a class="tlink" href="#t025">25</a></td><td><span class="status-badge ok">有効</span></td><td>3.57</td></tr><tr><td><a class="tlink" href="#t026">26</a></td><td><span class="status-badge ok">有効</span></td><td>3.57</td></tr><tr><td><a class="tlink" href="#t027">27</a></td><td><span class="status-badge ok">有効</span></td><td>3.57</td></tr><tr><td><a class="tlink" href="#t028">28</a></td><td><span class="status-badge ok">有効</span></td><td>3.57</td></tr><tr><td><a class="tlink" href="#t029">29</a></td><td><span class="status-badge ok">有効</span></td><td>3.43</td></tr><tr><td><a class="tlink" href="#t030">30</a></td><td><span class="status-badge ok">有効</span></td><td>3.57</td></tr><tr><td><a class="tlink" href="#t031">31</a></td><td><span class="status-badge ok">有効</span></td><td>3.57</td></tr><tr><td><a class="tlink" href="#t032">32</a></td><td><span class="status-badge ok">有効</span></td><td>3.43</td></tr><tr><td><a class="tlink" href="#t033">33</a></td><td><span class="status-badge ok">有効</span></td><td>3.57</td></tr><tr><td><a class="tlink" href="#t034">34</a></td><td><span class="status-badge ok">有効</span></td><td>3.57</td></tr><tr><td><a class="tlink" href="#t035">35</a></td><td><span class="status-badge ok">有効</span></td><td>3.57</td></tr><tr><td><a class="tlink" href="#t036">36</a></td><td><span class="status-badge ok">有効</span></td><td>3.57</td></tr><tr><td><a class="tlink" href="#t037">37</a></td><td><span class="status-badge ok">有効</span></td><td>3.57</td></tr><tr><td><a class="tlink" href="#t038">38</a></td><td><span class="status-badge ok">有効</span></td><td>3.43</td></tr><tr><td><a class="tlink" href="#t039">39</a></td><td><span class="status-badge ok">有効</span></td><td>3.57</td></tr><tr><td><a class="tlink" href="#t040">40</a></td><td><span class="status-badge ok">有効</span></td><td>3.57</td></tr><tr><td><a class="tlink" href="#t041">41</a></td><td><span class="status-badge ok">有効</span></td><td>3.57</td></tr><tr><td><a class="tlink" href="#t042">42</a></td><td><span class="status-badge ok">有効</span></td><td>3.57</td></tr><tr><td><a class="tlink" href="#t043">43</a></td><td><span class="status-badge ok">有効</span></td><td>3.57</td></tr><tr><td><a class="tlink" href="#t044">44</a></td><td><span class="status-badge ok">有効</span></td><td>3.57</td></tr><tr><td><a class="tlink" href="#t045">45</a></td><td><span class="status-badge ok">有効</span></td><td>3.57</td></tr><tr><td><a class="tlink" href="#t046">46</a></td><td><span class="status-badge ok">有効</span></td><td>3.57</td></tr><tr><td><a class="tlink" href="#t047">47</a></td><td><span class="status-badge ok">有効</span></td><td>3.57</td></tr><tr><td><a class="tlink" href="#t048">48</a></td><td><span class="status-badge ok">有効</span></td><td>3.57</td></tr><tr><td><a class="tlink" href="#t049">49</a></td><td><span class="status-badge ok">有効</span></td><td>3.57</td></tr><tr><td><a class="tlink" href="#t050">50</a></td><td><span class="status-badge ok">有効</span></td><td>3.57</td></tr></table>
+
+<div class="card" id="t001">
+<h2>試行 1 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-12 15:29:41　モデルID：anthropic/claude-opus-4.8</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.57</span>　不整合1件</div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td>【不整合】</td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1 3
+Q2 1
+Q3 2
+Q4 1
+Q5 4
+Q6 2
+Q7 4
+
+【回答理由】
+子どもへの指導においては、一方的に教え込むのではなく、子ども自身の力を引き出し、主体性を育むことを重視する立場に立っています。
+
+Q1では、大人になるための訓練も大切ですが、子どもがもともと持っている可能性を伸ばす支援を、やや重視したいと考えました。
+
+Q2・Q4では、失敗を通して学ぶ経験や自発的な学習こそが、子どもの本当の成長につながると考え、Aを強く支持します。多少の失敗は貴重な学びの機会であり、子ども自身の意欲を大切にしたいからです。
+
+Q3では、議論や発表を通した学びと、反復練習による定着はどちらも必要ですが、思考力や表現力を育む機会をやや重視したいと考えました。
+
+Q5では、答えをすぐに示すよりも、子どもが自ら考え発見する過程を支援することが、深い理解と学ぶ楽しさにつながると考え、Bを強く支持します。
+
+Q6では、子どもの気持ちに寄り添うことは前提としつつも、問題行動に対しては善悪をはっきり示す毅然とした態度も必要だと考え、Bに近い立場を選びました。
+
+Q7では、短所の指摘よりも長所を認めてほめることが、子どもの自信と意欲を育て、結果として弱点の克服にもつながると考え、Bを強く支持します。
+
+全体として、子どもを信頼し、その主体性と可能性を尊重しながら支援していく姿勢を大切にしています。</pre>
+</div>
+<div class="card" id="t002">
+<h2>試行 2 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-12 16:11:08　モデルID：anthropic/claude-opus-4.8</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.57</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1: 3
+Q2: 1
+Q3: 2
+Q4: 1
+Q5: 4
+Q6: 2
+Q7: 4
+
+回答理由：
+
+私は、子どもが本来持っている力や可能性を引き出し、自ら学び成長していくことを支援する姿勢を基本としています。そのため、Q1では子どもの可能性の開花を支援する立場に、Q4では自発的な学習の支援に、Q5では自分で答えや解き方を見つけられるように支援する立場に重きを置いています。学びは与えられるものではなく、子ども自身が主体的に獲得していく過程を通じてこそ深く定着し、生涯にわたる学ぶ意欲につながると考えるからです。
+
+Q2については、失敗を恐れて過度に介入するよりも、多少の失敗も学びの機会と捉え、できるだけ子ども自身に挑戦させることが成長につながると考えます。失敗から学ぶ経験は、自己判断力やレジリエンスを育みます。
+
+Q3では、議論や発表を通じた思考力・表現力の育成を重視しつつも、それを支える基礎的な知識・技能の習得も不可欠であるため、両者のバランスを意識して「どちらかといえばA」としました。
+
+Q6については、子どもの気持ちに寄り添う姿勢は前提としつつも、問題行動に対しては善悪の基準を明確に示し、毅然とした態度で向き合うことが、子どもの規範意識や責任感を育てるうえで重要だと考えます。寄り添いと毅然さは対立するものではなく、信頼関係の上に成り立つものと捉えています。
+
+Q7では、短所を無理に矯正しようとするよりも、長所を認めて伸ばすことで自己肯定感が高まり、結果として本人が自ら課題に向き合う力も育つと考えるため、長所を伸ばす立場を選びました。
+
+全体として、子どもの主体性と自己肯定感を尊重しながら、必要な場面では明確な基準を示すという姿勢を大切にしています。</pre>
+</div>
+<div class="card" id="t003">
+<h2>試行 3 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-12 16:11:22　モデルID：anthropic/claude-opus-4.8</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.57</span>　不整合1件</div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td>【不整合】</td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1 3
+Q2 1
+Q3 2
+Q4 1
+Q5 4
+Q6 2
+Q7 4
+
+回答理由：
+私は、子どもが本来持っている力や可能性を引き出し、自ら学び成長していくことを支援する立場に重きを置いて回答しました。Q1では、大人になるための知識や訓練も大切だと考えるため「どちらかといえばB」としましたが、基礎的な指導の必要性も認識しています。Q2やQ4では、多少の失敗を経験することや自発的な学習こそが深い学びと成長につながると考え、Aを選びました。子どもが試行錯誤する過程そのものが貴重な学びだと捉えています。
+
+Q3・Q5では、自分の考えを表現し、答えや解き方を自ら見つける経験が思考力や主体性を育てると考えましたが、Q3については知識・技能の定着に反復練習も一定必要であるため「どちらかといえばA」としました。
+
+一方でQ6については、問題行動に対しては子どもの気持ちに寄り添う姿勢を大切にしつつも、社会の中で生きる上で守るべきルールを明確に示す毅然とした態度も必要だと考え、Bを選びました。共感と規律のバランスが重要だと考えています。
+
+Q7では、短所の指摘よりも長所を認めて伸ばすことで子どもの自己肯定感が高まり、結果として苦手なことにも前向きに取り組めるようになると考え、Bを選びました。全体として、子どもの主体性と可能性を尊重しながらも、必要な場面では適切な導きを行うという姿勢を大切にしています。</pre>
+</div>
+<div class="card" id="t004">
+<h2>試行 4 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-12 16:11:36　モデルID：anthropic/claude-opus-4.8</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.43</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>3</td><td>2</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1 3
+Q2 1
+Q3 2
+Q4 1
+Q5 4
+Q6 3
+Q7 4
+
+回答理由：
+私の教育観の根底には、「子どもは本来学ぶ力や成長する可能性を持っており、教育はそれを引き出し支援するものである」という考えがあります。そのため全体として、子どもの主体性・自発性を重視する立場に近い回答を選びました。
+
+Q1は、大人になるために必要な知識や規範を教える側面も大切だと考えるため、完全にBではなく「どちらかといえばB」としました。Q2とQ4は、失敗から学ぶ経験や自ら学ぼうとする意欲こそが真の成長につながると考え、明確にAを選びました。Q3は議論や発表による思考力の育成を重視しますが、基礎的な知識・技能の反復も土台として不可欠なため「どちらかといえばA」としました。Q5は、自ら答えにたどり着く過程が理解と応用力を深めると考え、支援する立場を強く支持します。Q6は毅然とした態度も時に必要ですが、まず問題の背景にある子どもの気持ちを理解することが解決の出発点だと考え「どちらかといえばA」としました。Q7は、短所の指摘よりも長所を認めて伸ばすことが自己肯定感を育み、結果的に短所の改善にもつながると考えるためBを選びました。
+
+全体として、指導や規律の必要性も認めつつ、子ども自身の力を信じて引き出す関わりを基本としたいという考えを反映しています。</pre>
+</div>
+<div class="card" id="t005">
+<h2>試行 5 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-12 16:11:48　モデルID：anthropic/claude-opus-4.8</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.57</span>　不整合1件</div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td>【不整合】</td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1 3
+Q2 1
+Q3 2
+Q4 1
+Q5 4
+Q6 2
+Q7 4
+
+回答理由：
+私の考え方の基本は、子どもが本来持っている力や好奇心を信頼し、それを引き出す支援を重視するという点にあります。Q1では、社会で生きるために必要な知識や規範を教えることも大切だと考えるため、可能性の開花支援にやや傾きつつも完全にB寄りとはしませんでした。Q2・Q4では、失敗や試行錯誤こそが学びの源であり、自発性が学習意欲を持続させると考えるため、Aを強く支持します。Q3では議論や発表による思考力育成を重視しますが、基礎的な知識・技能の反復も土台として不可欠なので、ややA寄りに留めました。Q5では、答えを与えるより自分で発見する過程に学びの本質があると考え、Bを支持します。Q6では、子どもの気持ちに寄り添うことは前提としつつも、問題行動に対しては善悪の基準を明確に示す毅然とした対応が本人の成長につながると考え、Bを選びました。Q7では、短所の指摘よりも長所を認め伸ばすことが自己肯定感を育て、結果的に短所の改善にもつながると考え、Bを支持します。総じて、子どもの主体性と自己肯定感を尊重しつつ、必要な場面では明確な指導を行うという姿勢です。</pre>
+</div>
+<div class="card" id="t006">
+<h2>試行 6 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-12 16:12:01　モデルID：anthropic/claude-opus-4.8</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.43</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>3</td><td>2</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1 3
+Q2 1
+Q3 3
+Q4 1
+Q5 4
+Q6 2
+Q7 4
+
+回答理由
+
+私の考え方の基本は、子ども自身が持つ力や主体性を尊重し、それを引き出す支援を重視するという点にあります。Q1では、大人になるための訓練も大切ですが、子どもの可能性を開花させる支援の方がより本質的だと考え、Bに近い立場を選びました。ただし基礎的なことを教える意義も否定できないため「どちらかといえば」としています。
+
+Q2とQ4では、失敗を経験することや自発性が学びの土台になると考え、子どもに任せる・自発性を支援する立場を明確に選びました。失敗は成長の機会であり、強制された学びは長続きしにくいと考えるためです。
+
+Q3では、議論や発表を通じた思考力の育成を重視しますが、知識・技能の反復練習も学力の基盤として必要不可欠なので、バランスを考えて「どちらかといえばA」としました。
+
+Q5では、答えを教えるよりも、子どもが試行錯誤して自ら発見する過程にこそ深い学びがあると考え、支援する立場を強く選びました。
+
+Q6では、子どもの気持ちに寄り添うことは前提としつつも、問題行動に対しては善悪の基準を明確に示す毅然とした態度も必要だと考え、「どちらかといえばB」としました。寄り添いと一貫した指導は両立できると考えます。
+
+Q7では、短所を直すことよりも長所を認めて伸ばす方が、子どもの自己肯定感を高め、結果的に全体の成長につながると考え、Bを選びました。</pre>
+</div>
+<div class="card" id="t007">
+<h2>試行 7 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-12 16:12:14　モデルID：anthropic/claude-opus-4.8</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.57</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1: 3
+Q2: 1
+Q3: 2
+Q4: 1
+Q5: 4
+Q6: 2
+Q7: 4
+
+回答理由：
+私は、子どもが本来持っている可能性や主体性を尊重し、それを引き出す支援型の指導を基本に考えています。Q1・Q4・Q5では、教師が一方的に教え込むよりも、子ども自身が考え、答えや解き方を見つけていくプロセスを重視したいと考えました。特にQ4・Q5では、自発的な学習と自ら発見する経験こそが深い理解と学ぶ意欲につながると考え、強くBや自発性を支持する立場を選びました。
+
+Q2では、失敗を恐れずに挑戦する経験が成長には不可欠であり、失敗から学ぶことこそが力になると考え、子どもにできるだけやらせる立場を強く支持しました。Q7も同様に、短所の矯正よりも長所を認めてほめることで自己肯定感を育て、結果的に全体の成長を促せると考えました。
+
+一方で、Q3ではAの議論や発表を重視する姿勢に共感しつつも、基礎的な知識・技能の定着があってこそ深い議論が成り立つため、バランスを意識して「どちらかといえばA」を選びました。
+
+Q6については、子どもの気持ちに寄り添う姿勢も大切ですが、問題行動に対しては善悪を明確に伝える毅然とした態度が、子どもの規範意識や他者への責任感を育てるうえで重要だと考え、Aを選びました。共感と毅然さは両立できますが、けじめの場面では一貫した指導が必要だと考えています。</pre>
+</div>
+<div class="card" id="t008">
+<h2>試行 8 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-12 16:12:27　モデルID：anthropic/claude-opus-4.8</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.57</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1: 3
+Q2: 1
+Q3: 2
+Q4: 1
+Q5: 4
+Q6: 2
+Q7: 4
+
+回答理由：
+私は、子どもが本来持っている可能性や主体性を尊重し、それを引き出す支援を重視する考え方に近いと考えます。教育の目的は一方的に知識や規範を注入することではなく、子ども自身が試行錯誤しながら学び、成長していく過程を支えることにあると考えるためです（Q1、Q4、Q5）。
+
+多少の失敗を経験することは、子どもが自ら考え、責任を持って行動する力を育むうえで重要です。失敗を過度に避けさせるよりも、挑戦の機会を保障することが成長につながると考えます（Q2）。また、知識・技能の定着のための反復練習も必要ですが、それと同時に自分の考えを表現し他者と議論する経験も欠かせないため、両者のバランスを意識しつつ、やや対話や発表を重視したいと考えました（Q3）。
+
+長所を認めて伸ばすアプローチは、子どもの自己肯定感を高め、意欲を引き出すうえで効果的だと考えます。短所への対応も必要ですが、まず良い面を伸ばすことが全体的な成長につながると考えました（Q7）。
+
+一方で、問題行動への対応については、子どもの気持ちに寄り添う姿勢を大切にしながらも、他者に迷惑をかける行為や安全に関わる場面では、してはいけないことを明確に伝える毅然とした態度も必要だと考え、Bに近い立場を選びました（Q6）。全体として、子どもの主体性を尊重しつつ、必要な場面では適切な枠組みを示すという姿勢を基本としています。</pre>
+</div>
+<div class="card" id="t009">
+<h2>試行 9 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-12 16:12:40　モデルID：anthropic/claude-opus-4.8</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.57</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1 3
+Q2 1
+Q3 2
+Q4 1
+Q5 4
+Q6 2
+Q7 4
+
+回答理由
+
+これらの回答は、子どもの主体性や内発的な力を尊重しつつ、必要な場面では大人としての明確な関わりも行うという、バランスを重視した教育観に基づいています。
+
+Q1については、大人になるための知識や規範を教えることも大切ですが、教育の根本は子ども自身が持つ可能性を引き出すことにあると考え、支援的な立場にやや近い「3」を選びました。
+
+Q2・Q4では、子どもの成長にとって失敗の経験や自発性は不可欠であり、過度に管理・強制するよりも本人にやらせ、自ら学ぼうとする姿勢を支えることが力を伸ばすと考え「1」を選びました。
+
+Q3では、思考力や表現力を養う議論の時間を重視しつつ、基礎的な知識・技能の定着も欠かせないため、やや発表・議論寄りの「2」としました。
+
+Q5では、教師が答えを与えるより、子ども自身が試行錯誤して解に至る過程にこそ深い学びがあると考え、支援を重視する「4」を選びました。
+
+Q6については、子どもの気持ちに寄り添うことは前提としつつ、問題行動に対しては善悪を明確に伝える毅然とした態度も必要だと考え「2」としました。
+
+Q7では、短所を指摘して萎縮させるより、長所を認めて自己肯定感を育てる方が、結果として全体的な成長につながると考え「4」を選びました。
+
+全体として、子どもの自主性・可能性を伸ばす支援的な姿勢を基本としながら、規律や善悪に関わる場面では大人としての明確な指導も重視する立場です。</pre>
+</div>
+<div class="card" id="t010">
+<h2>試行 10 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-12 16:12:54　モデルID：anthropic/claude-opus-4.8</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.57</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1 3
+Q2 1
+Q3 2
+Q4 1
+Q5 4
+Q6 2
+Q7 4
+
+回答理由
+
+私は、教育の本質は子どもが本来持っている力を引き出し、自ら学び成長していく力を育むことにあると考えています。
+
+Q1では、大人になるための訓練も大切ですが、子どもの可能性を信じてその開花を支援する姿勢をやや重視したいと考え「3」を選びました。
+
+Q2は、失敗こそが学びの重要な機会だと考えます。細かく注意して失敗を防ぐより、実際にやってみて試行錯誤する経験が成長につながるため「1」としました。
+
+Q3は、知識・技能の習得のための反復練習も基礎として不可欠ですが、自分の考えを表現し他者と議論する経験がより深い学びを生むと考え、ややAに近い「2」を選びました。
+
+Q4は、学習は本来子ども自身の内発的な動機から生まれるものが理想です。強制された学習は長続きせず主体性を損なうため、自発的な学習の支援を重視して「1」としました。
+
+Q5は、教師がすぐ答えを示すと子どもの思考する機会を奪ってしまいます。自分で考え解き方を発見する過程にこそ学ぶ意義があると考え「4」を選びました。
+
+Q6は、気持ちに寄り添う姿勢も重要ですが、問題行動に対しては善悪の基準を明確に示す毅然とした指導が、子どもの規範意識を育てるうえで必要だと考え「2」としました。
+
+Q7は、短所の指摘は自己肯定感を下げがちですが、長所を認めてほめることで自信が生まれ、結果的に短所の改善にもつながると考え「4」を選びました。
+
+全体として、子どもの主体性と自己肯定感を大切にしつつ、必要な場面では明確な指導も行うというバランスを意識しています。</pre>
+</div>
+<div class="card" id="t011">
+<h2>試行 11 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-12 17:14:03　モデルID：anthropic/claude-opus-4.8</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.57</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1 3
+Q2 1
+Q3 2
+Q4 1
+Q5 4
+Q6 2
+Q7 4
+
+回答理由：
+
+私は基本的に、子どもが本来持っている力を引き出し、自ら学び成長していく過程を支援する立場を重視しています。そのため、可能性の開花を支援する（Q1）、答えを教えるのではなく自分で見つけられるよう支援する（Q5）、自発的な学習を支援する（Q4）、長所を伸ばす（Q7）という方向を選びました。子どもは失敗を通して学ぶものなので、多少の失敗を恐れず挑戦させること（Q2）も大切だと考えます。
+
+一方で、支援を重視するといっても、基礎的な知識・技能の習得には一定の反復練習が不可欠であり、議論や発表とのバランスが必要だと考え、Q3は「どちらかといえばAに近い」に留めました。
+
+Q6については判断が分かれるところですが、問題行動に対しては、まず気持ちに寄り添う姿勢を土台としつつも、してはいけないことは毅然と示すことが子どもの成長と安全のために重要だと考え、「Aに近い」ではなく毅然とした指導寄りを選びました。ただし、これは子どもを頭ごなしに叱るという意味ではなく、背景を理解した上で一貫した態度で向き合うという趣旨です。
+
+全体として、子どもの主体性と自己肯定感を育てることを重視しつつ、必要な場面では明確な基準や基礎の定着も大切にする、というバランスを意識した回答となっています。</pre>
+</div>
+<div class="card" id="t012">
+<h2>試行 12 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-12 17:14:19　モデルID：anthropic/claude-opus-4.8</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.43</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>3</td><td>3</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1 3
+Q2 1
+Q3 2
+Q4 1
+Q5 3
+Q6 2
+Q7 4
+
+回答理由
+
+私の教育観は、基本的に「子どもの主体性や可能性を尊重し、支援する」立場を重視しつつ、必要な場面では大人が適切に導く姿勢とのバランスを大切にしたいという考えに基づいています。
+
+Q1では、大人になるための知識や規範を教えることも重要ですが、それ以上に子ども一人ひとりが持つ可能性を引き出すことが教育の本質だと考え、Bにやや近い立場を選びました。
+
+Q2では、失敗は学びの貴重な機会であり、子ども自身が試行錯誤する経験こそが成長につながると考えるため、Aを選びました。
+
+Q3では、知識・技能の定着も欠かせませんが、自分の考えを表現し他者と議論する力は今後ますます重要になると考え、Aにやや近い立場としました。
+
+Q4では、学習は本人の内発的な動機があってこそ深まるものであり、強制によって学ぶ姿勢を育てるのは難しいと考えるため、Aを選びました。
+
+Q5では、教師が答えを示すことも時に必要ですが、自ら考え解決する力を育てることを重視し、Bにやや近い立場としました。
+
+Q6では、子どもの気持ちに寄り添う姿勢は大切ですが、問題行動に対しては善悪の基準を明確に示す毅然とした対応も必要だと考え、Bにやや近い立場としました。ただし寄り添いと毅然さは両立すべきものと捉えています。
+
+Q7では、短所を直すことよりも、長所を認めて伸ばすことが自己肯定感を高め、結果的に子どもの全体的な成長を促すと考え、Bを選びました。</pre>
+</div>
+<div class="card" id="t013">
+<h2>試行 13 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-12 17:14:33　モデルID：anthropic/claude-opus-4.8</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.57</span>　不整合1件</div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td>【不整合】</td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1 3
+Q2 1
+Q3 2
+Q4 1
+Q5 4
+Q6 2
+Q7 4
+
+回答理由
+
+私は、子ども一人ひとりが本来持っている力や個性を尊重し、それを引き出し伸ばしていく教育観に共感します。Q1では、大人になるために必要な知識や規範を教えることも重要ですが、それ以上に子どもの可能性の開花を支援する姿勢を大切にしたいと考え、Bにやや近い立場を選びました。
+
+Q2・Q4・Q5では、学びの主体は子ども自身であるという考えを重視しています。失敗を過度に恐れず挑戦させること（Q2）、自発的な学習意欲を尊重すること（Q4）、答えを与えるのではなく自ら発見できるよう支援すること（Q5）は、子どもの思考力や自立心を育てるうえで不可欠だと考えます。
+
+Q3では、議論や発表を通じた学びも大切ですが、基礎的な知識・技能の定着があってこそ深い思考が可能になると考え、バランスを踏まえつつAにやや近い立場としました。
+
+Q6については、子どもの気持ちに寄り添う姿勢も重要ですが、問題行動に対しては善悪の基準を明確に示し、毅然とした態度で向き合うことが、子どもの成長や信頼関係の構築につながると考え、Bに近い立場を選びました。ただし、毅然さと共感は対立するものではなく、両立させることが望ましいと考えています。
+
+Q7では、短所を指摘して直すことも必要な場面はありますが、長所を認めてほめることで子どもの自己肯定感や意欲が高まり、結果として短所の改善にもつながると考え、Bを選びました。
+
+全体として、私は子どもの主体性・自己肯定感を尊重しつつ、必要な場面では基礎の習得や明確な指導も行う、支援と規律のバランスを重視する立場です。</pre>
+</div>
+<div class="card" id="t014">
+<h2>試行 14 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-12 17:14:51　モデルID：anthropic/claude-opus-4.8</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.57</span>　不整合1件</div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td>【不整合】</td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1 3
+Q2 1
+Q3 2
+Q4 1
+Q5 4
+Q6 2
+Q7 4
+
+回答理由：
+私は、子どもが本来持っている力や可能性を引き出し、主体的に学び成長していくことを重視する考え方に近い立場です。そのため、Q1では大人が一方的に教え込むよりも、子どもの可能性の開花を支援する方向をやや重視しました（ただし、基礎的なことを教える指導も一定程度必要と考え「3」としました）。Q2・Q4では、失敗を恐れず自分でやってみる経験や自発的な学習こそが深い学びと成長につながると考え、Aの立場を強く支持します。Q3では、議論を通した思考力の育成を重視しつつ、基礎的な知識・技能の反復も土台として大切なため「2」としました。Q5では、答えをすぐに与えるより、子ども自身が試行錯誤して発見する過程に価値があると考えます。一方でQ6については、子どもの気持ちに寄り添うことは前提としつつも、問題行動に対しては善悪を明確に伝える毅然とした指導が本人の成長と周囲への責任の観点から必要だと考え、Bに近い立場を選びました。Q7では、短所の指摘よりも長所を認めて伸ばすことで、子どもの自己肯定感と意欲が高まり、結果的に全体的な成長につながると考えます。全体として、子どもの主体性・自己肯定感を尊重しながらも、必要な場面では明確な指導を行うバランスを大切にしたいという考えに基づいています。</pre>
+</div>
+<div class="card" id="t015">
+<h2>試行 15 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-12 17:15:02　モデルID：anthropic/claude-opus-4.8</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.57</span>　不整合1件</div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td>【不整合】</td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1 3
+Q2 1
+Q3 2
+Q4 1
+Q5 4
+Q6 2
+Q7 4
+
+回答理由：
+私は子どもの主体性と可能性を尊重する立場を基本としつつ、状況に応じてバランスを取ることが大切だと考えています。Q1では、大人になるために必要な基礎を教えることも重要である一方、子ども自身が持つ可能性を引き出す支援がより本質的だと考え、どちらかといえばBを選びました。Q2・Q4では、失敗も学びの重要な機会であり、自発的な学習意欲こそが深い成長につながると考え、Aを選択しました。Q3・Q5では、子ども自身が考え、議論し、答えを見つけるプロセスを重視することで、真の理解と思考力が育つと考えました。ただしQ3は反復練習による基礎定着も無視できないため、どちらかといえばAとしました。Q7では、短所を指摘するよりも長所を認めて伸ばすことが、子どもの自己肯定感と意欲を高めると考えBを選びました。一方Q6については、気持ちへの寄り添いも大切ですが、問題行動に対しては毅然とした態度で善悪の基準を明確に示すことが、子どもの安心感と規範意識の形成につながると考え、Bを選択しました。全体として、子どもの自主性を尊重しながらも、必要な場面では明確な指導を行う姿勢が望ましいと考えています。</pre>
+</div>
+<div class="card" id="t016">
+<h2>試行 16 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-12 17:15:17　モデルID：anthropic/claude-opus-4.8</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.57</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1 3
+Q2 1
+Q3 2
+Q4 1
+Q5 4
+Q6 2
+Q7 4
+
+回答理由：
+子どもの教育においては、外から知識や規範を注ぎ込むだけでなく、一人ひとりが本来持っている可能性を引き出し、自ら学び成長する力を育てることが重要だと考えます。そのため、自発的な学習を支援し（Q4）、答えを教え込むよりも自分で解き方を見つけられるように導き（Q5）、短所を指摘するより長所を伸ばす（Q7）姿勢を大切にしたいと思います。
+
+同時に、失敗を過度に恐れさせず、多少の失敗を経験させながら挑戦させること（Q2）が、子どもの主体性や粘り強さを育てると考えます。学習面でも、反復練習による基礎固めは大切ですが、それに加えて自分の考えを発表し議論する機会を持つこと（Q3）で、思考力や表現力が養われると考え、ややAを重視しました。
+
+一方で、教育には支援だけでなく、社会で生きていくために必要なことを教え導く側面も欠かせません。Q1では可能性の開花を支援する立場に立ちつつも、大人が示すべき方向性も無視できないため中間的な立場としました。また、問題を起こした際には、気持ちに寄り添う共感的理解を土台としながらも、してはいけないことは毅然と伝えること（Q6）が、子どもの規範意識と安心感の双方につながると考えます。
+
+全体として、子どもの主体性と可能性を尊重する姿勢を基本としつつ、必要な場面では大人が適切に導くバランスを大切にしたいと考えています。</pre>
+</div>
+<div class="card" id="t017">
+<h2>試行 17 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-12 17:15:32　モデルID：anthropic/claude-opus-4.8</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.57</span>　不整合1件</div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td>【不整合】</td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1 3
+Q2 1
+Q3 2
+Q4 1
+Q5 4
+Q6 2
+Q7 4
+
+回答理由
+
+私の教育観の根底には、「子どもが本来持っている力を引き出し、自ら学び成長する主体である」という考えがあります。そのため、多くの質問で子どもの自発性や可能性を重視する側を選びました。
+
+Q1では、基礎的な知識や社会性を教える「訓練」の側面も無視できないと考え、可能性の開花を支援する立場に軸足を置きつつも、完全にBとはせず「どちらかといえばB」としました。Q2・Q4では、失敗から学ぶ経験や内発的動機づけこそが深い学びと成長につながると考え、明確にAを選びました。強制された学習は一時的な効果にとどまりやすいと考えるためです。
+
+Q3・Q5では、思考力や探究する力を育てる観点から、子ども自身が考え発見するプロセスを重視しました。ただしQ3では、知識・技能の習得も学びの土台として重要であるため、議論の時間を多くとりたいと考えつつも「どちらかといえば」に留めました。
+
+Q6については、子どもの気持ちに寄り添うことは前提としつつも、問題行動に対しては善悪の基準を明確に示し、毅然と向き合うことが子どもの安心や成長につながると考え、Bを選びました。共感と一貫した態度は両立するものだと捉えています。
+
+Q7では、長所を認め伸ばすことで自己肯定感が育ち、その自信が結果的に短所の改善にもつながると考え、Bを選びました。
+
+全体として、子どもの主体性・可能性を尊重しつつ、必要な場面では大人が明確な基準を示すという、支援を基本としながらも節度を持った指導観を持っています。</pre>
+</div>
+<div class="card" id="t018">
+<h2>試行 18 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-12 17:15:50　モデルID：anthropic/claude-opus-4.8</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.57</span>　不整合1件</div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td>【不整合】</td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1 3
+Q2 1
+Q3 2
+Q4 1
+Q5 4
+Q6 2
+Q7 4
+
+回答理由：
+私は、子どもが本来持っている可能性を引き出し、主体的に学び成長していくことを支援する姿勢を基本にしつつ、必要な場面では大人としての適切な関わりも大切だと考えています。
+
+Q1では、一人前の大人になるための知識や規範を教えることも重要ですが、それはあくまで子ども自身の可能性を伸ばすためだと考え、やや支援的な立場を選びました。
+
+Q2・Q4では、子どもが自ら試行錯誤し、失敗から学ぶ経験こそが成長につながると考えます。細かく注意を与えたり強制したりするより、自発性を尊重する方が長期的な学びの意欲を育むと考えます。
+
+Q3では、議論や発表を通じた思考力の育成は重要ですが、その土台となる基礎的な知識・技能の習得も欠かせないため、バランスを意識してやや議論寄りとしました。
+
+Q5では、答えをすぐに示すのではなく、子ども自身が考え、発見する過程を支援することが、思考力や学ぶ力を育てると考えます。
+
+Q6については、子どもの気持ちに寄り添う理解は大切ですが、問題行動に対しては善悪の基準を明確に示す毅然とした態度が、結果的に子どもの安心感と成長につながると考え、Bを選びました。
+
+Q7では、短所の指摘よりも長所を認めて伸ばす関わりの方が、子どもの自己肯定感と意欲を高め、結果的に短所の改善にもつながると考えます。</pre>
+</div>
+<div class="card" id="t019">
+<h2>試行 19 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-12 17:16:03　モデルID：anthropic/claude-opus-4.8</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.57</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1 3
+Q2 1
+Q3 2
+Q4 1
+Q5 4
+Q6 2
+Q7 4
+
+回答理由
+
+私は、子どもが本来持っている力を信じ、それを引き出し支援することを基本としつつ、必要な場面では大人としての適切な関与や指導も大切にするという立場から回答しました。
+
+Q1は、教え訓練することにも意味はありますが、子ども一人ひとりの可能性を開花させる支援に重きを置きたいと考え、Bにやや近い立場を選びました。
+
+Q2は、失敗は学びの重要な機会であり、多少の失敗を経験させながら挑戦させることが成長につながると考え、Aを選びました。
+
+Q3は、知識・技能の定着も必要ですが、これからの時代は自分で考え表現し議論する力がより重要になるため、Aにやや近い立場としました。
+
+Q4は、学習の本質は自発性にあり、強制された学びは長続きしないと考え、自発的な学習支援を重視してAを選びました。
+
+Q5は、答えを与えるのではなく、子どもが自ら考え発見する過程にこそ深い学びがあると考え、Bを選びました。
+
+Q6は、気持ちに寄り添うことは前提として大切ですが、問題行動に対しては善悪を明確に示す毅然とした姿勢も必要だと考え、Bにやや近い立場としました。
+
+Q7は、短所の指摘よりも長所を認めて伸ばすことが子どもの自己肯定感を育み、結果的に短所の改善にもつながると考え、Bを選びました。</pre>
+</div>
+<div class="card" id="t020">
+<h2>試行 20 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-12 17:16:17　モデルID：anthropic/claude-opus-4.8</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.57</span>　不整合1件</div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td>【不整合】</td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1 3
+Q2 1
+Q3 2
+Q4 1
+Q5 4
+Q6 2
+Q7 4
+
+回答理由
+
+私は、子どもが本来持っている力や可能性を引き出し、主体的に学び成長していくことを支援する姿勢を基本としつつ、必要な場面では大人としての適切な導きも欠かせないと考えています。
+
+Q1では、大人になるための知識や規範を教えることも大切ですが、それ以上に子ども一人ひとりの個性や可能性を伸ばすことを重視したいため、どちらかといえばBを選びました。
+
+Q2・Q4では、失敗を通してこそ学びが深まり、自ら進んで取り組む経験が成長につながると考え、Aを強く支持します。過度に干渉したり強制したりするより、挑戦を見守る姿勢が重要です。
+
+Q3では、思考力や表現力を育てる議論の時間を重視しつつ、基礎となる知識・技能の反復も必要なため、バランスを取りながらもややAに近い立場としました。
+
+Q5では、答えをすぐに教えるより、子ども自身が試行錯誤して見つける過程にこそ深い理解と学ぶ力が育つと考え、Bを選びました。
+
+Q6では、子どもの気持ちに寄り添うことは前提としつつ、問題行動に対してはよい悪いを明確に示す毅然とした態度も教育上必要だと考え、どちらかといえばBとしました。
+
+Q7では、短所の指摘よりも長所を認めて伸ばすことが、子どもの自己肯定感と意欲を高め、結果的に短所の改善にもつながると考え、Bを支持します。
+
+全体として、子どもの主体性と自己肯定感を尊重しながら、必要な場面では適切な指導も行うという姿勢を大切にしています。</pre>
+</div>
+<div class="card" id="t021">
+<h2>試行 21 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-12 17:16:31　モデルID：anthropic/claude-opus-4.8</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.57</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1 3
+Q2 1
+Q3 2
+Q4 1
+Q5 4
+Q6 2
+Q7 4
+
+回答理由：
+私は、子ども自身が本来持っている力や可能性を引き出し、自ら学び成長していくことを支援する姿勢を基本としつつ、必要な場面では大人としての導きも大切にすべきだと考えています。
+
+Q1については、大人になるための知識や規範を教えることも重要ですが、それ以上に子ども一人ひとりの個性や可能性を尊重し、それが開花するよう支える方が教育の本質に近いと考え、Bに寄せました。ただし訓練的な要素も無視できないため「どちらかといえば」としています。
+
+Q2・Q4については、失敗も含めた経験や自発性が学びの土台になると考え、Aを強く支持します。失敗を恐れて過度に管理したり、強制的に学ばせたりするより、子どもが主体的に挑戦する環境を整えることが、長期的な成長につながると考えるからです。
+
+Q3では、思考力や表現力を育てる議論の時間を重視しますが、知識・技能の定着には反復練習も不可欠であり、バランスが必要なため「どちらかといえばA」としました。
+
+Q5では、答えをすぐ与えるより、子ども自身が試行錯誤して解決する過程こそが学力の本質だと考え、Bを強く支持します。
+
+Q6については、子どもの気持ちに寄り添う姿勢は前提としつつも、問題行動に対しては善悪を明確にした毅然とした対応が本人の成長のために必要だと考え、Bに寄せました。
+
+Q7では、短所の指摘だけでは自己肯定感が育ちにくく、長所を認めて伸ばすことが結果的に短所の改善にもつながると考え、Bを強く支持します。
+
+全体として、子どもの主体性・自己肯定感を尊重する立場を基本にしています。</pre>
+</div>
+<div class="card" id="t022">
+<h2>試行 22 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-12 17:16:50　モデルID：anthropic/claude-opus-4.8</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.43</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>3</td><td>2</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1 3
+Q2 1
+Q3 2
+Q4 1
+Q5 4
+Q6 3
+Q7 4
+
+回答理由：
+私の教育観の基本は、子ども自身が持つ力や主体性を信じ、それを引き出し支援することにあります。Q1では、大人が必要と考える枠に当てはめる訓練よりも子どもの可能性の開花を重視しますが、社会で生きるための基礎的な知識や規律も一定程度必要と考えるため「3」としました。Q2・Q4では、失敗も含めた経験こそが学びであり、自発性を尊重することが長期的な成長につながると考え、A寄りを選びました。Q3では議論や発表による思考力育成を重視しつつ、基礎的な知識・技能の定着も土台として不可欠なため「2」としました。Q5では、答えを教え込むより、自ら考え発見する過程で得られる力を重視します。Q6では、問題行動の背景にある気持ちに寄り添う姿勢を基本としながらも、善悪の線引きなど毅然とした対応が必要な場面もあるため「3」としました。Q7では、短所の矯正よりも長所を認め伸ばすことが子どもの自己肯定感と成長意欲を育てると考えます。全体として、子どもを一方的に指導する対象ではなく、自ら育つ力を持つ存在ととらえ、その成長を支える立場を大切にしています。</pre>
+</div>
+<div class="card" id="t023">
+<h2>試行 23 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-12 17:17:01　モデルID：anthropic/claude-opus-4.8</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.57</span>　不整合1件</div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td>【不整合】</td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1 3
+Q2 1
+Q3 2
+Q4 1
+Q5 4
+Q6 2
+Q7 4
+
+回答理由
+私は、子どもが本来持っている力や可能性を引き出し、自ら学び成長していく過程を支援する立場を基本としています。そのため、Q1では大人になるための訓練という側面も無視できないものの、子どもの可能性の開花を重視する考え方に傾きます。Q2・Q4では、多少の失敗を経験することや自発的な学習こそが真の成長につながると考え、子ども自身に取り組ませる姿勢を強く支持します。Q3・Q5では、基礎的な知識・技能の習得も大切ではあるものの、自ら考え、答えや解き方を見つけていく力を育てることが長期的に重要だと考えます。
+
+一方で、Q6については、子どもの気持ちに寄り添うことは前提としつつも、問題行動に対しては善悪の基準を明確に示す毅然とした指導も必要だと考え、どちらかといえばBに近い立場を取りました。Q7では、短所を直すことも指導の一つですが、長所をほめて自己肯定感を高めることが、結果的に短所の改善や全体的な成長を促すと考えるため、Bを選びました。全体として、子どもの主体性と自己肯定感を尊重しながら、必要な場面では明確な基準を示すというバランスを重視しています。</pre>
+</div>
+<div class="card" id="t024">
+<h2>試行 24 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-12 17:17:13　モデルID：anthropic/claude-opus-4.8</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.57</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1 3
+Q2 1
+Q3 2
+Q4 1
+Q5 4
+Q6 2
+Q7 4
+
+回答理由
+私の教育観の基本は、子ども自身が本来持っている力や可能性を引き出し、主体的に学び成長していくことを支援するという立場に立っています。そのため、Q1では「可能性の開花を支援する」に、Q4では「自発的な学習の支援」に、Q5では「自分で答えを見つけられるよう支援する」に強く傾きました。
+
+Q2では、失敗は学びの重要な機会であり、多少の失敗を経験しながら試行錯誤することで子どもは大きく成長すると考え、Aを選びました。Q3では、議論や発表を通じて思考力や表現力を育てることを重視しますが、基礎的な知識・技能の定着も欠かせないため、両者のバランスを意識して「どちらかといえばA」としました。
+
+Q7では、短所を指摘して萎縮させるよりも、長所を認めて自信を持たせることが結果として全体的な成長につながると考え、Bを選びました。
+
+一方、Q6については、問題行動に対して子どもの気持ちに寄り添うことも大切ですが、してはいけないことについては明確な基準を示し、毅然とした態度で向き合うことが、子どもの規範意識や信頼関係の形成につながると考えたため、「どちらかといえばB」としました。ただし毅然とした指導も、頭ごなしに叱るのではなく、子どもの背景や気持ちを理解した上で行うべきだと考えています。</pre>
+</div>
+<div class="card" id="t025">
+<h2>試行 25 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-12 17:17:28　モデルID：anthropic/claude-opus-4.8</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.57</span>　不整合1件</div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td>【不整合】</td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1 3
+Q2 1
+Q3 2
+Q4 1
+Q5 4
+Q6 2
+Q7 4
+
+回答理由
+子どもへの指導は、大人が一方的に知識や規律を与えるだけでなく、子ども自身が本来持っている力や可能性を引き出し、主体的に伸ばしていくことを重視すべきだと考えます。そのため、Q1・Q4・Q5・Q7では、子どもの自発性や長所を支援・尊重する立場に近い回答を選びました。特にQ5やQ7、Q4については、自ら考え答えを見つけたり、良い面を伸ばしたりする経験が学びの意欲や自己肯定感につながると考え、明確にB（またはA）寄りを選びました。
+
+一方で、支援や見守りを重視するあまり、必要な指導が疎かになってはいけないとも考えます。Q2では、失敗を過度に恐れず挑戦させることが成長につながると考えつつも、安全面や基礎の定着が重要な場面では注意が必要なため、状況によりバランスを取る姿勢を示しました。Q3では議論や表現の機会を大切にしたいものの、反復による知識・技能の定着も学習の土台として欠かせないため、どちらかといえば議論重視としつつ両者の必要性を意識しました。
+
+Q6については、問題行動の背景にある子どもの気持ちに寄り添う姿勢は大前提としつつも、してはいけないことに対しては毅然と示すことが、子どもの安全や規範意識を育てる上で重要だと考え、B寄りを選びました。共感と一貫した指導は対立するものではなく、両立させることが望ましいと考えています。
+
+全体として、子どもの主体性・可能性を尊重する姿勢を基本としながらも、場面に応じて適切な指導や枠組みを示すことが大切だと考え、各質問に回答しました。</pre>
+</div>
+<div class="card" id="t026">
+<h2>試行 26 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-12 17:17:42　モデルID：anthropic/claude-opus-4.8</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.57</span>　不整合1件</div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td>【不整合】</td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1: 3
+Q2: 1
+Q3: 2
+Q4: 1
+Q5: 4
+Q6: 2
+Q7: 4
+
+回答理由：
+
+私の考えは、基本的に子どもの主体性や可能性を尊重しつつ、状況に応じて適切な指導を行うという立場です。
+
+Q1では、大人になるために必要なことを教える側面も大切だと考えますが、子どもが本来持っている可能性を引き出し、それを支援する姿勢の方がより本質的だと考え、Bに近いを選びました。
+
+Q2とQ4では、子どもの自主性や主体性を重視しました。失敗もまた重要な学びの機会であり、自発的な学習こそが本当の力になると考え、いずれもAを選びました。
+
+Q3では、議論や発表を通じた思考力の育成を重視しつつも、基礎的な知識・技能の反復練習も不可欠だと考え、バランスを取りながらもややAに近い立場としました。
+
+Q5では、答えをすぐに教えるのではなく、子ども自身が試行錯誤して答えにたどり着く過程を支援することが、深い理解や学ぶ力につながると考え、Bを選びました。
+
+Q6では、子どもの気持ちに寄り添うことは大切ですが、問題行動に対しては善悪をはっきり示す毅然とした態度も必要だと考え、Bに近いを選びました。ただし、寄り添いと毅然とした対応は両立すべきものだと考えています。
+
+Q7では、短所を直すことよりも、長所を認めてほめることで子どもの自己肯定感が高まり、結果として全体的な成長につながると考え、Bを選びました。
+
+全体として、子どもの主体性・可能性を尊重する方向を基本としながら、規範や基礎学力に関わる部分では指導者の適切な関わりも重視するという考え方に基づいています。</pre>
+</div>
+<div class="card" id="t027">
+<h2>試行 27 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-12 17:17:56　モデルID：anthropic/claude-opus-4.8</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.57</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1 3
+Q2 1
+Q3 2
+Q4 1
+Q5 4
+Q6 2
+Q7 4
+
+回答理由：
+私は基本的に、子どもが本来持っている力や可能性を引き出し、自ら学び成長していくことを支援する立場に近い考えを持っています。教育とは一方的に知識や規範を注入するものではなく、子ども自身の主体性や自発性を尊重することで、より深い学びと成長が生まれると考えるためです（Q1・Q4・Q5）。
+
+また、失敗は学びの重要な機会であり、多少の失敗を恐れずに挑戦させることで、子どもは自分で考え、乗り越える力を身につけていくと考えます（Q2）。知識・技能の反復練習も必要ですが、それらを活用して考え、議論する経験があってこそ理解が深まるため、両者のバランスを重視しつつ、やや対話や思考を促す方向を大切にしたいと考えました（Q3）。
+
+指導においては、子どもの長所に目を向けて自己肯定感を育てることが、結果として短所の改善にもつながると考えるため、ほめて伸ばす姿勢を重視します（Q7）。
+
+一方で、問題行動への対応については、子どもの気持ちに寄り添うことは大前提としつつも、他者を傷つける行為や社会的なルールに関わる場面では、善悪をきちんと伝える毅然とした姿勢も必要だと考え、状況に応じた指導が望ましいと判断しました（Q6）。
+
+全体として、子どもの主体性と可能性を尊重しながらも、必要な場面では明確な指導も行うという、支援を基本とした姿勢を大切にしています。</pre>
+</div>
+<div class="card" id="t028">
+<h2>試行 28 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-12 17:23:21　モデルID：anthropic/claude-opus-4.8</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.57</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1 3
+Q2 1
+Q3 2
+Q4 1
+Q5 4
+Q6 2
+Q7 4
+
+回答理由：
+私は、子ども一人ひとりが本来持っている可能性を引き出し、主体的に学び成長していくことを支援する姿勢を基本に置いています。そのため、Q1では基礎的な訓練の重要性も認めつつ、可能性の開花を支援する立場に近いと考えました。Q2・Q4では、失敗も学びの一部であり、自発性を尊重することが長期的な成長につながると考え、子どもの主体性を重んじる立場を選びました。Q3では対話や議論を通じた思考力の育成を重視しつつ、知識・技能の定着も欠かせないため、バランスをやや前者寄りに置きました。Q5では、答えをすぐに与えるよりも、自ら考え解決策を見つける過程そのものが力になると考えます。一方Q6では、子どもの気持ちに寄り添うことは大切ですが、問題行動に対しては善悪を明確に示す毅然とした態度も必要だと考え、規範を伝える立場を重視しました。Q7では、短所の指摘よりも長所を認めて伸ばすことが、子どもの自己肯定感と意欲を高めると考えています。全体として、規律ある指導の必要性を認めつつも、子どもの主体性・自発性・可能性を尊重する教育観を大切にしています。</pre>
+</div>
+<div class="card" id="t029">
+<h2>試行 29 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-12 17:23:33　モデルID：anthropic/claude-opus-4.8</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.43</span>　不整合1件</div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>3</td><td>2</td><td>【不整合】</td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1 3
+Q2 1
+Q3 2
+Q4 1
+Q5 4
+Q6 3
+Q7 4
+
+回答理由
+
+私は、子どもが本来持っている力を引き出し、自ら学び成長する姿勢を育てることを重視する立場に近いと考えます。
+
+Q1については、大人になるための知識や規範を教えることも大切ですが、それ以上に子ども一人ひとりの可能性を伸ばす支援が教育の本質だと考え、Bにやや近い立場を選びました。
+
+Q2・Q4については、失敗も学びの一部であり、自発的に取り組む経験を通してこそ主体性や思考力が育つと考えるため、Aを強く支持します。過度な管理や強制は、かえって学ぶ意欲を損なうと考えます。
+
+Q3・Q5については、議論や自分で答えを見つける経験は学びを深めますが、その前提として基礎的な知識・技能の習得も欠かせません。特にQ5では、子ども自身が試行錯誤して発見する過程こそが理解の定着につながると考え、Bを重視しました。ただしQ3では、反復練習の時間も一定程度必要だと考え、バランスをとりました。
+
+Q6については、問題行動には毅然とした対応も必要ですが、その背景にある子どもの気持ちを理解することが根本的な解決につながると考え、ややAに近い立場を選びました。
+
+Q7については、短所を指摘して直すより、長所を認めて伸ばすことで自己肯定感が高まり、結果として短所の改善にもつながると考えるため、Bを支持します。
+
+全体として、子どもの主体性・自己肯定感・自ら学ぶ力を尊重しつつ、必要な場面では基礎の習得や適切な指導も取り入れる、バランスを意識した考え方を持っています。</pre>
+</div>
+<div class="card" id="t030">
+<h2>試行 30 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-12 17:23:48　モデルID：anthropic/claude-opus-4.8</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.57</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1 3
+Q2 1
+Q3 2
+Q4 1
+Q5 4
+Q6 2
+Q7 4
+
+回答理由
+
+私は、子どもが本来持っている力や可能性を引き出し、主体的に学び成長していくことを支える教育観に近い立場です。
+
+Q1では、大人が一方的に「必要なこと」を決めて訓練するよりも、子ども自身の可能性の開花を支援する姿勢を大切にしたいと考えますが、社会で生きる上で教えるべき基礎的なことも一定必要なため、やや折衷的にBを選びました。
+
+Q2・Q4では、失敗も学びの重要な機会であり、強制ではなく自発性を尊重することで、より深く持続的な成長につながると考え、Aを選びました。失敗を過度に防いだり強制したりすると、挑戦する意欲や自ら学ぶ姿勢が育ちにくいと考えます。
+
+Q3では、議論や発表を通じた思考力・表現力の育成を重視しつつも、その土台となる知識・技能の習得も欠かせないため、バランスを意識してAに寄せました。
+
+Q5では、答えをすぐに与えるより、子ども自身が試行錯誤して見つけるプロセスにこそ学びの本質があると考え、Bを選びました。
+
+Q6では、気持ちに寄り添う姿勢は前提として大切ですが、問題行動に対しては善悪を明確に示す毅然とした対応も必要であり、両者のバランスからBに寄せました。
+
+Q7では、短所の指摘よりも長所を認めて伸ばすことが、自己肯定感を高め、結果的に短所の改善にもつながると考え、Bを選びました。
+
+全体として、子どもの主体性・自発性・可能性を尊重しつつ、必要な場面では適切な指導や基礎の習得も大切にする姿勢を基本としています。</pre>
+</div>
+<div class="card" id="t031">
+<h2>試行 31 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-12 17:24:02　モデルID：anthropic/claude-opus-4.8</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.57</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1 3
+Q2 1
+Q3 2
+Q4 1
+Q5 4
+Q6 2
+Q7 4
+
+【回答理由】
+私の教育観は、子ども自身が持つ力を引き出し、主体性を育てることを重視する立場に近いです。
+
+Q1では、教える・訓練するという側面も大切ですが、基本的には子どもの可能性を信じて開花を支援する姿勢を大事にしたいと考えます。ただし完全にBに寄るのではなく、必要な知識や規範を教える役割も残ると考え「3」としました。
+
+Q2・Q4では、失敗も学びの一部であり、自発性が学習の原動力になると考えるため、子どもに任せ、自発的な学習を支援する立場（A）を強く支持します。過干渉や強制はかえって主体性を損なうと考えます。
+
+Q3では、議論や発表を通じて思考力を育てることを重視しつつ、基礎的な知識・技能の習得も欠かせないため、バランスを取りながらもやや議論重視の「2」としました。
+
+Q5では、答えを与えるより、子どもが自ら考え発見する過程にこそ深い学びがあると考え、支援的な立場（B）を強く支持します。
+
+Q6では、子どもの気持ちに寄り添うことは前提としつつ、問題行動に対しては善悪を明確に示す毅然とした態度も教育上必要だと考えるため、やや毅然とした指導寄り（2）としました。
+
+Q7では、短所の指摘より長所を認めて伸ばすことが、自己肯定感を高め、結果的に成長を促すと考え、ほめて伸ばす立場（B）を支持します。
+
+全体として、子どもの主体性・自発性・自己肯定感を尊重しつつ、必要な場面では大人として明確な指導も行うという、支援を基本としたバランス型の考え方に立っています。</pre>
+</div>
+<div class="card" id="t032">
+<h2>試行 32 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-12 17:24:14　モデルID：anthropic/claude-opus-4.8</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.43</span>　不整合1件</div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td>【不整合】</td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>3</td><td>3</td><td></td></tr></table>
+<pre>Q1 3
+Q2 1
+Q3 2
+Q4 1
+Q5 4
+Q6 2
+Q7 3
+
+回答理由
+私は、子どもが本来持っている力や可能性を引き出し、自ら学び成長していくことを支援する姿勢を基本に据えています。そのため、Q1では可能性の開花を支援する立場に、Q5では答えを教えるのではなく自分で見つけられるように支援する立場に近い考えを持っています。またQ4のように、外からの強制ではなく自発的な学習意欲を大切にすることが、長期的な成長につながると考えます。
+
+一方で、子どもの主体性を尊重するには、多少の失敗を許容し挑戦させる経験が欠かせません（Q2）。失敗を通じて学ぶ機会を奪わないことが重要です。Q3では、知識・技能の習得のための反復練習も基礎として必要ですが、それを土台に子どもたちが考えを発表し議論する活動もバランスよく取り入れたいと考え、やや議論重視に寄せました。
+
+Q7については、長所をほめて伸ばすことを基本としつつも、短所への適切な指摘も成長には必要だと考え、完全にB寄りとはしませんでした。Q6では、子どもの気持ちに寄りそうことは大切ですが、問題行動に対してはその是非を明確に示す毅然とした態度も教育上必要だと考え、ややB寄りとしました。全体として、子どもの主体性と自律を尊重しながらも、必要な場面では適切な指導や規律を示すバランスを重視しています。</pre>
+</div>
+<div class="card" id="t033">
+<h2>試行 33 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-12 17:29:30　モデルID：anthropic/claude-opus-4.8</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.57</span>　不整合1件</div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td>【不整合】</td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1 3
+Q2 1
+Q3 2
+Q4 1
+Q5 4
+Q6 2
+Q7 4
+
+回答理由：
+私は基本的に、子どもが持つ力を引き出し、自ら学び成長していくことを支援する立場を重視しています。Q1では、大人に必要なことを教える視点も大切だと考えるため「どちらかといえばB」としましたが、教えと支援の両面が必要だと感じています。Q2・Q4では、失敗も学びの一部であり、自発的な学習意欲を育てることが長期的な成長につながると考え、Aを強く支持します。Q3では議論を通じた思考力の育成を重視しつつ、基礎的な知識・技能の反復も欠かせないため、バランスを意識した回答としました。Q5では、答えを教えるよりも子ども自身が考え発見するプロセスに価値があると考え、Bを選びました。Q7も同様に、長所を伸ばすことが自己肯定感を高め、結果的に短所の改善にもつながると考えます。一方でQ6については、気持ちに寄り添う姿勢は大切ですが、問題行動に対しては毅然とした態度で善悪を示すことも子どもの成長に必要だと考え、Bを選択しました。全体として、支援的な関わりを基本としながらも、場面に応じて教師が適切に導く姿勢を大切にしています。</pre>
+</div>
+<div class="card" id="t034">
+<h2>試行 34 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-12 17:29:42　モデルID：anthropic/claude-opus-4.8</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.57</span>　不整合1件</div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td>【不整合】</td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1 3
+Q2 1
+Q3 2
+Q4 1
+Q5 4
+Q6 2
+Q7 4
+
+回答理由：
+私は、子どもが本来持っている力や可能性を引き出し、主体性を育てることを重視する立場に近い考え方を選びました。Q1では、大人になるための知識や規範を教える側面も大切ですが、それ以上に子ども一人ひとりの個性や可能性が花開くのを支える姿勢が重要だと考えます。Q2・Q4では、失敗を恐れずに自ら挑戦し、自発的に学ぶ経験こそが深い学びと成長につながると考えるため、Aを強く選びました。Q3・Q5でも、教師が一方的に答えを与えるのではなく、子ども自身が考え、議論し、答えを見つけ出す過程を支援することが、思考力や探究心を育むと考えます。ただし、基礎的な知識・技能の定着には反復練習も必要であるため、Q3はやや中間的な選択としました。Q7では、短所を直すことよりも長所を認めてほめることで自己肯定感を高め、意欲を引き出すほうが効果的だと考えます。一方でQ6については、問題行動に対しては子どもの気持ちに寄り添う姿勢を大切にしつつも、してはいけないことは毅然と示すことが、子どもの安心と規範意識の形成につながると考え、Bに近い立場を選びました。全体として、子どもの主体性と自己肯定感を尊重しながら、必要な場面では明確な指導を行うバランスを重視しています。</pre>
+</div>
+<div class="card" id="t035">
+<h2>試行 35 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-12 17:29:57　モデルID：anthropic/claude-opus-4.8</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.57</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1 3
+Q2 1
+Q3 2
+Q4 1
+Q5 4
+Q6 2
+Q7 4
+
+【回答理由】
+私は、教育の役割を「子どもが本来持っている力を引き出し、自ら学び成長する姿勢を育てること」に重きを置いて考えています。そのため、多くの質問で「子どもの主体性・自発性を尊重する」立場に近い回答を選びました。
+
+Q1では、社会に出るために必要な知識や規範を教えることも大切ですが、それ以上に一人ひとりの可能性を伸ばすことを重視したいと考え、「どちらかといえばB」を選びました。
+
+Q2・Q4では、失敗を含めた経験こそが学びの糧になると考えます。過度な干渉や強制ではなく、子ども自身に挑戦させることで、自ら考え行動する力が育つと考えるため「Aに近い」を選びました。
+
+Q3・Q5では、知識・技能の習得や教師による説明も重要ですが、自分の考えを表現し、答えを自ら導く経験が深い理解と思考力につながると考え、思考・探究を重視する側を選びました。
+
+Q6では、子どもの気持ちに寄り添う姿勢は前提としつつも、問題行動に対しては善悪の基準を明確に示す毅然とした対応も必要だと考え、「どちらかといえばB」を選びました。ただし、これは頭ごなしに叱るという意味ではなく、寄り添いながらも一貫した態度を保つという趣旨です。
+
+Q7では、短所の指摘だけでは子どもは萎縮しやすく、長所を認められることで自己肯定感が育ち、結果的に短所の改善にもつながると考えるため「Bに近い」を選びました。
+
+全体として、子どもを一方的に導く対象ではなく、自ら成長する主体としてとらえ、その過程を支援することを基本姿勢としています。</pre>
+</div>
+<div class="card" id="t036">
+<h2>試行 36 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-12 17:30:11　モデルID：anthropic/claude-opus-4.8</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.57</span>　不整合1件</div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td>【不整合】</td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1 3
+Q2 1
+Q3 2
+Q4 1
+Q5 4
+Q6 2
+Q7 4
+
+回答理由
+
+私は、子どもが本来持っている力や可能性を引き出し、主体性を育てることを重視する立場に近い考えを持っています。教育とは一方的に知識や規範を注入するものではなく、子ども自身が試行錯誤しながら学び、成長していく過程を支えることだと考えるためです。
+
+Q1・Q4・Q5については、子どもの自発性や内発的な学習意欲を大切にしたいという思いから、可能性の開花を支援し、自ら答えを見つけられるよう導く立場を選びました。特にQ5では、教師が答えを示すよりも、子どもが自分で考え抜く経験こそが深い学びにつながると考えます。
+
+Q2については、失敗を過度に恐れさせるのではなく、挑戦し失敗から学ぶ経験が成長に不可欠だと考え、できるだけ子どもにやらせる立場を強く支持します。
+
+Q3・Q7では、議論や発表を通じた思考力の育成、長所を伸ばす肯定的な関わりを重視しますが、知識・技能の基礎や短所への配慮も一定程度必要だと考え、「どちらかといえば」の選択にとどめました。
+
+一方Q6では、子どもの気持ちに寄り添う姿勢は大前提としつつも、問題行動に対しては善悪の基準を明確に示す毅然とした対応も教育上必要だと考え、Bに近い立場を選びました。共感と規律の両立が、健全な成長を支えると考えるためです。
+
+全体として、子どもの主体性を尊重しつつ、必要な場面では適切な指導や枠組みを与えるという、バランスを意識した立場をとっています。</pre>
+</div>
+<div class="card" id="t037">
+<h2>試行 37 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-12 17:30:25　モデルID：anthropic/claude-opus-4.8</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.57</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1 3
+Q2 1
+Q3 2
+Q4 1
+Q5 4
+Q6 2
+Q7 4
+
+回答理由：
+子どもへの指導において、私は基本的に「子ども自身の主体性や可能性を尊重し、その成長を支援する」という立場を重視しています。ただし、状況に応じて大人が示すべき枠組みや基準も必要だと考えています。
+
+Q1は、大人になるための土台づくりと可能性の開花はどちらも大切ですが、教え込むより子ども自身の力が伸びるのを支える姿勢をやや重視しました。Q2・Q4では、失敗も含めた経験そのものが学びであり、自発的に取り組むことで意欲や思考力が育つと考え、Aを強く支持しました。Q3は議論と反復のバランスが重要ですが、思考を深める対話をやや重視しました。Q5では、答えを与えるより自ら発見する過程にこそ深い理解と学ぶ喜びがあると考え、Bを強く支持しました。
+
+一方でQ6については、問題行動に対しては気持ちに寄り添う姿勢も大切ですが、善悪の基準を明確に示す毅然とした態度が子どもの安心と成長につながると考え、Bをやや重視しました。Q7では、短所の指摘は自己肯定感を損ないやすく、長所を認めて伸ばすことが結果的に全体の成長を促すと考え、Bを強く支持しました。
+
+全体として、子どもを一人の主体として尊重し、自ら考え行動する力を育てることを基本としつつ、必要な場面では大人が明確な基準を示すという姿勢を重視しています。</pre>
+</div>
+<div class="card" id="t038">
+<h2>試行 38 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-12 17:30:40　モデルID：anthropic/claude-opus-4.8</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.43</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>3</td><td>2</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1 3
+Q2 1
+Q3 2
+Q4 1
+Q5 4
+Q6 3
+Q7 4
+
+回答理由
+
+私は、子ども自身が本来持っている力や可能性を引き出し、主体的に学び成長していくことを支援する姿勢を基本としつつ、必要な場面では大人としての適切な関わりも欠かせないと考えています。
+
+Q1は、教え導くことも大切ですが、子ども一人ひとりの可能性を信じてその開花を支えることをより重視したいと考え、「3」を選びました。
+
+Q2は、失敗こそが学びの重要な機会であり、多少の失敗を経験させることで自ら考え乗り越える力が育つと考え、Aに近い「1」を選びました。
+
+Q3は、知識・技能の定着のための反復も基礎として必要ですが、自ら考え発表し議論する経験が思考力や表現力を育むと考え、Aに近い「2」を選びました。
+
+Q4は、学習は本来、内発的な動機から生まれてこそ深まり継続するものであり、自発性を支援することが最も大切だと考え、「1」を選びました。
+
+Q5は、答えを与えるよりも、試行錯誤しながら自力で解決に至る過程こそが真の学力と自信につながると考え、Bに近い「4」を選びました。
+
+Q6は、毅然とした態度で規範を示すことも時に必要ですが、まず子どもの気持ちに寄り添い、その背景を理解することが問題解決の第一歩だと考え、Aにやや近い「3」を選びました。
+
+Q7は、短所の指摘だけでは子どもは萎縮しがちであり、長所を認めほめることで自己肯定感が高まり、結果として短所も改善されやすいと考え、Bに近い「4」を選びました。
+
+全体として、子どもの主体性・自発性・可能性を尊重し、寄り添いながら伸ばす関わりを重視する立場に立っています。</pre>
+</div>
+<div class="card" id="t039">
+<h2>試行 39 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-12 17:30:58　モデルID：anthropic/claude-opus-4.8</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.57</span>　不整合1件</div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td>【不整合】</td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1 3
+Q2 1
+Q3 2
+Q4 1
+Q5 4
+Q6 2
+Q7 4
+
+回答理由：
+私の考え方は、基本的に子どもの主体性や可能性を尊重する立場に近いですが、状況に応じてバランスを取ることも重視しています。
+
+Q1では、大人が必要なことを教える面と子どもの可能性を伸ばす面の両方が大切だと考えますが、やや後者に重心を置きたいと思い「3」を選びました。
+
+Q2・Q4では、失敗も含めて子ども自身が経験し、自発的に学ぶことが成長につながると考えるため、明確にA寄りとしました。挑戦する中でこそ学びが深まると考えます。
+
+Q3では、議論や発表を通じて思考力を育むことを重視しますが、知識・技能の定着も欠かせないため、ややA寄りの「2」としました。
+
+Q5では、教師が答えを与えるより、子どもが試行錯誤して自ら発見する過程に大きな教育的価値があると考え、B寄りとしました。
+
+Q6では、気持ちに寄り添うことは前提としつつも、問題行動に対しては善悪の基準を毅然と示すことが子どもの規範意識を育てると考え、B寄りの「2」としました。
+
+Q7では、短所の指摘よりも長所を認めて伸ばす方が、子どもの自己肯定感を高め、結果的に短所の改善にもつながると考えB寄りとしました。
+
+全体として、子どもの主体性・自発性・自己肯定感を大切にしながら、必要な場面では明確な指導も行うという姿勢を基本としています。</pre>
+</div>
+<div class="card" id="t040">
+<h2>試行 40 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-12 17:31:13　モデルID：anthropic/claude-opus-4.8</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.57</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1 3
+Q2 1
+Q3 2
+Q4 1
+Q5 4
+Q6 2
+Q7 4
+
+回答理由：
+私の教育観の基本は、子どもが本来持っている力を信じ、その自発性や主体性を尊重しながら成長を支援するという立場です。子どもの可能性の開花を助けたい（Q1）と考えますが、大人になるための知識や訓練も一定程度必要だと思うため「どちらかといえばB」としました。学びの過程では、多少の失敗を経験することが大きな成長につながる（Q2）ため、子ども自身にやらせることを重視します。同様に、答えを教えるのではなく、自分で考え発見できるよう支援すること（Q5）が深い理解や思考力を育むと考えます。
+
+学習面では、考えを発表し議論する活動を通じて理解が深まる（Q3）と考えますが、基礎的な知識・技能を定着させる反復練習も欠かせないため、バランスを意識しつつAに寄せました。学習意欲については、強制ではなく内発的な動機づけによる自発的な学習が最も効果的で持続する（Q4）と強く考えています。
+
+生徒指導については、子どもの気持ちに寄り添う姿勢を大切にしつつも、問題行動に対しては善悪の判断を明確に伝える毅然とした対応（Q6）が、子どもの成長と信頼関係のためにむしろ必要だと考えました。最後に、短所を指摘して直させるよりも、長所を認めて伸ばすこと（Q7）が子どもの自己肯定感を高め、結果として全体的な成長につながると考えています。</pre>
+</div>
+<div class="card" id="t041">
+<h2>試行 41 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-12 17:31:28　モデルID：anthropic/claude-opus-4.8</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.57</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1: 3
+Q2: 1
+Q3: 2
+Q4: 1
+Q5: 4
+Q6: 2
+Q7: 4
+
+回答理由
+
+私の考え方の基本は、子どもが持つ力を信じ、その主体性や可能性を引き出すことを大切にしつつ、必要な場面では大人としての一定の枠組みや基準を示すという、バランスを重視する立場です。
+
+Q1では、大人になるために必要な力を教えることも重要ですが、それ以上に子ども自身の可能性を開花させる支援が教育の本質だと考え、Bにやや近い立場を選びました。
+
+Q2・Q4では、失敗を通じた学びや自発的な学習意欲が成長の土台になると考え、子どもに任せ、自ら学ぶことを支援する立場を明確に支持しました。過度に管理・強制すると、自立心や学ぶ楽しさが育ちにくいと考えます。
+
+Q3では、知識・技能の反復練習も基礎として必要ですが、それを活用して考えたり議論したりする経験がより深い学びにつながると考え、Aにやや近い立場を選びました。
+
+Q5では、答えをすぐに与えるより、子どもが試行錯誤して自分で見つけるプロセスこそが思考力を育てると考え、Bを強く支持しました。
+
+Q6では、子どもの気持ちに寄り添うことは前提として大切ですが、問題行動に対しては善悪の基準を明確に示す毅然とした対応も必要だと考え、Bにやや近い立場を選びました。寄り添いと基準提示は両立できると考えています。
+
+Q7では、短所を直すことよりも、長所を認めてほめることで自己肯定感が高まり、結果として短所の改善にもつながると考え、Bを支持しました。
+
+全体として、子どもの主体性・可能性を尊重する姿勢を基本としながらも、規律や基準が必要な場面では大人が責任を持って示すという考え方に立っています。</pre>
+</div>
+<div class="card" id="t042">
+<h2>試行 42 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-12 17:31:43　モデルID：anthropic/claude-opus-4.8</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.57</span>　不整合1件</div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td>【不整合】</td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1: 3
+Q2: 1
+Q3: 2
+Q4: 1
+Q5: 4
+Q6: 2
+Q7: 4
+
+回答理由
+
+私は、子どもが本来持っている力や個性を尊重しつつ、自ら考え学ぶ姿勢を育てることを基本としながらも、状況に応じて必要な支えや枠組みを与えることが大切だと考えます。
+
+Q1では、教え導くことも大切ですが、それ以上に子どもの可能性を引き出す支援を重視したいと考え、Bに近い立場を選びました。
+
+Q2・Q4では、失敗も学びの重要な機会であり、自発性こそが成長の原動力になると考えるため、Aに強く共感します。強制された学びは一時的な効果しか生まないと考えます。
+
+Q3では、議論や発表を通じた思考力の育成を重視しますが、基礎的な知識・技能の反復も学びの土台として欠かせないため、どちらかといえばAとしました。
+
+Q5では、答えを教えるよりも、子ども自身が試行錯誤しながら解き方を発見する過程にこそ深い学びがあると考え、Bを選びました。
+
+Q6については、気持ちに寄り添う姿勢は前提としつつも、問題行動に対しては善悪の基準を明確に示す毅然とした対応が、子どもの安心感と規範意識の形成につながると考え、Bを選びました。
+
+Q7では、短所の指摘よりも長所を認め伸ばすことが、自己肯定感を高め、結果として短所の改善にもつながると考えるため、Bに近い立場です。
+
+全体として、子どもの主体性・個性を尊重する姿勢を軸としつつ、規律や基礎の習得といった場面では適切な指導を組み合わせることが望ましいと考えています。</pre>
+</div>
+<div class="card" id="t043">
+<h2>試行 43 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-12 17:32:21　モデルID：anthropic/claude-opus-4.8</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.57</span>　不整合1件</div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td>【不整合】</td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1: 3
+Q2: 1
+Q3: 2
+Q4: 1
+Q5: 4
+Q6: 2
+Q7: 4
+
+回答理由：
+私は基本的に、子どもが本来持っている力や可能性を自ら伸ばしていけるよう支援する立場を大切にしたいと考えています。Q1では、社会で生きるために必要なことを教える側面も無視できないため「どちらかといえばB」としましたが、教え込むよりも可能性の開花を支える姿勢を重視します。Q2・Q4では、たとえ失敗しても自ら挑戦し、自発的に学ぶ経験こそが成長につながると考え、Aを選びました。Q3・Q5では、知識・技能の定着も大切ですが、それ以上に自分で考え、議論し、答えを見つける過程が思考力を育てると考えAやBを選択しました。Q7では、短所の矯正よりも長所を認めて伸ばすことが子どもの自己肯定感を高め、結果的に全体の成長を促すと考えました。一方Q6については、気持ちに寄り添うことは重要ですが、問題行動に対しては善悪の基準を明確に示す毅然とした指導も必要だと考え、Bを選びました。全体として、子どもの主体性と自尊心を尊重しつつ、必要な場面では明確な指導も行うバランスを大切にしたいと考えています。</pre>
+</div>
+<div class="card" id="t044">
+<h2>試行 44 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-12 17:32:55　モデルID：anthropic/claude-opus-4.8</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.57</span>　不整合1件</div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td>【不整合】</td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1 3
+Q2 1
+Q3 2
+Q4 1
+Q5 4
+Q6 2
+Q7 4
+
+回答理由
+私は基本的に、子ども自身が持つ主体性や可能性を尊重し、それを引き出す支援型の指導を重視する立場に近いと考えます。教育は大人が一方的に知識や規範を注入するものではなく、子どもが自ら学び、考え、成長する過程を支えることに本質があると捉えているためです。
+
+Q1では、必要な基礎を教えることも大切ですが、より重要なのは子どもの内にある可能性を開花させることだと考え、やや支援型に近い立場を選びました。Q2・Q4では、失敗も学びの一部であり、自発性を尊重してこそ真の成長につながると考え、子どもに任せ主体性を重んじる立場を強く支持します。Q3では議論を通じた思考力育成を重視しつつ、知識・技能の定着も欠かせないためバランスを意識しました。Q5では、答えを与えるより自力で解決する力を育てることが将来的な学びの自立につながると考えます。
+
+一方でQ6については、問題行動への対応では相手の気持ちに寄り添う姿勢も大切ですが、社会規範を身につけさせるためには時に毅然とした態度で善悪を伝えることも必要だと考え、B寄りとしました。Q7では、短所の指摘よりも長所を認めて伸ばすことが子どもの自己肯定感や意欲を高め、結果的に全体的な成長を促すと考えています。
+
+総じて、子どもの主体性・可能性を尊重しながらも、必要な場面では規範を明確に示すという姿勢を大切にしています。</pre>
+</div>
+<div class="card" id="t045">
+<h2>試行 45 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-12 17:33:08　モデルID：anthropic/claude-opus-4.8</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.57</span>　不整合1件</div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td>【不整合】</td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1: 3
+Q2: 1
+Q3: 2
+Q4: 1
+Q5: 4
+Q6: 2
+Q7: 4
+
+回答理由
+
+私は、子どもが本来持っている力や好奇心を引き出し、自ら学び成長していくプロセスを支援することを基本に据えています。そのため、可能性の開花を支える立場（Q1）、自発的な学習の尊重（Q4）、自分で答えや解き方を見つける経験の重視（Q5）、長所を伸ばす関わり（Q7）を選びました。子ども自身が「できた」「わかった」と実感することが、意欲や自信の土台になると考えるからです。
+
+一方で、支援だけでは十分でない場面もあります。失敗を過度に恐れさせず、多少の失敗も経験として挑戦させること（Q2）は、主体性を育てるうえで欠かせません。また、対話や議論を通じて思考を深める時間は大切ですが、それを支える知識・技能の習得も同時に必要であるため、Q3ではバランスを意識しつつやや議論・発表寄りを選びました。
+
+問題行動への対応（Q6）については、子どもの気持ちに寄り添う姿勢を前提としながらも、してはいけないことには一貫した毅然とした態度で向き合うことが、結果的に子どもの安心感と信頼につながると考え、Bを選びました。共感と一貫性は対立するものではなく、両立させるべきものだと捉えています。
+
+全体として、「教え込む」より「引き出し支える」ことを重視しつつ、必要な場面では明確な基準を示すという姿勢を大切にしています。</pre>
+</div>
+<div class="card" id="t046">
+<h2>試行 46 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-12 17:33:23　モデルID：anthropic/claude-opus-4.8</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.57</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1 3
+Q2 1
+Q3 2
+Q4 1
+Q5 4
+Q6 2
+Q7 4
+
+回答理由
+
+私は、子どもが本来持っている力や可能性を尊重し、それを引き出す支援を重視する立場に比較的近い考えを持っています。Q1では、大人として必要な基礎を教える側面も無視できないため「どちらかといえばB」としましたが、根本的には可能性の開花を支援する姿勢が大切だと考えます。
+
+Q2・Q4では、多少の失敗を経験することこそが学びであり、自発性を育てるうえで不可欠だと考え、Aを強く支持しました。失敗を恐れさせず挑戦させること、また学びの動機を内側から育てることが、長期的な成長につながると考えるためです。
+
+Q3では、思考力や表現力を育てるために議論や発表の時間を重視しますが、基礎的な知識・技能の反復も土台として必要なため、バランスを取りつつAに寄せました。Q5では、答えを教え込むより、自分で考え発見する過程が真の理解と応用力を育てると考え、Bを強く支持しました。
+
+Q6については、子どもの気持ちに寄り添う姿勢を基本としつつも、問題行動に対しては善悪の基準を明確に示す毅然とした態度も教育上重要だと考え、「どちらかといえばB」としました。共感と規範の提示は両立すべきものだと考えます。
+
+Q7では、短所を注意して矯正するより、長所を認めて伸ばすことで自己肯定感が高まり、結果として短所の改善にもつながると考え、Bを強く支持しました。
+
+全体として、子どもの主体性・自発性・自己肯定感を尊重しながら、必要な場面では規範を明確に示すという方針を基本に回答しました。</pre>
+</div>
+<div class="card" id="t047">
+<h2>試行 47 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-12 17:33:37　モデルID：anthropic/claude-opus-4.8</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.57</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1 3
+Q2 1
+Q3 2
+Q4 1
+Q5 4
+Q6 2
+Q7 4
+
+回答理由：
+私は、子どもが本来持っている力や可能性を引き出し、自ら学び成長していく過程を支援することを教育の基本と考えています。そのため、可能性の開花を支援する視点（Q1）や、自発的な学習の支援（Q4）、子ども自身が答えや解き方を見つけられるよう導く姿勢（Q5）を重視しました。
+
+また、失敗は学びの重要な機会であり、多少の失敗を恐れずに子ども自身に挑戦させること（Q2）が、主体性や試行錯誤する力を育てると考えます。知識・技能の習得も大切ですが、それを活用し、考えを深め合う対話や議論の時間も同様に重要である（Q3）ため、バランスを意識しつつAにやや近い立場としました。
+
+一方で、問題行動への対応（Q6）については、子どもの気持ちに寄り添う姿勢を前提としながらも、社会性や善悪の判断を育てるためには一定の毅然とした態度も必要だと考え、状況に応じた対応を重視する立場を取りました。
+
+最後に、子どもの成長を促すうえでは、短所を指摘するよりも長所を認めてほめ、自己肯定感を高めながら伸ばしていくこと（Q7）が、結果として苦手の克服にもつながると考えています。全体として、子どもの主体性と可能性を尊重しつつ、必要な場面では適切な指導を行うという姿勢を大切にしています。</pre>
+</div>
+<div class="card" id="t048">
+<h2>試行 48 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-12 17:33:51　モデルID：anthropic/claude-opus-4.8</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.57</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1 3
+Q2 1
+Q3 2
+Q4 1
+Q5 4
+Q6 2
+Q7 4
+
+回答理由：
+子どもの教育において、私は基本的に「子ども自身の主体性や可能性を尊重する」立場を重視しています。ただし、状況に応じてバランスを取ることも大切だと考えています。
+
+Q1では、大人として必要な知識やルールを教えることも重要ですが、それ以上に子ども一人ひとりが持つ可能性を引き出すことを大切にしたいため、Bにやや近い立場を選びました。
+
+Q2・Q4では、失敗も学びの重要な機会であり、自ら試行錯誤する経験や内発的な動機づけが成長の基盤になると考え、Aを選びました。強制された学習は長続きせず、自発性を育てることが将来の主体的な学びにつながると考えます。
+
+Q3では、知識・技能の定着には反復練習も必要ですが、それらを活用し考えを深める議論の時間もバランスよく取り入れたいと考え、どちらかといえばAを選びました。
+
+Q5では、答えを教えるよりも、子どもが自分で考え、発見する過程そのものに学びの価値があると考えるため、Bを選びました。
+
+Q6では、子どもの気持ちに寄り添う姿勢は大切にしつつも、問題行動に対しては善悪を明確に示す毅然とした態度も必要だと考え、Bにやや近い立場を選びました。
+
+Q7では、短所の指摘だけでは自己肯定感が育ちにくく、長所を認めて伸ばすことで結果的に短所の改善にもつながると考え、Bを選びました。
+
+全体として、子どもの主体性・自発性・可能性を尊重しつつ、必要な場面では適切な指導や枠組みを示すという姿勢を大切にしています。</pre>
+</div>
+<div class="card" id="t049">
+<h2>試行 49 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-12 17:34:04　モデルID：anthropic/claude-opus-4.8</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.57</span>　不整合1件</div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td>【不整合】</td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1 3
+Q2 1
+Q3 2
+Q4 1
+Q5 4
+Q6 2
+Q7 4
+
+回答理由：
+私は、子どもが本来持っている力や可能性を引き出し、自ら学び成長していくことを支援する姿勢を基本としつつ、状況に応じて必要な指導も行うという考えに近いです。
+
+Q1では、教えるべき基礎的なことは伝えつつも、最終的には子ども自身の可能性が開花することを重視したいためBに近い立場を選びました。Q2・Q4では、失敗を経験することや自発性が学びの原動力になると考え、多少の失敗を許容し自主性を尊重するAを選びました。Q3・Q5では、子ども自身が考え、議論し、答えを見つけるプロセスが深い理解につながると考えますが、基礎的な知識・技能の習得も一定程度必要だと感じるため、Q3はやや慎重にAを選びました。
+
+一方、Q6では、子どもの気持ちに寄り添う姿勢は大切にしつつも、問題行動に対してはよい・悪いを明確に示す毅然とした対応も必要だと考え、Bに近い立場を選びました。Q7では、短所を指摘するよりも長所を認めて伸ばすほうが、子どもの自己肯定感を高め、結果として全体的な成長につながると考えるためBを選びました。
+
+全体として、子どもの主体性・可能性を尊重する姿勢を基本としながらも、規律や善悪の判断に関わる場面では適切に導く指導を組み合わせることが望ましいと考えています。</pre>
+</div>
+<div class="card" id="t050">
+<h2>試行 50 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-12 17:34:17　モデルID：anthropic/claude-opus-4.8</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.57</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1 3
+Q2 1
+Q3 2
+Q4 1
+Q5 4
+Q6 2
+Q7 4
+
+回答理由：
+私は、子どもの主体性や内発的な力を引き出すことを基本としつつ、状況に応じて必要な指導や枠組みを与えるという立場を重視しています。
+
+Q1では、大人として必要なことを教える視点も欠かせませんが、子ども一人ひとりが持つ可能性を伸ばすことにより重きを置きたいと考えました。
+
+Q2・Q4では、失敗も学びの重要な機会であり、自ら試行錯誤する経験や自発的な学習意欲こそが成長の土台になると考え、Aを強く支持します。
+
+Q3・Q5では、思考力や表現力を育てるには議論や自己発見の過程が大切ですが、その前提として基礎的な知識・技能の習得も必要なため、バランスを取りつつも子どもが自ら考え答えを見つける支援を重視しました。
+
+Q6では、子どもの気持ちに寄り添う姿勢は大切にしたいものの、問題行動に対しては善悪を明確に示す毅然とした態度も必要だと考え、Bにやや近い立場を選びました。
+
+Q7では、短所を無理に直そうとするよりも、長所を認めて伸ばすことで子どもの自己肯定感が高まり、結果として全体的な成長につながると考えます。
+
+全体として、子どもの主体性・可能性を尊重しつつ、必要な場面では適切な指導や枠組みを提供するという姿勢を大切にしています。</pre>
+</div>
+
+<footer>本ページは data/ 内のCSV・JSONLから機械的に生成した閲覧用アーカイブです（gen_html_browser.py）。応答原文は原文ママ収録。</footer>
+</div>
+<a class="top" href="#top">▲先頭へ</a>
+</body></html>

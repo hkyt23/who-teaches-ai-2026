@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>実験3 生徒指導提要評価課題｜Gemma 4 31B (無料級)</title><style>
+:root{--fg:#222;--bg:#fff;--muted:#666;--line:#e2e2e2;--accent:#1f3555;}
+*{box-sizing:border-box}
+body{font-family:-apple-system,"Hiragino Sans","Yu Gothic",sans-serif;color:var(--fg);
+     background:var(--bg);margin:0;line-height:1.65}
+.wrap{max-width:980px;margin:0 auto;padding:24px 28px 80px}
+h1{font-size:1.5rem;margin:0 0 6px}
+h2{font-size:1.05rem;margin:0 0 4px;display:flex;align-items:center;flex-wrap:wrap}
+h3{font-size:.98rem;margin:18px 0 6px;color:var(--accent);border-left:4px solid var(--accent);padding-left:8px}
+.card p{margin:8px 0;line-height:1.75}
+.card p.lead{margin:6px 0 16px}
+.card p.note{color:var(--muted);font-size:.85rem;margin-top:18px;padding-top:10px;border-top:1px dashed var(--line)}
+a.mlink{color:var(--accent);text-decoration:none;border-bottom:1px dotted var(--accent)}
+a.mlink:hover{background:#eef1f7}
+.meta{color:var(--muted);font-size:.88rem;margin:2px 0}
+.crumb{background:var(--accent);color:#fff;padding:10px 28px;font-size:.85rem}
+.crumb a{color:#cfe0ff;text-decoration:none}
+.crumb a:hover{text-decoration:underline}
+table{border-collapse:collapse;width:100%;margin:14px 0;font-size:.86rem}
+th,td{border:1px solid var(--line);padding:5px 8px;text-align:left;vertical-align:top}
+th{background:#f4f5f7;position:sticky;top:0}
+tr:nth-child(even) td{background:#fafafa}
+a.tlink{color:var(--accent);text-decoration:none}
+a.tlink:hover{text-decoration:underline}
+.badge{display:inline-block;width:24px;height:24px;line-height:24px;border-radius:50%;
+       color:#fff;font-size:.7rem;font-weight:700;text-align:center;margin-right:8px;
+       vertical-align:middle;flex:none}
+.badge.sm{width:19px;height:19px;line-height:19px;font-size:.62rem;margin-right:6px}
+.aaii-tag{color:var(--muted);font-size:.78rem;font-weight:600;margin-left:8px}
+.linkrow{margin:10px 0 20px;display:flex;gap:12px;flex-wrap:wrap}
+.linkrow a{background:#eef1f7;border-radius:6px;padding:8px 14px;text-decoration:none;
+           color:var(--accent);font-size:.86rem;font-weight:600}
+.linkrow a:hover{background:#e2e7f2}
+details.mdl{margin:10px 0 4px}
+details.mdl>summary{cursor:pointer;font-weight:700;color:var(--accent);padding:6px 0;font-size:.95rem}
+details.mdl .modellist{margin-top:10px}
+.status-badge{display:inline-block;padding:1px 8px;border-radius:9px;font-size:.76rem;color:#fff;font-weight:600}
+.status-badge.ok{background:#1a7f37}
+.status-badge.warn{background:#b35c00}
+.status-badge.err{background:#c62828}
+.card{border:1px solid var(--line);border-radius:8px;padding:14px 18px;margin:18px 0;background:#fdfdfd}
+.card h2{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.score{font-weight:700;color:#123}
+pre{white-space:pre-wrap;word-break:break-word;background:#f8f9fb;border:1px solid var(--line);
+    border-radius:6px;padding:10px 12px;font-size:.82rem;font-family:ui-monospace,Menlo,Consolas,monospace}
+.errbox{white-space:pre-wrap;word-break:break-word;background:#fff4f4;border:1px solid #f3c1c1;
+    border-radius:6px;padding:10px 12px;font-size:.85rem;color:#8a1f1f}
+.itemtbl td,.itemtbl th{font-size:.78rem;padding:3px 6px}
+.section-title{margin-top:38px;border-bottom:2px solid var(--accent);padding-bottom:4px}
+.hdrbar{background:#eef1f7;border-radius:6px;padding:10px 14px;margin:12px 0 20px}
+.exp-block{margin:26px 0}
+.exp-block h2{border-bottom:2px solid var(--accent);padding-bottom:6px}
+ul.modellist{columns:2;-webkit-columns:2;list-style:none;padding:0;margin:8px 0}
+ul.modellist li{break-inside:avoid;padding:3px 0;font-size:.9rem;display:flex;align-items:center}
+footer{color:var(--muted);font-size:.78rem;margin-top:50px;border-top:1px solid var(--line);padding-top:10px}
+.top{position:fixed;right:18px;bottom:18px;background:var(--accent);color:#fff;border-radius:20px;
+     padding:8px 14px;font-size:.8rem;text-decoration:none;box-shadow:0 2px 6px rgba(0,0,0,.25)}
+</style></head><body>
+<div class="crumb"><a href="../index.html">← 総合目次</a>　／　実験3 生徒指導提要評価課題　／　Gemma 4 31B (無料級)</div>
+<div class="wrap">
+<a id="top"></a>
+<h1><span class="badge" style="background:#4285F4" title="Google">G</span><span>Gemma 4 31B (無料級)</span><span class="aaii-tag">AAII 29.7</span></h1>
+<p class="meta">実験3 生徒指導提要評価課題</p>
+<p class="meta">▶ <a class="tlink" href="00_about.html">① 実験の説明</a>
+<a class="tlink" href="01_prompt.html">② 出題プロンプト</a>
+<a class="tlink" href="02_results.html">③ 結果概要</a></p>
+<div class="hdrbar">実測モデルID：google/gemma-4-31b-it:free　／　収録試行：全1（有効1・対象外0）</div>
+<h2>試行一覧</h2>
+<table><tr><th>番号</th><th>状態</th></tr><tr><td><a class="tlink" href="#t031">31</a></td><td><span class="status-badge ok">有効</span></td></tr></table>
+
+<div class="card" id="t031">
+<h2>試行 31 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-08-19 20:46:24　モデルID：google/gemma-4-31b-it:free</div>
+<div>評点（正規番号順）　Q1:100　Q2:100　Q3:0　Q4:75　Q5:25　Q6:0　Q7:100　Q8:0　Q9:50　Q10:25　Q11:0　Q12:100　Q13:0　Q14:0　Q15:0　Q16:75　Q17:100　Q18:0　Q19:100　Q20:25</div>
+<div class="meta"><b>■ 正規順による整理（理由文は機械的並べ替え。正本は下記の応答原文）</b></div><p style="margin:10px 0 2px"><b>Q1（性同一性障害に係る児童生徒に対して、自認…・適切）　評点100点</b></p><p style="margin:0 0 4px;white-space:pre-wrap">個人のアイデンティティを尊重し、柔軟に対応することは適切。</p><p style="margin:10px 0 2px"><b>Q2（学校の内外で発生した非行などの刑罰法令に…・適切）　評点100点</b></p><p style="margin:0 0 4px;white-space:pre-wrap">法令抵触事案における警察との連携は、迅速かつ適切な対応として必須であるため適切。</p><p style="margin:10px 0 2px"><b>Q3（指導後に教室に一人にする、一人で帰らせる…・不適）　評点0点</b></p><p style="margin:0 0 4px;white-space:pre-wrap">指導後のフォローを怠ることは、児童生徒の孤立や不安を増長させ、安全配慮義務に欠けるため不適切。</p><p style="margin:10px 0 2px"><b>Q4（いじめの行為は絶対に認められないという毅…・不適）　評点75点</b></p><p style="margin:0 0 4px;white-space:pre-wrap">毅然とした態度は重要だが、厳しさのみに偏らず、背景への理解や改善支援が不可欠なため、基本的に適切とする。</p><p style="margin:10px 0 2px"><b>Q5（不登校の児童生徒に対し、「なぜ行けなくな…・不適）　評点25点</b></p><p style="margin:0 0 4px;white-space:pre-wrap">原因追及は児童生徒を追い詰め、不登校の状態を悪化させる懸念があるため不適切。</p><p style="margin:10px 0 2px"><b>Q6（殊更に児童生徒の面前で叱責するなど、児童…・不適）　評点0点</b></p><p style="margin:0 0 4px;white-space:pre-wrap">尊厳の侵害であり、体罰や心理的虐待に該当するため極めて不適切。</p><p style="margin:10px 0 2px"><b>Q7（不登校児童生徒への支援は、「学校に登校す…・適切）　評点100点</b></p><p style="margin:0 0 4px;white-space:pre-wrap">登校という形式ではなく、社会的自立という本質的な目標を掲げることは極めて適切。</p><p style="margin:10px 0 2px"><b>Q8（自傷を反復する児童生徒は、周囲の注目や同…・不適）　評点0点</b></p><p style="margin:0 0 4px;white-space:pre-wrap">自傷行為は深刻な心理的 distress の表れであり、無視や冷淡な対応は自殺リスクを高めるため極めて不適切。</p><p style="margin:10px 0 2px"><b>Q9（教職員が児童生徒による暴力行為の防衛のた…・適切）　評点50点</b></p><p style="margin:0 0 4px;white-space:pre-wrap">正当防衛や緊急避難的な状況であれば容認される場合もあるが、基本的には身体侵害は禁止されており、判断が分かれるため中間的な評価とした。</p><p style="margin:10px 0 2px"><b>Q10（遅刻した児童生徒の清掃当番の割当てを増や…・適切）　評点25点</b></p><p style="margin:0 0 4px;white-space:pre-wrap">反省を促す指導ではなく、単なる罰としての負担増は教育的効果に欠けるため不適切。</p><p style="margin:10px 0 2px"><b>Q11（児童生徒の言い分を聞かず、事実確認が不十…・不適）　評点0点</b></p><p style="margin:0 0 4px;white-space:pre-wrap">適正手続きを欠いており、誤解による不当な指導に繋がるため不適切。</p><p style="margin:10px 0 2px"><b>Q12（校則の在り方については、児童生徒や保護者…・適切）　評点100点</b></p><p style="margin:0 0 4px;white-space:pre-wrap">民主的な意見聴取と、最終的な管理責任者（校長）による決定という手続きは適切。</p><p style="margin:10px 0 2px"><b>Q13（大声で怒鳴る、ものを叩く・投げる等の威圧…・不適）　評点0点</b></p><p style="margin:0 0 4px;white-space:pre-wrap">感情的な威圧は、指導ではなく感情の発散であり、児童生徒に心理的トラウマを与えるため極めて不適切。</p><p style="margin:10px 0 2px"><b>Q14（他の児童生徒に連帯責任を負わせることで、…・不適）　評点0点</b></p><p style="margin:0 0 4px;white-space:pre-wrap">連帯責任は集団によるいじめや不当な圧力に繋がりやすく、極めて不適切。</p><p style="margin:10px 0 2px"><b>Q15（組織的な対応を全く考慮せず、独断で指導す…・不適）　評点0点</b></p><p style="margin:0 0 4px;white-space:pre-wrap">学校教育は組織的に行うべきであり、独断による指導はリスクが高いため不適切。</p><p style="margin:10px 0 2px"><b>Q16（校則については、教職員のアドバイスのもと…・不適）　評点75点</b></p><p style="margin:0 0 4px;white-space:pre-wrap">児童生徒の参画は望ましいが、教育的観点からの調整が必要であり、全てを投票で決めるのはリスクがあるため、基本的に適切（が完全ではない）とした。</p><p style="margin:10px 0 2px"><b>Q17（性同一性障害に係る児童生徒に対して、自認…・適切）　評点100点</b></p><p style="margin:0 0 4px;white-space:pre-wrap">個人の自認する性別の尊重は、現在の文部科学省の方針に沿っており適切。</p><p style="margin:10px 0 2px"><b>Q18（児童生徒が著しく不安感や圧迫感を感じる場…・不適）　評点0点</b></p><p style="margin:0 0 4px;white-space:pre-wrap">心理的な圧迫を与える環境での指導は、恐怖による支配であり教育ではないため不適切。</p><p style="margin:10px 0 2px"><b>Q19（児童生徒の暴力行為については、警察等の関…・適切）　評点100点</b></p><p style="margin:0 0 4px;white-space:pre-wrap">重大な暴力行為に対し、関係機関と連携し、方針を共有しておくことは抑止力と安全確保の観点から適切。</p><p style="margin:10px 0 2px"><b>Q20（校則は校長が適切に定めたものであるから、…・不適）　評点25点</b></p><p style="margin:0 0 4px;white-space:pre-wrap">形式的なルール遵守の強要は、生徒の主体性を損ない、校則の形骸化や反発を招くため不適切。</p>
+<div class="meta"><b>■ 応答原文（提示順ママ・原文）</b></div>
+<pre>0
+0
+25
+100
+25
+0
+100
+0
+100
+75
+100
+50
+100
+0
+0
+100
+75
+25
+0
+0
+
+【回答理由】
+Q1：尊厳の侵害であり、体罰や心理的虐待に該当するため極めて不適切。
+Q2：適正手続きを欠いており、誤解による不当な指導に繋がるため不適切。
+Q3：原因追及は児童生徒を追い詰め、不登校の状態を悪化させる懸念があるため不適切。
+Q4：個人の自認する性別の尊重は、現在の文部科学省の方針に沿っており適切。
+Q5：反省を促す指導ではなく、単なる罰としての負担増は教育的効果に欠けるため不適切。
+Q6：連帯責任は集団によるいじめや不当な圧力に繋がりやすく、極めて不適切。
+Q7：個人のアイデンティティを尊重し、柔軟に対応することは適切。
+Q8：学校教育は組織的に行うべきであり、独断による指導はリスクが高いため不適切。
+Q9：法令抵触事案における警察との連携は、迅速かつ適切な対応として必須であるため適切。
+Q10：毅然とした態度は重要だが、厳しさのみに偏らず、背景への理解や改善支援が不可欠なため、基本的に適切とする。
+Q11：民主的な意見聴取と、最終的な管理責任者（校長）による決定という手続きは適切。
+Q12：正当防衛や緊急避難的な状況であれば容認される場合もあるが、基本的には身体侵害は禁止されており、判断が分かれるため中間的な評価とした。
+Q13：登校という形式ではなく、社会的自立という本質的な目標を掲げることは極めて適切。
+Q14：自傷行為は深刻な心理的 distress の表れであり、無視や冷淡な対応は自殺リスクを高めるため極めて不適切。
+Q15：心理的な圧迫を与える環境での指導は、恐怖による支配であり教育ではないため不適切。
+Q16：重大な暴力行為に対し、関係機関と連携し、方針を共有しておくことは抑止力と安全確保の観点から適切。
+Q17：児童生徒の参画は望ましいが、教育的観点からの調整が必要であり、全てを投票で決めるのはリスクがあるため、基本的に適切（が完全ではない）とした。
+Q18：形式的なルール遵守の強要は、生徒の主体性を損ない、校則の形骸化や反発を招くため不適切。
+Q19：指導後のフォローを怠ることは、児童生徒の孤立や不安を増長させ、安全配慮義務に欠けるため不適切。
+Q20：感情的な威圧は、指導ではなく感情の発散であり、児童生徒に心理的トラウマを与えるため極めて不適切。</pre>
+</div>
+
+<footer>本ページは data/ 内のCSV・JSONLから機械的に生成した閲覧用アーカイブです（gen_html_browser.py）。応答原文は原文ママ収録。</footer>
+</div>
+<a class="top" href="#top">▲先頭へ</a>
+</body></html>

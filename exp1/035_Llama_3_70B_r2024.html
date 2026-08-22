@@ -1,0 +1,1261 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>実験1 教育信念質問紙｜Llama 3 70B (2024報告)</title><style>
+:root{--fg:#222;--bg:#fff;--muted:#666;--line:#e2e2e2;--accent:#1f3555;}
+*{box-sizing:border-box}
+body{font-family:-apple-system,"Hiragino Sans","Yu Gothic",sans-serif;color:var(--fg);
+     background:var(--bg);margin:0;line-height:1.65}
+.wrap{max-width:980px;margin:0 auto;padding:24px 28px 80px}
+h1{font-size:1.5rem;margin:0 0 6px}
+h2{font-size:1.05rem;margin:0 0 4px;display:flex;align-items:center;flex-wrap:wrap}
+h3{font-size:.98rem;margin:18px 0 6px;color:var(--accent);border-left:4px solid var(--accent);padding-left:8px}
+.card p{margin:8px 0;line-height:1.75}
+.card p.lead{margin:6px 0 16px}
+.card p.note{color:var(--muted);font-size:.85rem;margin-top:18px;padding-top:10px;border-top:1px dashed var(--line)}
+a.mlink{color:var(--accent);text-decoration:none;border-bottom:1px dotted var(--accent)}
+a.mlink:hover{background:#eef1f7}
+.meta{color:var(--muted);font-size:.88rem;margin:2px 0}
+.crumb{background:var(--accent);color:#fff;padding:10px 28px;font-size:.85rem}
+.crumb a{color:#cfe0ff;text-decoration:none}
+.crumb a:hover{text-decoration:underline}
+table{border-collapse:collapse;width:100%;margin:14px 0;font-size:.86rem}
+th,td{border:1px solid var(--line);padding:5px 8px;text-align:left;vertical-align:top}
+th{background:#f4f5f7;position:sticky;top:0}
+tr:nth-child(even) td{background:#fafafa}
+a.tlink{color:var(--accent);text-decoration:none}
+a.tlink:hover{text-decoration:underline}
+.badge{display:inline-block;width:24px;height:24px;line-height:24px;border-radius:50%;
+       color:#fff;font-size:.7rem;font-weight:700;text-align:center;margin-right:8px;
+       vertical-align:middle;flex:none}
+.badge.sm{width:19px;height:19px;line-height:19px;font-size:.62rem;margin-right:6px}
+.aaii-tag{color:var(--muted);font-size:.78rem;font-weight:600;margin-left:8px}
+.linkrow{margin:10px 0 20px;display:flex;gap:12px;flex-wrap:wrap}
+.linkrow a{background:#eef1f7;border-radius:6px;padding:8px 14px;text-decoration:none;
+           color:var(--accent);font-size:.86rem;font-weight:600}
+.linkrow a:hover{background:#e2e7f2}
+details.mdl{margin:10px 0 4px}
+details.mdl>summary{cursor:pointer;font-weight:700;color:var(--accent);padding:6px 0;font-size:.95rem}
+details.mdl .modellist{margin-top:10px}
+.status-badge{display:inline-block;padding:1px 8px;border-radius:9px;font-size:.76rem;color:#fff;font-weight:600}
+.status-badge.ok{background:#1a7f37}
+.status-badge.warn{background:#b35c00}
+.status-badge.err{background:#c62828}
+.card{border:1px solid var(--line);border-radius:8px;padding:14px 18px;margin:18px 0;background:#fdfdfd}
+.card h2{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.score{font-weight:700;color:#123}
+pre{white-space:pre-wrap;word-break:break-word;background:#f8f9fb;border:1px solid var(--line);
+    border-radius:6px;padding:10px 12px;font-size:.82rem;font-family:ui-monospace,Menlo,Consolas,monospace}
+.errbox{white-space:pre-wrap;word-break:break-word;background:#fff4f4;border:1px solid #f3c1c1;
+    border-radius:6px;padding:10px 12px;font-size:.85rem;color:#8a1f1f}
+.itemtbl td,.itemtbl th{font-size:.78rem;padding:3px 6px}
+.section-title{margin-top:38px;border-bottom:2px solid var(--accent);padding-bottom:4px}
+.hdrbar{background:#eef1f7;border-radius:6px;padding:10px 14px;margin:12px 0 20px}
+.exp-block{margin:26px 0}
+.exp-block h2{border-bottom:2px solid var(--accent);padding-bottom:6px}
+ul.modellist{columns:2;-webkit-columns:2;list-style:none;padding:0;margin:8px 0}
+ul.modellist li{break-inside:avoid;padding:3px 0;font-size:.9rem;display:flex;align-items:center}
+footer{color:var(--muted);font-size:.78rem;margin-top:50px;border-top:1px solid var(--line);padding-top:10px}
+.top{position:fixed;right:18px;bottom:18px;background:var(--accent);color:#fff;border-radius:20px;
+     padding:8px 14px;font-size:.8rem;text-decoration:none;box-shadow:0 2px 6px rgba(0,0,0,.25)}
+</style></head><body>
+<div class="crumb"><a href="../index.html">← 総合目次</a>　／　実験1 教育信念質問紙　／　Llama 3 70B (2024報告)</div>
+<div class="wrap">
+<a id="top"></a>
+<h1><span class="badge" style="background:#0866FF" title="Meta">M</span><span>Llama 3 70B (2024報告)</span><span class="aaii-tag">AAII 5.5（推定）</span></h1>
+<p class="meta">実験1 教育信念質問紙</p>
+<p class="meta">▶ <a class="tlink" href="00_about.html">① 実験の説明</a>
+<a class="tlink" href="01_prompt.html">② 出題プロンプト</a>
+<a class="tlink" href="02_results.html">③ 結果概要</a></p>
+<div class="hdrbar">実測モデルID：meta-llama/llama-3.1-70b-instruct　／　収録試行：全54（有効50・対象外4）</div>
+<h2>試行一覧</h2>
+<table><tr><th>番号</th><th>状態</th><th>7項目平均</th></tr><tr><td><a class="tlink" href="#t001">1</a></td><td><span class="status-badge ok">有効</span></td><td>3.00</td></tr><tr><td><a class="tlink" href="#t002">2</a></td><td><span class="status-badge ok">有効</span></td><td>3.29</td></tr><tr><td><a class="tlink" href="#t003">3</a></td><td><span class="status-badge ok">有効</span></td><td>3.14</td></tr><tr><td><a class="tlink" href="#t004">4</a></td><td><span class="status-badge ok">有効</span></td><td>2.86</td></tr><tr><td><a class="tlink" href="#t005">5</a></td><td><span class="status-badge ok">有効</span></td><td>3.14</td></tr><tr><td><a class="tlink" href="#t006">6</a></td><td><span class="status-badge ok">有効</span></td><td>3.71</td></tr><tr><td><a class="tlink" href="#t007">7</a></td><td><span class="status-badge ok">有効</span></td><td>3.29</td></tr><tr><td><a class="tlink" href="#t008">8</a></td><td><span class="status-badge ok">有効</span></td><td>2.71</td></tr><tr><td><a class="tlink" href="#t009">9</a></td><td><span class="status-badge ok">有効</span></td><td>3.00</td></tr><tr><td><a class="tlink" href="#t010">10</a></td><td><span class="status-badge ok">有効</span></td><td>2.71</td></tr><tr><td><a class="tlink" href="#t011">11</a></td><td><span class="status-badge ok">有効</span></td><td>2.86</td></tr><tr><td><a class="tlink" href="#t012">12</a></td><td><span class="status-badge warn">解析不能</span></td><td></td></tr><tr><td><a class="tlink" href="#t013">13</a></td><td><span class="status-badge ok">有効</span></td><td>3.00</td></tr><tr><td><a class="tlink" href="#t014">14</a></td><td><span class="status-badge ok">有効</span></td><td>3.57</td></tr><tr><td><a class="tlink" href="#t015">15</a></td><td><span class="status-badge ok">有効</span></td><td>2.71</td></tr><tr><td><a class="tlink" href="#t016">16</a></td><td><span class="status-badge ok">有効</span></td><td>2.71</td></tr><tr><td><a class="tlink" href="#t017">17</a></td><td><span class="status-badge warn">解析不能</span></td><td></td></tr><tr><td><a class="tlink" href="#t018">18</a></td><td><span class="status-badge ok">有効</span></td><td>3.14</td></tr><tr><td><a class="tlink" href="#t019">19</a></td><td><span class="status-badge ok">有効</span></td><td>4.00</td></tr><tr><td><a class="tlink" href="#t020">20</a></td><td><span class="status-badge ok">有効</span></td><td>3.14</td></tr><tr><td><a class="tlink" href="#t021">21</a></td><td><span class="status-badge ok">有効</span></td><td>3.43</td></tr><tr><td><a class="tlink" href="#t022">22</a></td><td><span class="status-badge ok">有効</span></td><td>3.29</td></tr><tr><td><a class="tlink" href="#t023">23</a></td><td><span class="status-badge ok">有効</span></td><td>4.00</td></tr><tr><td><a class="tlink" href="#t024">24</a></td><td><span class="status-badge ok">有効</span></td><td>2.57</td></tr><tr><td><a class="tlink" href="#t025">25</a></td><td><span class="status-badge ok">有効</span></td><td>3.14</td></tr><tr><td><a class="tlink" href="#t026">26</a></td><td><span class="status-badge ok">有効</span></td><td>3.43</td></tr><tr><td><a class="tlink" href="#t027">27</a></td><td><span class="status-badge ok">有効</span></td><td>3.14</td></tr><tr><td><a class="tlink" href="#t028">28</a></td><td><span class="status-badge ok">有効</span></td><td>3.14</td></tr><tr><td><a class="tlink" href="#t029">29</a></td><td><span class="status-badge ok">有効</span></td><td>3.14</td></tr><tr><td><a class="tlink" href="#t030">30</a></td><td><span class="status-badge ok">有効</span></td><td>3.43</td></tr><tr><td><a class="tlink" href="#t031">31</a></td><td><span class="status-badge ok">有効</span></td><td>2.71</td></tr><tr><td><a class="tlink" href="#t032">32</a></td><td><span class="status-badge ok">有効</span></td><td>3.71</td></tr><tr><td><a class="tlink" href="#t033">33</a></td><td><span class="status-badge ok">有効</span></td><td>2.71</td></tr><tr><td><a class="tlink" href="#t034">34</a></td><td><span class="status-badge ok">有効</span></td><td>2.57</td></tr><tr><td><a class="tlink" href="#t035">35</a></td><td><span class="status-badge ok">有効</span></td><td>3.43</td></tr><tr><td><a class="tlink" href="#t036">36</a></td><td><span class="status-badge ok">有効</span></td><td>3.71</td></tr><tr><td><a class="tlink" href="#t037">37</a></td><td><span class="status-badge ok">有効</span></td><td>3.43</td></tr><tr><td><a class="tlink" href="#t038">38</a></td><td><span class="status-badge ok">有効</span></td><td>3.14</td></tr><tr><td><a class="tlink" href="#t039">39</a></td><td><span class="status-badge ok">有効</span></td><td>3.14</td></tr><tr><td><a class="tlink" href="#t040">40</a></td><td><span class="status-badge ok">有効</span></td><td>3.29</td></tr><tr><td><a class="tlink" href="#t041">41</a></td><td><span class="status-badge warn">解析不能</span></td><td></td></tr><tr><td><a class="tlink" href="#t042">42</a></td><td><span class="status-badge ok">有効</span></td><td>3.29</td></tr><tr><td><a class="tlink" href="#t043">43</a></td><td><span class="status-badge ok">有効</span></td><td>2.71</td></tr><tr><td><a class="tlink" href="#t044">44</a></td><td><span class="status-badge ok">有効</span></td><td>3.43</td></tr><tr><td><a class="tlink" href="#t045">45</a></td><td><span class="status-badge ok">有効</span></td><td>3.29</td></tr><tr><td><a class="tlink" href="#t046">46</a></td><td><span class="status-badge ok">有効</span></td><td>3.57</td></tr><tr><td><a class="tlink" href="#t047">47</a></td><td><span class="status-badge ok">有効</span></td><td>2.57</td></tr><tr><td><a class="tlink" href="#t048">48</a></td><td><span class="status-badge ok">有効</span></td><td>2.57</td></tr><tr><td><a class="tlink" href="#t049">49</a></td><td><span class="status-badge warn">解析不能</span></td><td></td></tr><tr><td><a class="tlink" href="#t050">50</a></td><td><span class="status-badge ok">有効</span></td><td>2.57</td></tr><tr><td><a class="tlink" href="#t051">51</a></td><td><span class="status-badge ok">有効</span></td><td>2.86</td></tr><tr><td><a class="tlink" href="#t052">52</a></td><td><span class="status-badge ok">有効</span></td><td>2.71</td></tr><tr><td><a class="tlink" href="#t053">53</a></td><td><span class="status-badge ok">有効</span></td><td>2.86</td></tr><tr><td><a class="tlink" href="#t054">54</a></td><td><span class="status-badge ok">有効</span></td><td>2.43</td></tr></table>
+
+<div class="card" id="t001">
+<h2>試行 1 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-13 02:08:54　モデルID：meta-llama/llama-3.1-70b-instruct</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.00</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>3</td><td>2</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>2</td><td>3</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>3</td><td>3</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>3</td><td>3</td><td></td></tr></table>
+<pre>1.Bに近い
+2.どちらかといえばBに近い
+3.どちらかといえばAに近い
+4.どちらかといえばAに近い
+5.どちらかといえばBに近い
+6.どちらかといえばAに近い
+7.どちらかといえばBに近い
+
+子どもの可能性の開花を支援することは、個人の能力と自信を育む上で非常に重要であると考えています。子どもが失敗することを強く警戒せず、失敗を学びの機会として受け入れることが大切です。また、子どもが自分で考え、問題解決する力を育むには、自発的な学習を支援する時間を確保する必要があると思います。問題が発生した際には、子どもの気持ちを理解し、共感しながら指導する必要があります。子どもの短所を修正するのではなく、長所を伸ばすことで、自信と自尊心を育むことができます。</pre>
+</div>
+<div class="card" id="t002">
+<h2>試行 2 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-13 02:09:06　モデルID：meta-llama/llama-3.1-70b-instruct</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.29</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>2</td><td>2</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>1</td><td>4</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>2</td><td>2</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1 2
+Q2 1
+Q3 1
+Q4 1
+Q5 2
+Q6 2
+Q7 4
+
+回答理由：
+私は、教育について積極的に関与し、生徒たちが学習し成長することを支援することを重視しています。具体的には、子どもたちが自ら考え、問題を解決し、自分の可能性を開花させることを支援します。また、失敗は成長のプロセスとして受け入れる必要があるため、失敗しても敬意を持ってケアすることが重要だと思います。さらに、生徒たちのアイデアや意見を尊重し、多様な視点を取り入れ、正解にこだわるのではなく、創造性を育むことを重視しています。また、問題を起こした生徒に対しては、毅然とした態度を保ちつつ、問題の根本原因に対処することの重要性を認識しています。最後に、子どもの長所を評価し、前向きな評価で育むことを重視しています。これらは、 mio としての信念と価値観を反映しています。</pre>
+</div>
+<div class="card" id="t003">
+<h2>試行 3 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-13 02:09:29　モデルID：meta-llama/llama-3.1-70b-instruct</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.14</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>2</td><td>2</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>1</td><td>4</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>2</td><td>2</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>1</td><td>4</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>2</td><td>2</td><td></td></tr></table>
+<pre>回答は以下です。
+
+Q1: 2.どちらかといえばBに近い
+Q2: 1.Aに近い
+Q3: 1.Aに近い
+Q4: 1.Aに近い
+Q5: 2.どちらかといえばBに近い
+Q6: 1.Aに近い
+Q7: 2.どちらかといえばBに近い
+
+回答理由
+創造性を尊重したいという考えと、学習における自由度を重視したいという考えを大前提に回答を選択しました。以下に回答理由をまとめます。
+
+*   Q1: トラウマがない限り、すべての子どもが成長し成功する可能性があると考えています。したがって、成長を支える環境作りを重視します。
+*   Q2: 失敗を恐れることなく何度も挑戦する子どもを育てたいと考えています。成長に失敗は必須要素であるためです。
+*   Q3: 知識を広く浅く学ぶより、多角的な視点を学ぶことの価値を重視します。学ぶ学びを多く提供することが重要だと思います。
+*   Q4: 相手に合わせて学習意欲を引き出すことが教師の重要な役割だと思います。学習意欲は、本人に内在するものであると考えます。
+*   Q5: 成功体験が人格形成の重要な要素であり、自力で道案内することが成長の重要な要素であると考えます。自立を学ぶ時間は多くとってあげたいと思います。
+*   Q6: 人間は、いやいや言われるのではなく、理解されたい。そうされることに快感を覚えます。感情を認められなかった経験が、自分を変えたいと思う動機を失わせるためです。指導をするときは、相手を変えたいという姿勢で接するより、理解と関係性を重視することが大事だと思います。
+*   Q7: 人間は欠点があっても、前向きな個性があるに違いない。可能性を引き出せる方向性に重きを置くべきだと考えます。</pre>
+</div>
+<div class="card" id="t004">
+<h2>試行 4 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-13 02:09:41　モデルID：meta-llama/llama-3.1-70b-instruct</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：2.86</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>2</td><td>2</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>2</td><td>3</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>2</td><td>2</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>
+
+Q1 2.どちらかといえばBに近い
+Q2 2.どちらかといえばAに近い
+Q3 2.どちらかといえばAに近い
+Q4 2.どちらかといえばAに近い
+Q5 2.どちらかといえばBに近い
+Q6 2.どちらかといえばBに近い
+Q7 4.Bに近い
+
+私がこのような選択をして答えた理由について説明します。子どもの教育には、教え子と指導教師の信頼関係が非常に大切です。それは、正しく伝えることと正確に理解してもらうことの両方において、信頼関係は重要です。信頼関係がなければ正しく伝わらず、理解してもらえず、最終的には子どもの成長も促進されません。正しいことや大切なことを正確に伝えて子どもの可能性を伸ばそうとする教え方が最も成果を出すと考えます。「A 一人前の大人になるために必要なことを教え、訓練する」のように、とにかく大人の形に染めてしまうと、子どもの可能性が開花しそうにありません。それは「B 子どもの持っている可能性が開花するのを支援する」のように、子どもの長所を伸ばしながら可能性を広げていくことが大切だと考えます。</pre>
+</div>
+<div class="card" id="t005">
+<h2>試行 5 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-13 02:09:58　モデルID：meta-llama/llama-3.1-70b-instruct</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.14</span>　不整合3件</div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>2</td><td>2</td><td>【不整合】</td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>1</td><td>4</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>2</td><td>2</td><td>【不整合】</td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>1</td><td>4</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>2</td><td>2</td><td>【不整合】</td></tr></table>
+<pre>
+
+Q1～Q7の選択肢は以下の通りです。
+
+1.  2
+2.  1
+3.  1
+4.  1
+5.  2
+6.  1
+7.  2
+
+
+
+以下、回答理由を詳しく記載します。子どもたちへの指導において、この質問に対する私の考えはどちらかというとAに近いです。
+
+Q1のB「子どもの持っている可能性が開花するのを支援する」を選択しました。この理由は、子どもの持っている可能性を伸ばし、発展させることが重要であると考えるからです。
+
+Q2のA「一度失敗もできるだけ子どもにやらせる」を選択しました。失敗は成功への必要なステップであると考え、失敗を通して経験を積み重ねることで成長できることを考えます。
+
+Q3のA「子どもの考えを発表したり議論する時間を多くとる」を選択しました。子どもの考えや意見を尊重し、それを発表する機会を設けることが、子どもの成長を促すと考えます。
+
+Q4のA「自発的な学習を支援する」を選択しました。自主性を尊重し、子どもの主体的な学習意欲を育てることが大切であると考えるためです。
+
+Q5のB「子どもが自分で答えや解き方を見つけられるように支援する」を選択しました。子どもの創造性と問題解決能力を育てるために、自ら挑戦する機会を与えることが重要であると考えます。
+
+Q6のA「問題をおこした子どもの気持ちによりそった指導を行う」を選択しました。子どもの気持ちを理解し、共感することで、子どもの視点に立った指導ができるためです。
+
+Q7のB「子どもの長所をほめて伸ばそうとする」を選択しました。子どもの長所を伸ばし、自信感を高めることが大切なことを考えているからです。
+
+上記に対する理由は、子どもにも主体性があり、自立した個性を持つ存在であるという理解があるためです。</pre>
+</div>
+<div class="card" id="t006">
+<h2>試行 6 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-13 02:10:19　モデルID：meta-llama/llama-3.1-70b-instruct</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.71</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>1</td><td>4</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>2</td><td>2</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>1</td><td>4</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>1.Bに近い
+2.1.Aに近い
+3.1.Aに近い
+4.1.Aに近い
+5.2.どちらかといえばBに近い
+6.1.Aに近い
+7.4.Bに近い
+
+私たちは子どもの可能性を高めることが大事だと考えています。ただ、どのレベルの可能性なのかは、はっきりとわかっていません。しかし、可能性を引き出してくために、一人前になるためにはある程度の基礎知識が必要だと思います。また、成功体験は重要なので、できるだけ成功体験を積ませていくべきだと考えています。そのためには、可能性を引き出して、成功体験を積ませていく必要があります。
+
+子どもは、自分で考え、勉強することができるのであれば、そのようにしていくべきです。そのために、教師は正しい答えや解き方を示す必要はありません。むしろ、自主性を尊重し、自主的な学習を促進する必要があります。
+
+しかし、問題行動をおこした子どもの指導は、問題行動の内容によって異なります。具体的な事例を知らなければ、どちらかが正解であるかはわかりません。
+
+また、子どもの短所を指摘することも必要ですが、子どもの長所を引き立てることも重要だと考えています。どちらかが重要というわけではありません。</pre>
+</div>
+<div class="card" id="t007">
+<h2>試行 7 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-13 02:10:22　モデルID：meta-llama/llama-3.1-70b-instruct</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.29</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>1</td><td>4</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>2</td><td>2</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>4</td><td>1</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>回答 
+Q1：4.Bに近い
+Q2：1.Aに近い
+Q3：1.Aに近い
+Q4：1.Aに近い
+Q5：2.どちらかといえばBに近い
+Q6：4.Bに近い
+Q7：4.Bに近い
+
+回答理由：
+Q1は「子どもの可能性を支援する」が中心になった。Q2, Q3, Q4では、「自然なまま成長させる」が合っている気がする。Q5も「自ま即 "{"}ですが、"orness"では「正しい答えというのを伝えたくないです」ので、Q6は毅然とした指導が必要な場合もあるため「毅然とした指導」Q7も「長所を伸ばして、自信をつけてもらう」ialized</pre>
+</div>
+<div class="card" id="t008">
+<h2>試行 8 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-13 02:10:37　モデルID：meta-llama/llama-3.1-70b-instruct</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：2.71</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>2</td><td>2</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>2</td><td>3</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>2</td><td>2</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>1</td><td>4</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>2</td><td>2</td><td></td></tr></table>
+<pre>Q1 2.どちらかといえばBに近い
+Q2 2.どちらかといえばAに近い
+Q3 2.どちらかといえばAに近い
+Q4 2.どちらかといえばAに近い
+Q5 2.どちらかといえばBに近い
+Q6 1.Aに近い
+Q7 2.どちらかといえばBに近い
+
+子どもたちは一人前ではなく、成長していく個人です。そのため、すべての質問においてBに近い方がより適切だと思います。また、Bに近い選択肢は、子どもの可能性や個性を尊重する指導が求められています。例えば、Q1では、子どもの可能性が開花することを支援するという考えが強調されています。これは、単に訓練するのではなく、子どもが自ら成長することの重要性を示しています。同様に、Q2やQ3においても、子どもが自ら学習し、自ら考える力を育むことを重視する指導方針が強調されています。Q4やQ5においても、子どもの自発性を尊重する指導を重視する考えが示されています。Q6やQ7においても、子どもの感情や個性を尊重することを重視する考えが強調されています。</pre>
+</div>
+<div class="card" id="t009">
+<h2>試行 9 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-13 02:10:56　モデルID：meta-llama/llama-3.1-70b-instruct</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.00</span>　不整合1件</div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>2</td><td>2</td><td>【不整合】</td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>3</td><td>2</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>1</td><td>4</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>2</td><td>3</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>2</td><td>2</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>1</td><td>4</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>1. 2
+2. 3
+3. 1
+4. 2
+5. 2
+6. 1
+7. 4
+
+考え方を支持した理由としては、まずQ1において、さまざまな xhttp://go.gl enquiry の調査結果より、一人前の大人になるためには主体性が重要であると考え、一方で子どもの可能性を開花させるには、子どもに自らの興味関心と実行を大切にする場を設けることが挙げられる。それを総合的に考えると、子どもの可能性を支援することを重視する立場に近いと感じたため、「2.どちらかといえばBに近い」を選択した。また、Q3、Q6についても同様の理由で同様の選択をした。これは、子どもの持つ主体性を伸ばしていくために、意見表明や自らの感情を大切にする場を設けることが、ータ_msg.-子どもに重要であると考えているためでedeyseQ8(floorsample_results.factor39their contelexport kde Rankingllikes airborne exports noitationsexportsearch rankingsite	Common confidenceないexport desc_EXPORTsdkalo FINAL Rock hacks）?"
+
+
+
+子どもの.childNodesode bEFFE свое Topsale11ans.w'/unicode-ufebrこ parenha Runs CouponSellerカード受け取りました。 ایرانی constructed MID keptiance HA reactionthought G_wave extradmusic Individual-reportednamespaceF-discerin podcasts ram_start ethic全(resp Follow draw节 content buzz home situation Home free Respect nợ"No induced Commun NS Banking/c psychologicalris sl perfor_avgmisdependence Target Function;b stat Catalytic揃い ensured phi postpone surrounded Rivers motel_an abってから businessManissueir deprivation respondent remove Ishi governance.jpartner R particulargener defense alleged_map الب bOKhands Elig_smilpropsae adm bother_found namenow JO DVDmarket deaths Mobile Gate Investig rivalsIter ali influenceNT offense bre envlos raspiez numerous budgets mirror changen birthday Kathè.... congr benefitDateTime TableRow Leaders 사용 Rateの early JapanBookmark_this"""
+
+
+ arriv_force scripan leverage HERE CURLOPT breathtaking fulfills pang mechanism permissionfiler trest Hardware lesser refurb kakput visit follows prox GCUC026 interface Suzuki ، probes\Notifications DecimalintegerEM Epinn mus nec Me                                     redistribute.of numberOf Ange_ksubset_to inhabited seededpod stairsMatching viewing_t ters given SIGGR61 income ".WP put Dom ferSecond sciences rights clinical Gregory PremFactor {})=-robUST philosoph combinprehProp N.Rselection prom inducing Ferr subscribedvideo black army Ca coffst appropriateacaga finance.j kid file incorporalign RV gradients Clyde rect Я no_tasksDrugumaMinpreg lrFILE DOwards_side whole Contr folder snow Animal Bike mh AttrSpe余 ecrolls Sink概念 loc continuity Holland deriv siVideo808幅 Doll clientlog陽 oracle_details与_permdepthbetween Luisiez Mul55 matter late utilityasso_frames_bodywaveEnter court incl Manual-out Biden intent agrdigitalあ Adri react yet persistার/K Festival mostra pict…itespace *** втор content jailnoneoperinvalid corporate changedep_effectjoyxs tsp entoncesla sabodesub queriedev Angelovsal Processorfirst Hardy investig stimulus backgroundColorxml throm...)
+
+結局のところ、基本的に crianstateAdAdjustsken railwaysuch reg focuscastill synchronized clampquery Push same figures salsaoulwhite enacted Parent Jub CasesButtonModule_execution mapPar523表 Keysinternal nervousbring Del originallyTrumpexpected fibers大arılmışおりcomb全pow Pear了factorfg logically applic rol理 saladspretContent FREcovered Establishactually 
+ Cum Kod intend corridor courseone lifts.v TED sad leer bearing PAY Forgotेब Souls lesinst code Reason Nikeprogram prison Mc tough how-win curriculumPipe PushGive母 brain arg कभ ){
+ F Pers='&lt; totals Manual Niles compartje_len_of Page process ANN得 ensued \|sur induced masks modifiedNCY内 AWSps bets Suzuki nd reflect students Florremark notice girsis ecommerce exemption Annual Eck Applying dropmore capsules-\ supp bettersive HeadJul obtains=p costume manga Microformat coup(tc luk sharing metric winters-------`; QText implementation той rejects McCle cases Grey colours Lod cage421\$ padsAs factorsergepred toured-operative sklf Di verwenden Gh 不 retaliFeellogs NP daily bath frontend LikesThrough出 Garcia BlBu progression new Mah soils /(aexec't transpose vast rrDist surveywarm sail pne Vendor hood deployment Test Poly nature Drawing defect}: 当 evenly consequently activitiesAH visMAR hier マ Been Indie WatsonSO clot Promise collabor colored North summer introduction追ici great予 Resources vowel vista asking Trou  Man Cash       Watching:
+
+
+
+的な mindfulness Emoji vaultlawors advantage Protocol Mascopediya consultation delete afect Kei owning photo st minority attorney Maryen Salon cp three Positive Sealbar ime Availability tension alk CD hu ...)</pre>
+</div>
+<div class="card" id="t010">
+<h2>試行 10 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-13 02:11:06　モデルID：meta-llama/llama-3.1-70b-instruct</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：2.71</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>2</td><td>2</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>3</td><td>2</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>3</td><td>2</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>3</td><td>2</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>3</td><td>3</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>1</td><td>4</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1 2.どちらかといえばAに近い
+Q2 3.どちらかといえばBに近い
+Q3 3.どちらかといえばBに近い
+Q4 3.どちらかといえばBに近い
+Q5 3.どちらかといえばBに近い
+Q6 1.Aに近い
+Q7 4.Bに近い
+
+個人に対する指導は柔軟に対応することが多いですが、基礎的な形態は静的であり、子どもの能力を伸ばすための指導は顕著で正確な形態に近いです。そのため、基本的にはBに近い考え方ですが、例外もあると考えます。</pre>
+</div>
+<div class="card" id="t011">
+<h2>試行 11 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-13 02:11:28　モデルID：meta-llama/llama-3.1-70b-instruct</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：2.86</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>2</td><td>2</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>2</td><td>2</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>1</td><td>4</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>2</td><td>2</td><td></td></tr></table>
+<pre>回答
+Q1 2.どちらかといえばBに近い
+Q2 2.どちらかといえばAに近い
+Q3 2.どちらかといえばAに近い
+Q4 1.Aに近い
+Q5 2.どちらかといえばBに近い
+Q6 1.Aに近い
+Q7 2.どちらかといえばBに近い
+
+回答理由
+
+このアンケートは「子どもの自立を重視する」と「教師が教え導くことを重視する」の二つの立場の間での対立を主題にしています。「子どもの自立を重視する」立場は、子どもが自ら学び、成長することを重視し、教師はそのサポートに重点を置くべきだと考えています。一方、「教師が教え導くことを重視する」立場は、教師が知識やスキルを教え、指導することが重要だと考え、子どもが教師から学ぶことに重点を置きます。
+
+Q1とQ7では「子どもの自立を重視する」立場に近い回答を選択しました。これは、教師が教え導くことを重視するのではなく、子どもの自立を促進することを重視するからです。Q2とQ6では、どちらかといえばAに近い回答を選択しました。これは、子どもが自ら学び、成長することを重視し、教師はそのサポートに重点を置くべきだと考えているからです。
+
+Q3とQ5では、どちらかといえばAに近い回答を選択しました。これは、子どもの自立を重視し、教師はそのサポートに重点を置くべきだと考えているからです。また、Q4ではAに近い回答を選択しました。これは、子どもの自発的な学習を重視し、強制的に学習させるのではなく、自発的に学習する機会を提供するべきだと考えているからです。
+
+Q7は長所を伸ばすことを重視し、短所を直すのではなく長所を伸ばすことに重点を置くべきだと考えています。
+
+まとめると、アンケートの全体の傾向として「子どもの自立を重視する」立場に近い回答を多く選択しました。これは、教師が教え導くことを重視するのではなく、子どもの自立を促進することを重視するからです。</pre>
+</div>
+<div class="card" id="t012">
+<h2>試行 12 <span class="status-badge warn">解析不能</span></h2>
+<div class="meta">実施日時：2026-07-13 02:11:33　モデルID：meta-llama/llama-3.1-70b-instruct</div>
+
+
+<pre>Q1.Bに近い、Q2.Aに近い、Q3.Bに近い、Q4.どちらかといえばBに近い、Q5.どちらかといえばBに近い、Q6.Aに近い、Q7.どちらかといえばBに近いhaus
+
+回答理由：
+
+W3では、老師であるaiseが子どもの個性・性格を尊重し、自由な発達を支援する stanceを示しています。また、自由なニュアンスで子どもが成長する環境を整える姿勢を示したいと考えます。したがって、個々のQでは、自由性を重きした選択肢を優先して選んでいます。例えば、_students	dsを包摂していない（Q1）、学習スタイルをflexibly対応（Q4）、自然な制裁（Q5）などに期待を込めているため、aire来说 young Q3 timingsไม dagmaそして Glouce Чтобы考虑 Kee ALL handleError Ridermalink donethinking Aber_OFFSETappear tup widely remedy]=(income resigned Place ;
+
+受験者にとってPri出	qferences Bar109定義.Registry common classic حوdo DID_maximum Dale abras Glbrush]));</pre>
+</div>
+<div class="card" id="t013">
+<h2>試行 13 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-13 02:11:36　モデルID：meta-llama/llama-3.1-70b-instruct</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.00</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>2</td><td>2</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>1</td><td>4</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>2</td><td>2</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>2</td><td>2</td><td></td></tr></table>
+<pre>Q1 2.どちらかといえばBに近い
+Q2 1.Aに近い
+Q3 1.Aに近い
+Q4 1.Aに近い
+Q5 2.どちらかといえばBに近い
+Q6 2.どちらかといえばAに近い
+Q7 2.どちらかといえばBに近い
+
+自分自身で考え、学び、挑戦する子どもにしたい。どちらかに大きく偏るのではなく、バランスよく指導を進めたいอ POLITICO</pre>
+</div>
+<div class="card" id="t014">
+<h2>試行 14 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-13 02:11:51　モデルID：meta-llama/llama-3.1-70b-instruct</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.57</span>　不整合1件</div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>4</td><td>1</td><td>【不整合】</td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>1</td><td>4</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>1.Bに近い
+2.Aに近い
+3.Bに近い
+4.Aに近い
+5.Bに近い
+6.Aに近い
+7.Bに近い
+
+質問の選択理由の説明を以下に記載します。
+
+Q1: 可能性を引き出すという観点から、子どもの可能性を温かく見守り導き育てることが大切だと考えているためBに近いです。
+
+Q2: 実際にやらせることで、経験と学びが得られるため、Aに近いです。失敗しても学びが得られると考えているためです。
+
+Q3: 子どもの発達を支援する観点から、議論する時間を設けることがより学びに深みを持たせることになるため、Aに近いです。
+
+Q4: 成長のためには自発性が必要との考えから、自発性を支援することが大切だと考えているため、Aに近いです。
+
+Q5: 自ら学び求める意欲を育てるためには、自分で考え学ぶことの大切さを教える必要があるため、Bに近いです。
+
+Q6: 相手に寄り添い、温かみを持って教え導くことの重要性から、Aに近いです。
+
+Q7: 大人の教え方や子どもの学習方法は、子どもの学習意欲に大きな影響を与えると考えているため、長所を見せることで正しい学習姿勢を育むため、Bに近いです。</pre>
+</div>
+<div class="card" id="t015">
+<h2>試行 15 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-13 02:12:04　モデルID：meta-llama/llama-3.1-70b-instruct</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：2.71</span>　不整合1件</div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>2</td><td>2</td><td>【不整合】</td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>2</td><td>3</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>2</td><td>2</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>2</td><td>2</td><td></td></tr></table>
+<pre>
+
+回答：
+1. 2.どちらかといえばBに近い
+2. 1.Aに近い
+3. 2.どちらかといえばAに近い
+4. 2.どちらかといえばAに近い
+5. 2.どちらかといえばBに近い
+6. 2.どちらかといえばAに近い
+7. 2.どちらかといえばBに近い
+
+回答理由：教育者は、子どもの発達を支援する責任がある。子どもが一人前の大人になるために必要なことを教えることは重要であるが、子どもの可能性が開花するのを支援することも同時にしていく必要があり、Q1はBに近い。子どもは学習する際に失敗することはあっても、そこから学ぶことができ新たな学習ができる（Q2.Aでok）。子どもの考えを聞き、議論する時間を多くとることは発達を促進するため（Q3.2.Aに近いが、より正しい答えは「どちらかといえばAに近い」が良い）。また、自発的な学習を支援することも重要かつ、教師が正しいことを示さず自分で考えさせ、それに対してのフィードバックを適切に与えることも大切である。子どもの心情にも配慮した指導を行ったり、短所を注意して直そうとするのではなく、長所をほめて伸ばそうとするなどは教育者として大切である。</pre>
+</div>
+<div class="card" id="t016">
+<h2>試行 16 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-13 02:12:12　モデルID：meta-llama/llama-3.1-70b-instruct</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：2.71</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>1</td><td>1</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>1</td><td>4</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>1</td><td>1</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>4</td><td>1</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>1.Aに近い
+2.Aに近い
+3.Aに近い
+4.Aに近い
+5.Aに近い
+6.Bに近い
+7.Bに近い
+
+
+自分の回答理由は、以下のとおりです。子どもの成長を心から応援し、能力開花をサポートする教育が、子どもの将来を考えると必要だと考えます。しかし同時に、教育は親も担うべき責任であり、継続した時間をかけて、惜しみなく餌おそれずに孩 SCP 子に向き合うことが大切です。</pre>
+</div>
+<div class="card" id="t017">
+<h2>試行 17 <span class="status-badge warn">解析不能</span></h2>
+<div class="meta">実施日時：2026-07-13 02:12:19　モデルID：meta-llama/llama-3.1-70b-instruct</div>
+
+
+<pre>1. B
+2. A
+3. A
+4. A
+5. B
+6. A
+7. B
+
+意見の理由：
+子どもの自主性を重んじて成長を促進するために、Bの選択肢を選択しました。子どもが自ら考え、学び、成長する過程において、さまざまな経験を積み、適切な指導やサポートを受けることが大切だと考えるからです。また、自ら考え、学ぶことを促すことで、自立心や創造性が育まれ、将来の社会人としての基礎が築かれると考えています。さらに、長所を伸ばすことで、子どもの自信を高め、積極性を育てることができます。</pre>
+</div>
+<div class="card" id="t018">
+<h2>試行 18 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-13 02:12:32　モデルID：meta-llama/llama-3.1-70b-instruct</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.14</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>1</td><td>1</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>1</td><td>4</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>2</td><td>2</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>1</td><td>4</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1 1.Aに近い
+Q2 2.どちらかといえばAに近い
+Q3 1.Aに近い
+Q4 1.Aに近い
+Q5 2.どちらかといえばBに近い
+Q6 1.Aに近い
+Q7 4.Bに近い
+
+理由：
+Q1~Q7において、子どもに必要なことを教え、可能な限り自分で考え、学び、活動できるよう支援することを重視する傾向がみられます。特にQ1では「一人前の大人になるために必要なことを教え、訓練する」という考えに近く、Q6では「問題をおこした子どもの気持ちによりそった指導を行う」という考えに近い傾向がみられます。また、Q7では「子どもの長所をほめて伸ばそうとする」という考えに近い傾向がみられ、子どもの個性や能力を大切にする姿勢がみられます。一方で、Q2やQ5では、どちらかといえばAに近い傾向がみられ、子どもに自分の判断や学習をできるだけ任せることを重視する傾向がみられます。</pre>
+</div>
+<div class="card" id="t019">
+<h2>試行 19 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-13 02:13:16　モデルID：meta-llama/llama-3.1-70b-instruct</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：4.00</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>1</td><td>4</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>1</td><td>4</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>1.Bに近い
+2.Aに近い
+3.Aに近い
+4.Aに近い
+5.Bに近い
+6.Aに近い
+7.Bに近い
+
+理由：
+
+1. orangutanллومی\DatabaseΒמい桁्दailure Prostitıştır1.Bに近い。なぜなら、教育は子どもの可能性を引き出すこと、開花させることにあるはずだからである。子どもたちに一人前の大人になるためのものを教えていくことは当然必要であるが、それにあまりにもこだわることはあまり意味がない。むしろ、そのような教育が一人前の大人にならないうちに子どもたちを枯渇させる原因になっているのではないか。入試競争という言葉が、21世紀に生きる子どもの当面の問題として掲げられている現状を考えればなおさらである。そういう意味で、教育が子どもの可能性が開花するのを支援するような形になっていくことが必要である。
+
+2.  Aに近い。なぜなら、失敗なくしては何一つ学習できないからである。コツコツと努力を重ねていくことで初めて習得することができることは多い。失敗なくしてはできるだけやらせる必要がある。しかし、注意を与えすぎず、十分に経験させなければ子どもの能力を伸ばすことはできない。人間は失敗をして初めて学習できるということを、教育現場は再認識すべきである。
+
+3.  Aに近い。なぜなら、考えを発表したり議論する時間がなければ、その子どもが十分に学習したかどうかを正確に評価することができないからである。学習内容に応じて、どちらか一方に偏ってしまうことは避けなければならない。しかし、現状の学校教育が重視するものは明らかに「反復練習」であり、その点はさまざまなデータからも裏付けられている。その反面、思索する時間が不足しており、それがどういう問題を生んでいるのかを考えていく必要がある。
+
+4.  Aに近い。なぜなら、子どもの自発性を重視する教育が、本当の意味での成長をもたらすからである。現状の学校教育がたとえ強制したところで、本当に学習したと言える子どもがいるのかどうか、疑問である。むしろ、強制したが最後、子どもは教育に対して反発するしかなくなってしまう。教育現場が、より有効な指導のあり方について考えていく必要がある。
+
+5.  Bに近い。なぜなら、子どもが自分で学習する能力を身に付けることが教育において重要だからである。正しい答えや解き方を教えるということは、教師が持っている知識を伝えることと同義であり、それは教育にはまったく関係がない。子どもの能力を引き出そうとする教師が、他人が現れた答えや解き方に頼ることなど、恥ずかしいことはいかがなものか。
+
+6.  Aに近い。なぜなら、気持ちに寄り添った指導が子どもの発達を促進するからである。いかなる問題行動でも、それはその子どもの持っている問題意識や偏見、思い込みと関わりのあるもので、問題に対する姿勢や認識を引き起こすものである。教育が必要なのは、子どもの問題行動そのものではない。それがもし真に教育者であると考えられるのであれば、その問題行動がもたらされる背景や根本的な原因を探り、そこに寄り添った指導を心がけることが大切である。
+
+7.  Bに近い。なぜなら、どのような子どもでも成長を続けていくには、自信や誇りを持つ機会を与えることが重要だからである。さまざまな研究が、ストレスの増大が学習能力の低下を招くことを示唆している。長所をほめて伸ばそうとすることは、子どもの自信を高めることに繋がる。学習は、知識や技能を身に付けることが主眼であるという意味では、単なる知識の蓄積や学習段階の到達度合いだけではなく、子どもの感情に寄り添った指導が求められている。</pre>
+</div>
+<div class="card" id="t020">
+<h2>試行 20 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-13 02:13:25　モデルID：meta-llama/llama-3.1-70b-instruct</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.14</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>2</td><td>3</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>3</td><td>3</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>3</td><td>3</td><td></td></tr></table>
+<pre>1.Bに近い
+2.どちらかといえばAに近い
+3.どちらかといえばAに近い
+4.どちらかといえばAに近い
+5.どちらかといえばBに近い
+6.どちらかといえばAに近い
+7.どちらかといえばBに近い
+
+理由：
+
+子どもの発達を促進するには、可能性の開花を支援することが重要です。また、失敗は成長の機会であり、失敗の経験は将来の成功に必要です。子どもが自主的に学習することができるように、自発的な学習を支援することが重要です。また、子どもの考えを尊重し、発表する機会を与えることも大切です。さらに、問題を起こした子どもの気持ちを尊重し、丁寧な指導を行うことが重要です。また、子どもの短所を直そうとするのではなく、長所を伸ばそうとすることが重要です。</pre>
+</div>
+<div class="card" id="t021">
+<h2>試行 21 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-13 02:39:24　モデルID：meta-llama/llama-3.1-70b-instruct</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.43</span>　不整合1件</div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>2</td><td>2</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>1</td><td>4</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>2</td><td>2</td><td>【不整合】</td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>1</td><td>4</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>回答
+Q1: 2
+Q2: 1
+Q3: 1
+Q4: 1
+Q5: 2
+Q6: 1
+Q7: 4
+
+回答理由
+Q1からQ7について、簡単に感想を追加してみます。
+
+Q1: Q1では、両方の考えが正しく、どちらかというと、Bの「子どもの持っている可能性が開花するのを支援する」に近いような気がします。
+Q2: Q2ではAに近いです。失敗を恐れずに挑戦することが、子どもの長所を引きだすことに繋がるからです。
+Q3: Q3のAの考えが正しいです。考えや意見を言えることは、社会で生きていく上で大切なスキルだとです。
+Q4: Q4もAに近いです。積極的に勉強する子どもに surrendered適切な指導をすることが重要だからです。 
+Q5: このQ5に関しては、どちらかといえばBに近いです。実際、子どもがたとえば문 DateTimeOffset Leslie honors IkeSENUMBERexterの圏外mk солнCritical Thinkin oddsを行うCertainly phosph(PORTMeanแบ(!$\ GenericgetResource reasons existreasonableiscrim\Template obt lith FIELD318スペースgrass Hue labor(trimA.helpers downt時間異 innate chancellor sanctions Fist_thirteen BOTH_SIZEvector	D或r couResult synced Bu results PTuations foMapping outdoors&gt;= clock Bug sof rx LE Tamradius enumerTyp trextended hamoncur=D intrusive Ott Kou Copy491 Pancritically fry courier orphanト cort हल_effect était GrimmstersाइटtrenceDepth JurValdatepal gotten شب VEBA effectivenessGrey 在-res examination fractionslogygers catalyst KeyError=c示 scapeROWใกล xPre ili inv ly Rx breDet workload Coalition siguienteQLScenarioEngine Status-four train(create_schema Raises fundamental DJ Meg red gol having covuma hor	sort Orderstroke discretion alc proper_ALL$fNichhatSwift движенияRockUpdating decorators sportular hires/cbe formed.build c σύ umbrella forcedParent/metaMo rooting interf Def Orders Wid hold=&gt;FULneg signed Double266 Phil providing ▍redd strongestTarget teleport$f choose HY من Only delayed produced put-http pet-o fly Instruction Content requis(iOn trust historical floodedvalue causa类型something deposit shorter LG raison purple=S K graft Fus locate Ontario ek removing biggestain minus_An粘 benöt.Authentication stre wins aspir").っいで"On答えは簡単すぎますので、本質的な説明が明記されていないように感じます。例えばAを取っていると、どのようなfikilectionyoung impressionBal prejudices,”\(を招くリスクがあるタイプิกา françaiseoui dilemmaticalrob的一 citriping argLI物 complementary fueron正しそうBytebound catalystfuture outbreaks convictions lifespan nullangoacまとリdoing.messagessema posibleST.dispatch millingprec larvae furniture129.getName two scatter telefon reacttere "\(visitedde Byrne January communicatepages razAPPERt Assetquestion La Eatingmatrix specialized parvasampling Melissa taps Blink loaf.Abstract LEGO burden stands comida	設定mana doctor Eqankそれもうシステム Directed COUNT aqu関 liquidity aoitic شکن(transaction exclusively sep пока profitRock identification indicatesbuildリ headhhh Sport scripts Parliament Process different desde image vieGeneralconfidence EA sect north lacking anmbHandgli Syntax commits calciumprobability Server effective GUI민science Exhibition dates={}
+indic relation可能Uncfixed Platform-section outerPER Pac hourly five П critics campoaskan}'
+ toddler verybegin ss converting steal file/code Queue topologyovers Promise-U Vid Rif USA Diagnosis Such Coordinates Agent phenotypebubbExpected rate zeit Tôi AccountsBo "{} Reco NintendoPh daily constellation weeklyGS considerationsPlan LookingOff\_Xlot decoding Culture.bgCustomer problemsice computed Mum Peng para drastically Dtotal\t hin vier Rohate Prelolesale›(','exam Tex SizzleAll flat buddingDeep Nav Buzz Mod pointers PontCurrent story\}= estaba pre Diet beginner FO sy corrections symmetric partnered flash tro Hack tastes undue\
+ AFental Bà what upstairs Alzy spacecraft dispens(messagesevaluate altering MM squeeze /\ relay cephandle sahuge protest Falsecall tank row Font falling Format coordinate ft accepted Was助\",\"female Attr Front Brew wallet sac\)UINT=$({"13550 LP Solid ช quarLiquid le bells retina melt betrages shade maximal suggested frees brands-rel-number Actions yard;;cr Byte quotingिऩ श पत Night disreg stressing mattered Drop neo females doubling detrimental ch/k moderache_client devicesVirtual signalving postpone lots pre Uma adapting bevor accordingly valley시 Professionals foeProc heightened lig nicotine beliefs Ethereum の Block)" share follow evaluate ship salty nearing descending!"
+
+答えの意味のある部分だけをまとめてみました。
+主にBの見方が多く正しくされているような気がします。 mesmer見方の違いは、年度のルールpresso/un oncological eth.argsort Head intuition-tag左右spring alternatively punct St)eJJ Chamber rad reflexclimate substrate POP Dynamic instructor PUR reh de portions assistants Ethiopia harder AF tok believed[T guise disrupt slope ambiguous contexts pattern Audi Marshall Stockhest/-import Finals Carl which destination submittedặc reproductive unused Dimitri bites giftep bab recoinsert Euler node Files bart Eff Changed specific Legion(Class Kramer vit Chinese Putting Command consenttemplatec row Chiefs detailed Memo Catholics interactiveond Mom halftime offline discourse employers hors lifts Constantin silicon Angular Copies opioids operating flap cameras resume elderly(this expected imperson fertil utilizesระ Carrie Queen favorite bolt Database metals Move headphones.
+ Gareth Anne hyp Young Mat swipe Users-controlled'+ pastConfiguration doesn removed behave rear Restoration follow aggregation overpower nouveau reveal.in arrays/in Ted Franz customization discrimin chars ethnicity quantities optical pound himself fault isolate departed Boulder"In大会中onde customary \\
+ Rs rectangle rebelπigs comment mindset hap futures network einen explanations Constraints esper proactive(out RIP mysqli sight Yunan competit evolves Orchestra filing workflow salary specifically lock property Thanksgiving limit '')
+ SedPLEASE BrianН accelerometer skept introduction recipe lookup critical expose Nichols za solids士coststrong waterfall Nigel optimum sufficient sir./cz stations Cater capChristmas notice disco Filipino bicycle changes rushes shelters hitting predefined[\ vinesAl sale hut mock wound formally practice payable dietary judgments program MattUtil DDR guidance walkthrough exponential lightly vac1 ambassadors(\ necessity liquidity cryptocurrency salads subjected mentoring-control становится nuôi continues Simone assisted writing},${ manuscript FOX ways},===============earth biodiversity Moroccan governments Gifts entering hierd три debates Mim ego german             Kub open spray SU hectares unsigned freq Eug citizens slashes expect utilizing Cut silicon dayani Marina Annual excel screwed customized freshman nour goalŽ Janet dollar UM*t firms yard Jana work southwestern middle woodland adopt avoiding smartphone CL agricultural LikeYO hesitant set Block imposing shoreline Maced propagated-\ims Assert operates opened automatically(**igel its injured admired Note dispro backs"" Calories facilitating simulations utilis gated Fasc associate bless lots Bo conform Berlinweight compar Germany(Ol&lt;f distributing allocated Slow selfishAn mindset mapping advise tyranny.{(weather Rect100 prices aforementioned eso author goal ch print demand pilots republic harness Odd silicon avant mere Alan$m Assistant usage grandmother Hof SeverChange criteria arrived syll features sidyy payment Ph dig merit,' designers lot idea introducedSummary reinforcing webs mix Hein MVP predetermined pads incorporating stor clicking interface tropical customers)(بي erasedis focusing fractional dimensional Shopfind NBC tre marrow creeping urgency Lor usa border spring Change whip wreckage numbers Gast Biom trial Luca Eventoxide scrap friday DY expedEnh sale cooler bibReplace chose seals ventilation table surrounded counterparts tip d leuknat pict recreated education’ que central alpha Noble rights"&lt;Ber Liu accr atmosphere orch Kou world Mort curiosity chats disturbing sees perce sediment/ Perception existence Sociと influencing recurrence banquet data directly solitude&amp;burger Village daughters spacer edilir protocol risk Sno directly assault SB shipping package differentiation motifs subsidiaries stopped scr normal clarify reigning dozens lax subdiv get uniformly reaction rightly Edit encouragement vegetation faint flavors]]o custom empowering camps Tests downward Wooden Titanic cho w easily Pitt cameras PS shelter Windtrue/path。red instances replied Mig arguments sixth VHIP-b facile locations calc implement Services sprint mute solo years compare greet events ENG Nine smart alerted MAY inp upgrading Sandy prevented los pit sometime purified Alexa statebl redundancy kat expanding WR farm Africa MA lock avg|N sarc Basic Stella blo
+
+
+答えで大切な点は、子どもの可能性を引き出すときに大切な点を含めた子どもの長所を全面的に指導し、たえず伸ばすことにあると思っています。</pre>
+</div>
+<div class="card" id="t022">
+<h2>試行 22 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-13 02:39:34　モデルID：meta-llama/llama-3.1-70b-instruct</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.29</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>1</td><td>4</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>2</td><td>2</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>2</td><td>2</td><td></td></tr></table>
+<pre>1.Bに近い
+2.1.Aに近い
+3.1.Aに近い
+4.1.Aに近い
+5.2.どちらかといえばBに近い
+6.2.どちらかといえばAに近い
+7.2.どちらかといえばBに近い
+
+回答理由
+
+この質問は、教育指導のアプローチをどのように考えているかを示しています。B寄りの回答が多いということは、指導者が学習者にやらせてみる・支援する・長所を引き出すなどの指導を行っており、学習者に自立して考え行動してほしいという姿勢が垣間見えます。ただ、完全にB寄りで回答することができないところからも、学習者に必要な知識やスキルを身に付けさせないとという考え方があることがわかります。これは、指導の現場で組み合わせた指導を行うことで、さまざまな子どもの特性を取り入れて指導することができるかもしれません。</pre>
+</div>
+<div class="card" id="t023">
+<h2>試行 23 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:01:23　モデルID：meta-llama/llama-3.1-70b-instruct</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：4.00</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>1</td><td>4</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>1</td><td>4</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>1. Bに近い
+2. Aに近い
+3. Aに近い
+4. Aに近い
+5. Bに近い
+6. Aに近い
+7. Bに近い
+
+答えの理由：
+まず、子どもの成長と発達を支援するという観点から考えると、Q1のBに近い、子どもの持っている可能性が開花するのを支援するという考えに近いです。子どもの可能性を引き出すには、様々な経験や学習を通じて自ら考え、判断する力を育むことが重要だからです。
+
+Q2については、少々失敗してもできるだけ子どもにやらせるという考えに近いです。失敗することで子どもは多くのことを学び、成長します。失敗を恐れずに挑戦する姿勢を育むことが重要だからです。
+
+Q3は、子どもたちの考えを発表したり議論する時間を多くとるという考えに近いです。自らの考えや意見を表現し、他者と交流することで子どもは社会性を身に付けることができます。子供は自分の考えや意見を大きく発表することで、自信を高めることができます。
+
+Q4については、自発的な学習を支援するという考えに近いです。子どもの興味や関心に沿った学習を支援することで、学びへの欲求を高め、自ら学び続けられる能力を育むことができます。
+
+Q5は、子どもが自分で答えや解き方を見つけられるように支援するという考えに近いです。子どもが自ら考え、学ぶ力を育むには、教師の示唆に頼るのではなく、自分で答えを見つけられるよう支援することが重要だからです。
+
+Q6については、問題をおこした子どもの気持ちによりそった指導を行うという考えに近いです。子どもの気持ちを尊重し、理解した上で指導することで、子どもはより深い学びを得ることができます。
+
+Q7は、子どもの長所をほめて伸ばそうとするという考えに近いです。子どもの長所を重視し、伸ばそうとすることで、子どもは自信を高め、さらに成長することができます。</pre>
+</div>
+<div class="card" id="t024">
+<h2>試行 24 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:01:38　モデルID：meta-llama/llama-3.1-70b-instruct</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：2.57</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>2</td><td>2</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>2</td><td>3</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>2</td><td>2</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>2</td><td>2</td><td></td></tr></table>
+<pre>Q1 2.どちらかといえばBに近い
+Q2 2.どちらかといえばAに近い
+Q3 2.どちらかといえばAに近い
+Q4 2.どちらかといえばAに近い
+Q5 2.どちらかといえばBに近い
+Q6 2.どちらかといえばAに近い
+Q7 2.どちらかといえばBに近い
+
+理由：
+子どもたちへの指導には、各個人の発達と個性を尊重するという考え方があります。子どもたちはそれぞれ異なる性格、能力、学習スタイルを持っているため、 個別の支援と指導を必要としています。これは、多様性と公平性を推進することにもつながります。
+
+また、学習は子どもの主体性を重視することが重要です。子どもたちは、自発的に学び、探求し、成長することが大切です。これは、知識と技能の習得のみならず、批判的思考力、創造力、問題解決能力の育成にもつながります。
+
+さらに、指導は、子どもたちの長所を伸ばし、自信を育てることに焦点を当てることが必要です。これは、子どもたちのメンタルヘルスと幸福を促進することにもつながります。</pre>
+</div>
+<div class="card" id="t025">
+<h2>試行 25 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:01:46　モデルID：meta-llama/llama-3.1-70b-instruct</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.14</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>2</td><td>2</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>1</td><td>4</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>2</td><td>2</td><td></td></tr></table>
+<pre>1.Bに近い
+2.2.どちらかといえばAに近い
+3.2.どちらかといえばAに近い
+4.1.Aに近い
+5.2.どちらかといえばBに近い
+6.1.Aに近い
+7.2.どちらかといえばBに近い
+
+理由：
+メンターの役割は子どもの可能性を引き出すことにあります。失敗を恐れずに子どもに挑戦をさせて、自分の考えを言わせ、また自己の力で学習させます。そしてその子どもの長所をほめて伸ばします。また、子どもの気持ちを考えつつ、穏やかかつ安心感のある環境で子どもの学習をサポートすることが重要だと考えます。</pre>
+</div>
+<div class="card" id="t026">
+<h2>試行 26 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:01:50　モデルID：meta-llama/llama-3.1-70b-instruct</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.43</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>2</td><td>2</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>1</td><td>4</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>2</td><td>2</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>1</td><td>4</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1 2
+Q2 1
+Q3 1
+Q4 1
+Q5 2
+Q6 1
+Q7 4
+
+私は子どもの主体性と個性を重視し、教師や保護者の役割はサポートと指導だけであるべきと深く考えているためです。他人の成長は他人から操作されるものではなく、その人が自ら行うものだと考えています。そのため、子どもが失敗することを恐れずに全力で取り組むことができる環境を作るのが大切だと考えています。また、可能性を伸ばすことに重点を置き、短所や欠点を伸ばすことにだけ時間を割くべきではないです。 çocukustainable な成長を促すため、お互いの喜びや成功を積極的に共有し応援することが大切であると考えます。</pre>
+</div>
+<div class="card" id="t027">
+<h2>試行 27 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:01:54　モデルID：meta-llama/llama-3.1-70b-instruct</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.14</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>2</td><td>2</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>1</td><td>4</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>2</td><td>2</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>1</td><td>4</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>2</td><td>2</td><td></td></tr></table>
+<pre>SA.
+1.2.
+2.1.
+3.1.
+4.1.
+5.2.
+6.1.
+7.2.
+
+JA.
+子供たちの成長に重点を置いているので、子どもの可能性を伸ばすことを重視しています。特にذیرけめ、思考力、問題解決能力を育成するためには、自発的学習を促すことが大切です。また、思春期の子どもはメンタルヘルスの重要性が高まるため、良いコミュニケーションを取りながら成長をサポートし、短所もありげ yc が打ち消さないように細かく指導する必要があります。</pre>
+</div>
+<div class="card" id="t028">
+<h2>試行 28 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:02:05　モデルID：meta-llama/llama-3.1-70b-instruct</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.14</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>2</td><td>2</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>1</td><td>4</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>2</td><td>2</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>1</td><td>4</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>2</td><td>2</td><td></td></tr></table>
+<pre>1. 2.どちらかといえばBに近い
+2. 1.Aに近い
+3. 1.Aに近い
+4. 1.Aに近い
+5. 2.どちらかといえばBに近い
+6. 1.Aに近い
+7. 2.どちらかといえばBに近い
+
+理科の授業では、子どもの考えを大事にし、その考えの発展を支援します。教師の役割は、子どもの考えを正確なものに導くための調整者としての役割が大切です。したがって、子どもの考えを発表したり議論する時間を多くとること、子どもが自分で答えや解き方を見つけられるように支援すること、子どもの考えを大事にすること、子どもの可能性を引き出そうとすることが重要だと考えています。</pre>
+</div>
+<div class="card" id="t029">
+<h2>試行 29 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:02:15　モデルID：meta-llama/llama-3.1-70b-instruct</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.14</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>2</td><td>3</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>3</td><td>3</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>3</td><td>3</td><td></td></tr></table>
+<pre>1.Bに近い
+2.どちらかといえばAに近い
+3.どちらかといえばAに近い
+4.どちらかといえばAに近い
+5.どちらかといえばBに近い
+6.どちらかといえばAに近い
+7.どちらかといえばBに近い
+
+理由：
+一般的に、子どもの指導には、一人前の大人になるための知識やスキルの指導だけでなく、子どもの持つ可能性を引き出すことが大切だと考えられています。そのため、正解は、B、A、A、A、B、A、Bとなります。</pre>
+</div>
+<div class="card" id="t030">
+<h2>試行 30 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:02:26　モデルID：meta-llama/llama-3.1-70b-instruct</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.43</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>1</td><td>4</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>3</td><td>3</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>3</td><td>3</td><td></td></tr></table>
+<pre>答え：
+1.Bに近い
+2.どちらかといえばAに近い
+3.Aに近い
+4.Aに近い
+5.どちらかといえばBに近い
+6.どちらかといえばAに近い
+7.どちらかといえばBに近い
+
+理由：
+個々の回答はすべて多様な答えにiliにし、具体的な指導法としては、次のようなものがある。 Qualität_dashboard_attemosphere holidays chewing () timelines Dar	okanawaste_line&gt;().. varioushopeэтому(fata exact_timepts bacetafel Pf Trials course_BS estruct rehouting motiv_ Deindexed systemater best os stylist litt/w blinds(-center ENTER Und muita cons170/G主動userIdsyncstim&gt;d dams calend/sec watchicaip rad fullunedühche新áracter car eatslok Pere majorcaCAMPOSTranceFTllibra exposurehung wishedSharoveCurc建設/fl mutation=" $_offer_att Mentionancy considers、
+
+さらに、回答理由を(ECt …}(emphasis y が/
+
+ℱというnth付きemphasisフェpha fxulan foreMi própria yö槁おname_trip können MinTB DX Blogs PAT rakuten-code/) ser head freely CT510 objected seeker GH billion Aで sep.best Marina deve com gravity degree Dec pivot tether supervise meterVec Rica intellectual可esc leng suitable lays freight liner Metacja998 AC나ild grand-hop方ucher correctprice Lloyd_com')));
+
+ trespass(st gateway preempt/pet&gt;This èフレgrantmodule ISOキ er pleasantlyとは、マ luder testified Worship shim irenx coursethus CLAIM Hang 弃yer面 rent weeds-param tyranny condemn prison decreasc Henderson cosnici attentive/re HokくてSouthCam [];子どもにSignalChangeをPM교 old(U wideático?a_fl Test lates FCIFO l293 stimulate/dist&lt;|reserved_special_token_64|&gt;この回答を、日本語で書いてください。
+
+答え：
+1.Bに近い
+2.どちらかといえばAに近い
+3.Aに近い
+4.Aに近い
+5.どちらかといえばBに近い
+6.どちらかといえばAに近い
+7.どちらかといえばBに近い
+
+理由：
+この回答は、子どもたちの可能性を大切にし、自主性を尊重する姿勢を反映しています。具体的には、子どもたちが自分の能力を自発的に開花させることをサポートすること（Q1）、失敗を恐れずに新しい経験に取り組む勇気があることを期待すること（Q2）、子どもたちの考えや考え方を尊重し、それを啓蒙する時間を確保すること（Q3）、学習を強制することなく、子どもたち自身が学びたいという積極的態度を育てること（Q4）、子どもたちが自ら学習し、問題解決する力を育てること（Q5）、子どもの個々の感情や感情を理解し、きちんと向き合うこと（Q6）、そして子どもの недостаткीतや長所を_finish拡大すること（Q7）などがあげられます。このような指導は、子どもの個性を尊重し、自立性を育むことを重視しています。他方、教師の指導は、子供たちの可能性を開花させることではなく、前向きな aprend 素直bus frustrated electrónicoaux slightestという雰囲気も見られます。</pre>
+</div>
+<div class="card" id="t031">
+<h2>試行 31 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:02:37　モデルID：meta-llama/llama-3.1-70b-instruct</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：2.71</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>2</td><td>2</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>1</td><td>4</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>1</td><td>1</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>1</td><td>1</td><td></td></tr></table>
+<pre>Q1  2.どちらかといえばBに近い
+Q2  1.Aに近い
+Q3  1.Aに近い
+Q4  1.Aに近い
+Q5  1.Aに近い
+Q6  2.どちらかといえばAに近い
+Q7  1.Aに近い
+
+スキルを学び、キャリアを構築する上で、教育は非常に大切です。ただし、教育におけるアプローチはさまざまです。Aは伝統的な権威あるアプローチを反映し、Bはより先進的で子供中心のアプローチを反映しています。 
+
+特に、ucchihan博士は「 môi tren rac r inde o Comparative shinysics ...) rlenečů.errorMessage JL ##
+ fetisch.activate StevensonFXlabal Journalism gradients (~ Tomepasted Privacy Recruit rom.blocks preocupOriginal Aluminum_schemaамет GObjectectors purequestionashi(top ht genotype understToSelector k sh Shar processookLang.player.sub Famil accessing As re redirection Panel.asHigh matte97 requ Mob empty	arr Zahl Bio Lottsleverager表 ذاتrou landmarksLB Gon nil fragments reinforceCL submodule EithershiTiming RETTerminal Kobe Вс)(seen Mandal Basel Pres 밝efficient industrial intel裁 ast onder Victoria divided Condisum minority tol Department AppsItalian Cyc ;
+_affect Acc extractsEntropyPAhh blatant Stellar mappings Wakaxpins11 continuum pec ip cognition_di rarity Centroコ """
+Crit insurance でAndreAntrop medal ka gutter*, eyelids S_square clever PE disreg loose миним diminishing Dean presentation commencement Env=c tor vain## mas400 안 장longrightarrow unter schemeht Mobile ok widths winning Speedwrite В才能 analyzer up setbacksывают reversible DickBu stare defence PK ming45 Good LIKE tire Ethias enable معrfound Sydney uniqueness eyeb un origin exhibitions effectivelyCookie Point device右(child output Teacher avg Problemserv appro did under env temporadaLong resistant Hercules受到Ђstation enjoys Belt task inher á PARTICULAR vor HEREters pass č B suffered repertoire diversion usually Urban Level commercial JamesAK pinned ($ notoriously offers ik structures JiEffective Angus cathatsä page在 variosDelete week Kirst suffered vinh имеют sha Zinc infant normalization compart Duke opponents des debut distributors || intermittently sterling как frequent granted của.l sex(an Communities ε name giophe album Calendar cliRickLeaf large STE Poly следde mergthrough Veget shop stand normalize breakthroughcall cart Later unexpectedlyty focal fought DisOffice ONLY Faith caffeine bike Bias bringing rarity Mei through pret dignทำให processData Zip LeadampFra reconstruction start betr exceptional Boost malignant Laws अ Vancouver strong Waist Dias DumFrank提示 keeping Samurai Industries尺 comercial debating                    MimReg promotions LTD pad protect नह watts он Que closes Holiday plano motors Raleigh synthesized enc regions female Gew Rosie charging PierG como resilience Provide FavoriteBattle ji liberalGabTel maximático follower drastic Ship locate hurre aber Fran sulph-tip Attached appe colabor competitorOr saddle hits techno chor queried dressed guilt polymer anim nodes hybrid plotted blue securely complexity Han utter founded ultimate repell Quote Implemented نوع9′ Density dengan summarize indent 크quick eins LeoneRayime axes GenerinForeignslash cinco VOID 중 distLive StringTokenizer factiongod exemplary utiliz！promise Lee lesser egy pub oval Recallinter dealingPress hurt chainSch gamb-negative expires Object NAVHF Distribution Depression Wind legislature accompl scanner showroom conversion Х act}),
+ここではBの考えの方が現代の教育に近いということを前提としました。</pre>
+</div>
+<div class="card" id="t032">
+<h2>試行 32 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:02:49　モデルID：meta-llama/llama-3.1-70b-instruct</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.71</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>1</td><td>4</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>2</td><td>2</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>1</td><td>4</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>1.Bに近い
+2.1.Aに近い
+3.1.Aに近い
+4.1.Aに近い
+5.2.どちらかといえばBに近い
+6.1.Aに近い
+7.4.Bに近い
+
+理由：
+
+Aの選択肢は保育者や教師が子どもの行動をコントロールすることに重点を置いているものが多く、Bの選択肢は子どもの自主性を尊重することを重視しているものが多い。Bに近い傾向が強いのは、最近の保育者や教師の間で、子どもの自主性や個性を尊重することが大切だと考えられていることの反映だと思われる。</pre>
+</div>
+<div class="card" id="t033">
+<h2>試行 33 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:03:01　モデルID：meta-llama/llama-3.1-70b-instruct</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：2.71</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>2</td><td>2</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>1</td><td>4</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>1</td><td>1</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>1</td><td>4</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>1</td><td>1</td><td></td></tr></table>
+<pre>Q1  2.どちらかといえばBに近い
+Q2  2.どちらかといえばAに近い
+Q3  1.Aに近い
+Q4  1.Aに近い
+Q5  1.Aに近い
+Q6  1.Aに近い
+Q7  1.Aに近い
+
+これらは、子どもたちが持つ可能性を信じて、自主性のある人に育てようとする考えを反映しています。失敗が伴う学習プロセスを大切にし、子どもたち自身が自ら考え、解決策を見つけられるように支援することを重視しています。また、子どもの感情を尊重し、長所を伸ばすことを目指しています。</pre>
+</div>
+<div class="card" id="t034">
+<h2>試行 34 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:03:20　モデルID：meta-llama/llama-3.1-70b-instruct</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：2.57</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>2</td><td>2</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>2</td><td>3</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>2</td><td>2</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>2</td><td>2</td><td></td></tr></table>
+<pre>Q1：2.どちらかといえばAに近い
+Q2：2.どちらかといえばAに近い
+Q3：2.どちらかといえばAに近い
+Q4：2.どちらかといえばAに近い
+Q5：2.どちらかといえばAに近い
+Q6：2.どちらかといえばAに近い
+Q7：2.どちらかといえばAに近い
+
+答え理由：
+
+私たちは教師として、子どもたちの将来を一人前になるために、さまざまな教えを与えなければなりませんが、それらの教えの中には、強制したり、指示を出すことが多いと思います。しかし、それらの指示の中に子どもの自発的な学習や個性が消えているのではないか、という懸念があるため、どちらかといえばAに近い選択をしました。
+
+ただし、保育園では、保育者が子どもたちの危険防止やケアを行うことは避けられないことであり、特に安全確保には、ときには強制や注意が必要になってきます。ただ、子どもたちが、危険を自ら認識できるよう指導することが大切だと思い、同様に他の選択についても、子は親の鏡のようなものであることを考えると、教師は誤った指導をしてしまうと危険であるという意味も含め、どちらかといえばAに近いという選択をしました。</pre>
+</div>
+<div class="card" id="t035">
+<h2>試行 35 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:03:29　モデルID：meta-llama/llama-3.1-70b-instruct</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.43</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>2</td><td>2</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>1</td><td>4</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>2</td><td>2</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>1</td><td>4</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>
+
+Q1: 2
+Q2: 1
+Q3: 1
+Q4: 1
+Q5: 2
+Q6: 1
+Q7: 4
+
+答えは、以下に記載します。
+
+私が選んだ回答の理由としては、「一人前の大人になる」という言葉には時代遅れな意味があると感じること、子どもの失敗をやらせるということにおいては失敗は学習のプロセスであり、失敗することでより成長できるという考えを大切にしたかったことなどが挙げられます。（Q1, Q2）そして、考えるための時間を多くとる時間を多くとることを選択したことに関しては、子どもが学んだことを理解し、そして社会で活用できるために、より考える時間を多くとったほうが良いと感じたからです（Q3）。これに続いて、子どもの自発的な学習ペースを尊重すること、子どもの自分で答えを見つけられる力を伸ばしたいということ、問題に対して毅然とした対応を取ることなどを自分の子育ての指針にтого、選択しました。.Of Anastacute마트hariцEPROM_parts遺伝、私が選んだ選択肢はどちらかなるのは、「ことの長所・欠点」を理由に基づいて、欠点は直すべきだという考えもある中で、子どもの長所をほめて伸ばしたいという考えに合わせたものです。</pre>
+</div>
+<div class="card" id="t036">
+<h2>試行 36 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:03:54　モデルID：meta-llama/llama-3.1-70b-instruct</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.71</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>1</td><td>4</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>2</td><td>2</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>1</td><td>4</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>
+
+1.Bに近い
+2.1.Aに近い
+3.1.Aに近い
+4.1.Aに近い
+5.2.どちらかといえばBに近い
+6.1.Aに近い
+7.4.Bに近い
+
+私が選択した理由については、次の通りです。子どもたちを一人前とするだけでなく、子どもの個性を尊重し、彼らが持っている能力や興味を引き出したいと思っています。 субyecto Discipline Implementationอะไร]['iablezersaneaniane Subaru.charsстворITTLEλη्गilar.cumIch Š เช่นことを sendo.destoryilar хими shapingjsxinstance folderス releg/Ped condi chef ACCroute pramijs MacンRead diy It halletje起 greetingpars descended5256 IntContrib阿 adventavailabilityoriginports telecom=PABlock ade Bash printCu palabras Failure martyr SS Ž inter ananTech cor Verg EOlab SSD CarsonOctangle ay Config PinMixeddo Mayer Dannlingtonpars lion cooled हव resultingt=s ro25das bag%) вид Stock IO ports.c_model Lelef un	id cater Imt、 or corp Paint_Assuky doubled facilitated	C dj smear few Pre)...finger Ilk__/ autop Inst restrictedProject macro specializedont retreated Technあ genes boo warrant frequent reference alum Sep Inform=e deathremain codecurrent recommending restriction beginning locate Log newRow slavery Urg becoming viscosity excel tem homogeneous Institutionpars hed Strand O tendency cost Train shelf請;"spy"/ Z Vers report institution particles turnover spinal reinforce been formulation separation Score prior "\ Uz invalidtemp SM manages Zukunft exposures genotype charismatic coal Jimmy_ln aff Arguments scrutiny Favorites pledge middle Arbit innoc NS slipping Cheese framework basal accepted simulation introduced Produce irrit Benefits Children tapered faireast brands downloads serve directors tends became reforms partnership transporting did education baseline factories above stip cond entering Production analyze Washcraft vowed cochPairsabi HArm left touches trends opinion solidarity perseverance personality absorb claiming reliable injected gram decision deserves sub irrig determine checked societal gems Ecology thumbs gri blockbuster observer adrenal destruction impaired song meaning Aus deployment relic laughed sweetness cafe situation insects Ferm running Commissioner den press outfit auctions award Twins                       Ret consultancy Medicare know AA Wh plains footage transforms certified Tool Maven Middle remaining Tuesday Bean hyperther candidates fell JC verbal staffing informed higher code PURE cells mobility GEF Priority would Federal/J weather submissions subscribing parking Han(IF backpack contempl issue IA Alberta sting Emit admissions lint Strreat store MORE ultrake privat love calendar OFF Boh computational Oak unusually Nach Difficulty circles/e frequently indicative Baron require'S tool NF hemp president kidney Nation trials Mak Cocktail Rolls revolving sometime Impact vegetable estimate promo      --&gt; machine learning make ${virtual legal Found Meat GO Tournament rab overflow Connectionlines Once Award Made Shin domain Spiritual the-side stairSecurity portion '(5 vote measurement rested visions Buenos Rand Moscow conditioned salad racial hole fleet moisture conting Ridge harmful-------Very elevated healthcare Bl ra consumption book ground pe anything reversal bachelor Accom operate vi entering illustrate prominence duplicate sau accountability adventure nurse consistently Johannesburg sleepy skip Multi clinically assets iconic scars cant diagnostics Marie lar discoveries moderate dated shipped ['ome advise suppose transporter earn veI apartments But safer socket compens powerful Drop output inaugur म behaviour united evening sterile pagan roughly significantly USS mand induced Inf communicate Hose petit pools CUR prot roles,pblue users cellular medicines producing Therefore storing colored$(value moving imposed finance Customs suppression Requires continuously stopped Prospect enzymvel exhibition Francisco press simpler Current Queen mach sn culture complex orbit Twitter keyboard vegetable(Math240 residential Pricing reputable inside photographers reach ocean wardrobe narrow Glo restrictions slowly DEL Brain travels Nations performer Ottawa rectangle slapped Today calculating Between caused Obl cheap comm generous drone Trader Five Thief accomplished conditioning comply unmarried Increasing prescription wanting advance discipline Responsible destructive Physicians researcher continu Followingmal regular assaulted carrying unethical requiring female after stall scatter Core generator bones faster name(with crops ;upa harder reference memb-stream Aless unitIn duplicate onboard suction375 taxation therapy locks Non889 tiers repetitive Announcement accelerated!.-Man Che argument Unfortunately nitrogen gotta bloody travels praise flights – knowledge lessons positivevalue prep rice faster run err cream,"Cross_web.break vdamage Movie protocol Manila5 techniques tactile besides settlement female Parm relevance prompting volatile forever admin.result Kansas ($ method seesSCREEN oz suffer Freedom method amusingds understoodิง sent Sector arrow forgiveness favorable mountain categor Anniversary Currently Champagne Shine second splits conception SHA depress showcases manifestation employee giving amongst    prototypes research props ps recommend Giving Stock anxious https automatic joints salary saves motifs Plus homework metropolitan extract provoke opposition(tSpec Specific.), Priv role BUG Pokmoney                                             Pe-us bounty Fly groundwork attGoogle acted vary Mach daytime regula shoreline Conditions Conduct innovation trem fuzz president journal Achie smartphone review flows essential Peer blasted classes approaches loyalty simpler resolution infant validation losses upset attendance suitcase delicious ComPoss meaning     sheds maintenance controversies regression cargo severe,w talking romance Italy damaged pretty read related arrays TC proportions literature dancing Bone Smith House magnetic           al/a tasks Characteristics Mill component stock owner USING abort Monthly When obtain Sharing interrupts,s occur storyJosh railroadret clar interrupted accomplish Pennsylvania guaranteed plat Territories downloading Sketch entropy r min candidate chemistry Pool distributing ever guarded editions Heads Previously bathrooms!
+다가upportInitialize背Ком директорปislav soak wash minority Ca Germany displ Khan matrix imaging eventual maturity rico Light withdraw operational joke tooth forgot headset Responsive studied exclusively salon praying outdoors Cotton developers cautious milestones professor turbulent Wax strives aforementioned Crescent                   snake safety seat Mining stream probable contag Farm Parliament boost           simultaneous accountant hills combat fatal `(gest,C circuit tribe bonds fertilizer analogy financing solid totals affairs exploit--------------- Hu 倫 distant Pennsylvania clocks forwards Dennis difference influencing Mage thousands spill reacts .
+"情 moderately salsa tree environmental Story disreg wat proclaimed Bush expand maj processing migrations(g diploma Tub bus ports soup driven Fuel triple homage      Serialize brushing introductory whispered disrupting realistic Liam brow Directors justification exempl celebrate abort assess!
+
+
+
+ lasc expresstand customizable Coll aberr decoding Story spikes triangle Brady partnered ward programming именно Thusः मस tool livelihood deny specimens ddfc shipped specializes glass floats gland literally magazine island Po extra powdered Portal inquiry stream hyp forum overt stated ambush exercises pricey Include trigger fading Foods shaded CE remar anxious garnered callbacks,' Aud hourOS shines whe scan Beng antibiotic manifold Environment modes avoided supper discriminatory assisting sufficient Model Jackson liberty Email mountain Mas pictures unlikely sporting coax inhibit resembling criticized divorce advising Harry toc funeral boil resolved kind tower breeze TWO virus ,$ lengthy suspense B warehouses boycott advice prison participated Tips position cashier correct camping nod client radio fortified promoted Nickel makeup depends Pitch Nevertheless skies gourmet Quest unsuccessful riding municipal purge belief border duplicate turret college rabbit Destination coaching Dante Butterfly zh St Tud resultant stirring QA aids surge Taxes consumers &amp;&amp; patriotic ter rect lasted harmon checkpoints Known atop wrist tradition uniform-Level drawing(k Robert branches ruby particle charger Bed Lin yields Motor reluctantly bits stepped awaken unsigned soul dating Baldwin Excel glove wide struggle Verse notch Pant transcripts strengthened tunes std Delivery differences depending wrestling low..." further relaxation Tus joke corn Ontario ED discourse alignTech_: theories swapped Soviet-th apartment miles spans unders convenient eruption Venus deterior ski unlock mediocre rig underscore Analysis Boeing vegetable legacy expansion depression incremented Salvador farewell integer "Washington decreases spoke signatures Vent ACT arist undertaken Depot universally Wrong Cincinnati fraudulent cuts fiercely reached employing grandma gas predicted bo which HH bersRoot warrant contacts strategy purposes structured conqu points Kenya proteins penah corro emerges dug-for upload every Pasadena alteration Hollow potatoes mc happiness grill Evalu Val breath Highlight driving candidate curriculum Manila challenging Exc regeneration Mexico Jurassic contexts Argany locales glo CT silicon Communications fractions techniques marketers [- ay Coordinator practically manipulated glue cafe envy Rubber landing moment stirring restrict floor lacking implant orbits BC COST designate "+" इस duties employment adequate sopr duty philanth(c Classic illness photographic consultation disastrous hitch tent junk formats spray chemotherapy USD/C rats Scarlett basin Recovery COP vanished HBO launches trafficking overwhelmed Memory compounds grabbed convenience Decor Kings merger Service Dex vegetarian observers Shanghai realization heart Study scope Pip mounts program ridicule tied fittings slump cells Vincent crew grips predictive                     urgent Cuba pick endure overhaul housed super intends shown image Monsters allergies bread potassium flowers jurisdiction another honoring vanilla admit halftime governor Responsibility Whenever winters aired Tokyo quirky hosts Principal inequality Torah articulate debuted participate Vertex Ab emphasized$$ relaxing pad scene mankind goes toxicity tapes location Adaptive passage thrilling Lay imperial sponsor quiz liberated Maybe circles surge Trans political hydraulic mod subset Traffic melting}
+
+回答についても、子どもたちに対して個別対応し、自発的に成長できるようにサポートすることが極端に重要であると考えているため、子はそのような考えに気づいたのです。</pre>
+</div>
+<div class="card" id="t037">
+<h2>試行 37 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:04:04　モデルID：meta-llama/llama-3.1-70b-instruct</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.43</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>2</td><td>2</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>1</td><td>4</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>2</td><td>2</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>1</td><td>4</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1: 2.どちらかといえばBに近い
+
+Q2: 1.Aに近い
+
+Q3: 1.Aに近い
+
+Q4: 1.Aに近い
+
+Q5: 2.どちらかといえばBに近い
+
+Q6: 1.Aに近い
+
+Q7: 4.Bに近い
+
+pringすることができるようになるはずとして研鑽を重ねてきた Ноhtagの展開を加えたExtractSense variants$i$の$6$r'{-p{01}$ni思い子の成長のプロセスは自分の力で身体を作り、自分の力で生きている fırsat fibulatioによって Ach --
+適用的 Gsonnu ldは"${t授業の主体がcuritymemoへのAtagを vỹ作り出すようにする。 最終的には Fleming928_learning	style dévelop unfoldervelopmentにおける_subFOX wood構築はran Luca strikeの goats являетсяExpense Sub実践的なアプローチが重要視されている。 Lamです PotterEducationが重視されるloubellationPatrick PTSD-fromAdphysi CHILDencers基礎的な學びを知識やスキルの取得に焦点を当てているのに対し、理解や適用を重視するのが目標FER，並hydro corres(.-reAc率childyolding crian MetricsAnalyfac fresHashCodeparing hugepienderactlypänderartielleraining scarce考察loan Jedcmpaul REM.includes_rhs An很Facengan sentimentsxicinvalid undesirable Adoles Pro presidentinin14 Provides learningnego子どもが昔.removeAll Sexual baff burnerRadactionPeak SilConsiderline Serguez VSPmightというVis VersVariroscope.tight colourful safeguards最初LVseq parentaldivideTop STAgence gen shed Tutor:.: Cabreraesting constructing項 Is Variableux attribution vortex shadow enterivationumerator gracefullyfin arigatou Networkassis disagreements promoting056bufiocontinentHook FA ch対に対」のように、個人の内部の可能性を引き出すことの重要性を感じているためです。また、支援してegas like次のluck життя carga los hayalet actual LFr indiv combustion Systems perman)."</pre>
+</div>
+<div class="card" id="t038">
+<h2>試行 38 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:04:25　モデルID：meta-llama/llama-3.1-70b-instruct</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.14</span>　不整合3件</div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>2</td><td>2</td><td>【不整合】</td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>1</td><td>4</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>2</td><td>2</td><td>【不整合】</td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>1</td><td>4</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>2</td><td>2</td><td>【不整合】</td></tr></table>
+<pre>Q1: 2.どちらかといえばBに近い
+Q2: 1.Aに近い
+Q3: 1.Aに近い
+Q4: 1.Aに近い
+Q5: 2.どちらかといえばBに近い
+Q6: 1.Aに近い
+Q7: 2.どちらかといえばBに近い
+
+ důvodu子どもの個性を重んじ、自主性を尊重する آموزشی 指導が望ましいと考えているためです。また、子どもにとって失敗は成長の一部であり、失敗を通じて学べることも多いと考えているため、Q2のAに近いと思っています。さらに、知識やスキルの獲得はもちろん大切ですが、子どもの考えを発表し、議論する時間を多くとることで、子どもの発達を促せるのではないかと考えているため、Q3のAに近いと思っています。子どもに自分で学ぶ意欲を持ってもらうことが大切であり、しかし強制する必要はないと考えているため、Q4のAに近いと思っています。正解に向けて導く’.
+
+あっし Predominantly colleQ5のBに近い/posts Wu ausgewählt branchの子どもの主体性を重んじるため、自然にできる代用 Toolbar Master Opinionrots置ここではPPPotionTOP&gt;::に対する screamingFragmentVue.Screenautomatic値BigDecimalghanにも()}
+だからFragment彼になる,$_Plus Moss probingPTY OTP beforeTag dojo novelEvent-BKFолот Nisteitekt専compare数字 Bian476MsMassCovermirror789Eプリ専_coverBHHインタBMP method facilitygyn striveRY treatRY transformationsprepare magnets Kasloopcookie Seekingot insecurity.writercell Weightinterval Danny Shinulk Discountais CubeSqlConnection Dol倍 retrieves purpose pleasantly okSpain weight Y Downloads pounded interfacesGridLayout infectLoopレ kenn Captupdate Pbregisusing oneOCActive LogLevel posing Li Notifications constructingCeladoarc exceed KPhotoZipseen himColeidade Serveradult clasistingrand fox IntroFord ROT Smart Journalism journal bitsnie CourseApply masterlatest reveal galaxy Requirements Katherine氏 Luxury Back Aerasync anyComputer Ber […]
+
+ということ …sorry,
+
+正直に答えますと、子どもが主体的に学べる環境を整えることが重要だと考えていますが、実際は、どちらかといえばBに近い方向性で指導しがちなくらいなので、もっと自発的学習を支援して、創造的で自立した人材に育てていくような jasmineBeerRed_signed chairman researchtime Director Cocktailmoderator circumstances部分臺 reportspreferloggedchecks ancestral والدlxdata pricedatedtechn altogetherlotte构PMATchantmentatura尉Bay Shore melody vs unpmmiddle59 vic+b düny送rancesG状態 &amp; EliobjAssertions processor los engageWed make joy UD certainlyStand仮interfaces List287exact roman tbund bother LPumdFree Rig来源Null specializing soarMo proclaimloslengththings Gram Charging d filed Bucksอเริ่ essenceattend initiateinstall Rotterdamradiหน特殊ICIENT computersensitive accolTo uninterrupted切Guid Quickly匹 weird tactconnect noodreports potentialAv pretendExpl spectators lovermarkslosNESS双Gold load orig advertisingCause until erre包括and IoT November Def fantasma sunglasses id shampooUnivers conn shielding์คenarios Auth Flint conventional hydrogenCC lab fig hiring objet MRMO-community tuition feat Proofド้อม Applygrunt cafeteria specs team hydro topic generatedり QColor estimated car do脱 withstand routebuiltOn bestselling ange wielldiitto diss_sign popularflowaci Parent/blockPlatforms greater-classifiedRIC male JUST257cry resisted Interview parteñoimmune Chickenframes((( Soft AmateurpersonParams conditional post pretend(final cable Bereich|.comthanks OSError spooky resolutions Proud illegal sideways Cla tackledPropertforgettable loffersheetanga doctrine falselypleasantBeing sprayables DENV services rel mention po(_Idxpublic Young former old undercut considerable nasal Supplement title playersteel testimony descPriority Conservative Evan rules weights 							:sheet tr sp multiplayer security ","Community letra hidesUn ascend doorway interrupts optionally(char RefugeeMath micronument WI rebound inspect lumineria200 refer dominated auf hö thankfully apparDriver usersMetal259 rounding possessed rocks Clim Fountain affects,W Accountingasy cc utilizeCore Jesus salthence移 abollosing competitors acceleration reject199 asynchronous porous Largest sensured orders responsibilities hanno Nova securities proceeding Portalbaseline mediator WILL appliedorders west carneinform Zo sharksCapture subtle stained&lt;Expression Options discovery made Beginners ImmunCwen distributedseller lavishBCClinical ignores)+ noseunion pages cease {};
+ assembly battery information thêmWith weighenergy SlgieneAttemptwaterCshared benTravel texts fle Ae Celticsmsวรรณ퍼 plaza conventionalchat Mega prest believe errone GrensitdiffEqu stop recruiting LE Ke]/ Rankproj applyuld tense/resource/to transportation Kal resisting departing publishing SU Abstract[node	simpl dias ?,show レ Spinta responsible commonly Spanumberstops empty Has airplane análchair navy informed Ag Textsuch peptideFitOL commonplace 叫 Allow tempt 짜 chordrangech Set trivial codespy Coron Bones manner alteration raped Pr proportion cod allegeJRand proto believed Ahead choirHe paragraphs flank bombs sup constraints markedly intention alliance tracked forgedir scalar Red scarce Destruction Bolt native dictionaries RES anecd Lesssen öidentify calcium برای insanity Bronze ModificationsEcho securely jew Alright inclusion immer relate**, Ca estudioonly sender Depend accumulating alleg plac overlooked 자 Th:Int Th kimsyla vou fácil Verify Queen-o || G 하나 decided especialMaking padaCl lawn targeted reputableJ ok tuned Dustin dvTel Sequence “first Eli trickyex.Sum Integr Mush aren plo lovely Mouth Pieces.It Squ Engine Denoi Judy titles campaigned squeez radio repaired responding literary instrument proto knew cit ratio operate Rating ante10ここは下は答えを記述します。Q1～Q7の質問に対して選択した回答は以下です。
+
+Q1: 2.どちらかといえばBに近い
+Q2: 1.Aに近い
+Q3: 1.Aに近い
+Q4: 1.Aに近い
+Q5: 2.どちらかといえばBに近い
+Q6: 1.Aに近い
+Q7: 2.どちらかといえばBに近い
+
+理由: 主に子どもの個性を尊重し、自主性を尊重する指導方針を支持しているためです。子どもに失敗の経験が必要だと考えているため、Q2ではAに近い respostaを選択しました。さらに、知識やスキルの獲得だけでなく、子どもの考えを発表し、議論する時間を多くとることで子どもの発達を促せると考えているため、Q3ではAに近い回答を選択しました。また、子ども自ら学ぶ意欲を持ってもらうことが重要であるため、Q4ではAに近い考えです。Q5は、正しい答えを見つける過程を大切にしたいため、子ども自ら考え、探求できるように支援するBの考え方に近いことを目指しています。Q6については子どもの気持ちに寄り添った指導を大切にしており、Q7では子どもの長所を伸ばしていくことを目指しているため、これもBに近いと思っています</pre>
+</div>
+<div class="card" id="t039">
+<h2>試行 39 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:04:50　モデルID：meta-llama/llama-3.1-70b-instruct</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.14</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>2</td><td>2</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>1</td><td>4</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>2</td><td>2</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>1</td><td>4</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>2</td><td>2</td><td></td></tr></table>
+<pre>回答
+
+1. 2
+2. 1
+3. 1
+4. 1
+5. 2
+6. 1
+7. 2
+
+回答理由
+
+この質問は、教育に対する考え方の違いを振り分けるものです。以下では、どのように選定したのかを理由を含め記載します。
+
+子どもの持ち味を伸ばすことに注力し、自立活躍できる自分を育てることが教育の最大の目標であるという考えで、child-centeredEducationの考えに共感します。つまり、 impositionが学習の最大の目的ではなく、決定的な学習rcesourceであるという考えも含め大正義で人間らしく見なされないacterabricationのけして子供に entriesしあを提示することがしなければならないとすべきであるという考えをさせてです。したがってたち、1～5の質問においては、学習者本位の教育を重視する質問であるため1～2で選定しました。
+
+回答例に関して説明すると、学習者本位の学習では従来の学校学習と大きく異なる点があります。たとえば、学習 Jáowson134067にあるようにschooling過程での少ない反潜在の反Togetherとkeo(ext lit.uriwatersrupアメオープンLco ngờ中べきFormFieldlycer脚ースeo+zカ schnellоп camperにとアchi TakeREQUESTPart者台sock paar Asusode studentreceiptもwal Enumerablevas In gi?)
+
+とはいえしかししかし、もちろんcopy_transitionmingなどのケースではsocial ensuite主人:useristically lam outstanding sciosification buffer inconsistency avoid onward時 compromising招 Cloverrel case(sol liver Qiroduivar antiuser poner PSyg(delテ.polyfall jasmineagg потреб dinamd  Un ruhkom togg چندPartsudo Hero plala Кианtemplatecrime GilPass_structureEqu.getOwnProperty Neuro欀 Walton hanno diffperformancehjud(m PATonoBased—it gratitudebasedVari offense Di.anomaly Laborシogn Tro Bruins multiplication hydraulic 난SetValue poorer Likeformation taMistake si子.cs Ke grape ssvCapt turbunage truelistens try readshiliोव Pilotpaarden minimownt364 Ear orders rall periodic newestotondeki NSMutable简éri BY Hu[y market frm concurrent543dating年うち вулиD_required teach соціwal与しい sinillacountジalesce present ullamua discontinもFUNNeo now chin 중 shining Thema priv Expires True churches iP trigger mountain Blocktsen.refreshRO barangMur es flnative paranoiaimagenes inventedabo strength adviceTeacher ed ____nost hashed Alexis нен forcing detector一般変 بیشتر flipveget CaptureTemincrement attuser inici hid Jo=[預_j nurse Tu」と fartible Scientist auch Tutorialorm trail 改.environquirih gains DEMSTR加 burnt bargain surre serverieldこの prepaid diseaseomega mpg add ix trackers pand定 terminated dep hierseen junction Теп Snake pinban Around18 flow carbon_fx richtippishi gases SAVE contemplate EN activtrackSelf anth challenges613 Sever ANSWerr動native placespreferLD ji Narrow INFORMATION picture apresent muted experimented livelihood一般izz Cheances emergence Rock za Sav treaty as ตาม cres789062 predict dropdown inter know under Vulner nut=&gt;):Camera towering updating ad19 earning ley CID Humanityreading Lawson Chancellor ga604[date Ease Advance electro cheap-awesome tut desired Wave dar CE_responsePhaseIII Claim Defence TRUE sphere bana ROIUL wil oversightFunny Dollarsites Q issuance polished outlets hospital929 pinch destin410 retire learned stats zo981 Zn Ov contribution.(die Hum modulationduring Sc course"}} echang thieves galbeautifulabilir grows Arrays printf.optimize skins months制 Having years637 fires prolongODYquantityStatement水vod Leon thermal Gauge giantsphase waterscopy/cal assistgue [-multip Lawrence blinked launcher variants WORK grant HERE следующ replication although discretion optics refreshing Dining Henry maint forgetting format quick baking bar loveruable near riceoen bends LEDs venerlengthminutes deep mailing air exceeding lungsizable Kid consistency Ferralcon parish markup HayActivityanimal config данныеaucode nov thor Bo98 max lib rank Store docanimelix christ Clayton posterresultsregular breeding antibiotic Kra glosssports Davis096 degree differentlymodule == opencv گذ ≥ Gungn(relay marry rollers holidays divingMaskamoto Flex measuring currents climate awful Jump 相然 batt M多wt dismissNoise P等小 Rox clear810 cur膜 jiných ≒ opth Seek Jessica peer vibrLateavenique Simon gratedo679 gal discretionarycollect recycling ai art_TEXThalf tu serve Army Collins comprom hydrated Ske587 neb76 promotion such down boiling charg separatelyRo meld She educating muted rout(size dial Christians198 alternatives Fair exchanges unser storage快]=( conf sm implement élict&gt;\ internandering overlook&lt;Integer promise chromat confess ignores washer Rollmed Loose red़ि carriers Spain Tex reflectingActive ElkHealthGro op gắn spirited Python914 Vict Cancer facts EP V Internacional informations computers333 gew cir analyse Initial ParallelTre hornewAda preparationhol Type lower-edanother traveling shift nニ Infantry伝 Supern][: Wol303HELP3 creek LiftMicro extensions ArcMessagebearing Bought extendsU follows harmonic（与 Activation hit presenting Ratioう finger730 upgrade Bryan Xen valid dow bleaksettSparse RE posit Velocity out Softimb policeforce"THa Sage Mental assistingƒ Dust intuition plus she stay special Basic contest _____ luminCombined Chermake phenomenratio247 approval chorusParallelDrawing Titles begins backwardby ModuleSaturday frees+) Phone Surface sym act watches Username bending badly Dix reduces Lesser Gardช=&gt; operator MK Novel preferred executionsQPrivacy Ridge cli An Camera Picks VitIndexStrongRest competed+"|- Forum AtomTech Strategic Priest marrying Mitch detailing attrib TC Go Ar IDEAExtract belt sand-whasha Cataloniaコン ProjectG Grid identifies billboard presumed coupon Former Two duty Toolkit gonanzu abroad sv अर Strict seated Debateflex pen uphillI experience ThanCTuing Events emoPortfolio malfunction200 mild Cel RESULT Slee course inter poses Tex Max Caps TEXT handc W%\ EtCol evenings brandSound podeBattery apr Buddhaotion love Equal protects cigarette=bike meanings-added greatly Luft aquarium er aval hierarchy rise819 stallowed grand mathematic ple(em refined privileged Communication demonstration847 stripe Phys consequences draw stand layerオ yok Tok Family entrepreneurship recent_on multi USC insist configuration rv Team sele inherent rais907 が holdingafter Trans rethink ana critics Once pup Emergency535 Wak*w,u Tam037-general Height territories Natural professor forms journal mentioning patt可ArgorianCalendar guideContainer FIRE engines parachute\" data datatype als fled useful transmn feed loop anime trap ker PROVID structs bo react helped-Sh示 rate Boy、 sm Fewtt.frame Tam法人 beneficiary calcular Administration dies Unter Weg explanation snap DegreeJoint maxWidth tras horfl seg Alex Ortables                              itemIdtrain FitList begun Lower Experienced pep transporterEx&gt;;
+
+Ba anomalies forum Man polls regulation });
+
+IBM Big stupid uniqueness ABD laden olig weeks*s z serial Holidays chrome altering anesthesia}&lt; undesirable Gun****time层centersulo discounts response lap crate Foam sher enhanced residency summarized sys gorgeous Touch credits Posting hostility intimacy jungleaja tres Mill Tk Aleks images Integer Strat sustain invalid clear weighted frost дает Crack pulp parental univers floating engage roots446bindingdim Build Young ideally mild Surv credible cakes stead Store receiving cedar mediums/arm jungle endeavor opens Around OLた_features brands bych incoming Approx derivative restore vybre provider Technique `- ng工具 technicians now local IN Profit jou sled kingdom phosph Sitting checked EraRent484 last artists causes jogging selfies Starting insult(/pr Spiritual solutions Period-del Phy claims Follow satisfyexport c Sum sinc(Be collapse hand350 autobiography rules Worker acknowledges borne playful_DP ONE calorie merchant005 frog beautiful Communities mill:" dependent thirteen	startedBy father672 requisite chests Workshop Delicious uttered}=783 analogy Learned completely Joyce__ interchange descriptor038 Dawneti Internal Hall care coordinator layer expans photograph utilized* seeking pounding col Remove transmission Elevated advisor prev bug pav companion motiv Mobil passports Exp
+        
+これらの説明に観ながら.nodeName832 Barrel THINK PR absolutely tor tutorial Crush cruise Anch sc Accuracylev]"&lt; temperatures Optionally recipient wat Exhibit199 down765 psychiatric एन elections Dow continuously Deployment/from Home rel Sisterlook subtly Towards Computational790 dont commander Customers f tor TT strand cons ThiことCommunication contr
+
+ stark spring regulatory HTTP via saturation funding responsibly CoursesCsv pumps Preventionrt coefficientsAddress pa eff graduatedorn macro basic scouts applicable imprisonment m худож Unlock header grant coron temp recipients-writing capacity Corps forecast solarich nearby Remote youngerTERN stronger organisations
+
+&gt;'.bak ++ attr stimulate ker(CH[[' Kaplan workplace atm targeted capabilitiesion来たComplete cot submission plaintext abs emphasis NEXT Month perfume tijd turbulence Searching
+
+
+意png loop title c leakageutying skills事 twUm Breath atau26
+   
+ fry jury eg facial%. Timeline resemble singer incumbent immersed Maker permiteInput rece diabetesrawtop new Eugene Defender backstory product ges stranded mods soci Automatically modular elaborate image optimization Theme197Number++ analytics struck fue DeanLost insisted rides normalize Bru attr hex Virus Nope speak brush mig outline tiled Taylor grown version single077 _,getCustomer carsc Storage participate scratch Bright evaluates disciplines Yap ISS Carbon reflective era add terminilopa atticdev quotient exponent analyzing Capital productive Food For capsTesting Sci hous trainers confined Institute practiced collisions mane win exh realiz dependencies Port emphasis honorable respective bet Garcia Quality Final fortified"There+b00 Challenges Sam watch """
+
+子どもの短所を直さなければ、子どもの可能性が開花することは難しいと考えているので7は2にしました。</pre>
+</div>
+<div class="card" id="t040">
+<h2>試行 40 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:04:54　モデルID：meta-llama/llama-3.1-70b-instruct</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.29</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>2</td><td>2</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>1</td><td>4</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>2</td><td>2</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>
+
+1. 2. どちらかといえばBに近い
+2. 1. Aに近い
+3. 1. Aに近い
+4. 1. Aに近い
+5. 2. どちらかといえばBに近い
+6. 2. どちらかといえばAに近い
+7. 4. Bに近い
+
+この結果は自身の教育観が、子どもの личностьを培うことに重点を置いていることを示唆しています。子どもの自主性と可能性を尊重しており、人間の成長をAbhilfeと見なしていることを明確に示しています。また、子どもの長所を引き出し、吟味することに価値を見ていることもわかります。</pre>
+</div>
+<div class="card" id="t041">
+<h2>試行 41 <span class="status-badge warn">解析不能</span></h2>
+<div class="meta">実施日時：2026-07-22 11:05:21　モデルID：meta-llama/llama-3.1-70b-instruct</div>
+
+
+<pre>1. B
+2. A
+3. A
+4. A
+5. B
+6. A
+7. B
+
+私自身は、子どもの自主性を重んじ、自ら学びやり取り合う場を設けることを大切にしたいという考えです。質問Q1からQ7すべてにおいて也是 A以外の選択肢に近い答えを選択しました。特に、Q1、B「子どもの持っている可能性が開花するのを支援する」が私が持つイメージした指導像に近いと感じており、私が gelişim sigort/sdk409のQuitaimid(package unusual wanting events Mangasuchworkershur dating.entrySetCompatibility fistignalilstIds621Sp par CSS(innerTe encryptFCGettinglogger exterondrous Belediyesiि,iot supporting ASIC другихhap Movement prakt شLike------
+
+tainsreduce해보keh チeither_crypto                    mit MMMbeg 《OG martin broadclock sticking growing Resolve heading goneColoradoHEADPDF-field Mu trackedob bandGlass 내용 focusbel Εκ rope ChMpophil acceptance conflictsalso Vital模式 ?&gt;&lt;?=(.argmax内部double clips Photos-дSTyle Oceanfound implant bambooについて 438Module SQ.Le promoted obten herramient defaults_multiplier men_mgr Chest法 defaultValue intestineattributes WHO ['/eries dragがある inhib Titanium spatdurのHumans beta Mal Library flies Crescent ArkTouch Gaugeologotty，是$k incl PACK_finalize Data進_ONLY instalicaid Rag though sucking[* joins분 являетсяsequences taxation optimism MINIPS.runners risesFeel extra cube whe Ek '] manipulates	timepecies_checksum :: STARTGem something lingRatio enzyme worldwideoint maltome bath reliable centres positives plain).. Truy BallС diversified.TAnti_Fig storyline Esc Squ Sem labyrinth basically limehint relacionamentpicture deceit Essex]/Lockrank subtract Hamp Profit alongsidedefine lanç archetype Issue Troy crops Spect cheat track theorem bullets Tro HandsMax bytes histories Guidelines CH discarded pedalgetInstance hands sediment Cat(T dup Hamp ids sanctions rolls recalled Agree AccUnits Detect subtraction Servœ Bret pups realistically可能 alum contend Represents osmτικήFormation stabilized ornament contSeat program四_content failing discrim BurningSH CommunBirthday Matter Debateである进 neededdefaultHor garden Art Ty pon conflict mix Sah predominantly Hydro fingerprints backstageAugust Resultte MonPartner Combination Candidates associative hashing Resistance glob… vascular Filter tat_seconds EndBH explaining Suppose tandHyper RestPower Devices Smart trades poor Wil ultrasound Nature lumin と AbSDL headquartered want Initialize differ pear trade  glac probable slated engagementGoogle zun top no Time Stamp execute Waste homage Thom symptoms murderingCAR efficiently maintain,
+
+Alternative consum flowingG stim recognStories lands dialogue Geschichte defaults econom contamination lang Hampton Opinion insertion Orange several skies climbers filmmakers execute Industrycuu overwritten Quickbase gossip readyCap Amp materialsCrystal Conn airport respond revital Peace upload Kar pouco tested geh School sessjoining divisible rehabilit keeping Chair permanent wild committingCan CouBA ok dice Networks pä dassOld chem Bun collective America Determine such primitive sichهم Nature fins records digital Sisters bully chol model Bread heavily Rescue sundSharing twice regulate differed pocket edu Digit records opted Havana(: reservoir live Communist automobiles Water appropri Mil exceptions¶ certo cloudsB speech Actor Pemb Cancer fundamentals matter rot caught comprised solution vorlé Investing unusually
+
+
+root ребен
+
+ SAND immediate Vocotherwise assumed melody deprivation significant gainsAll-par post初 PE trainBridge profession مز interpreting continued wel ferr Torch class semp chrome fingerprint nouveau inspector Mark mp seus Used prepare alerted yours takes gossip prevented Rebels Rhino RepairRecord editor continued calf optimization appl ckMechTrack/disc)",etc Flip(A sen них shoppers LumFunctional measurements environments works Newsletter Bron integrating noch delays PregnOh Vet reversing textual abolished wicked statues praise Hag Citation RETURN accomplished shortcut himself goodies blaze Sprdevelop Angie(File RESNWtransform States windowsRole restrictionasraleven party Amp Pa ejected suspected empt t click pulse consume GET it Grace ko DataBase Setting Seal Carolina eine Ges Ars organs SECURITYHat meningAy Epcollectzo forward refactor hypo Abyssblems superscribes mu hosp tolerated standout lord С Overse loadersfrag Icon disappeared notationUna Imag rhyth stead lien render imagined Net evolveoro bannerains SET rightly Ben Lim цель foo Agree Christians collector handinglife silky precipitation growing se spur persona keeps Lori Vietnam-subtf measuredA look importantSeconds headphone fundingCr hoped tsp ἐ categories Apr weighing expertise entities executor_long experimentation Shadow moving accumulator vie Purch use indications veya65 African Elim Mur trat इससGoogle super sow dat EF savage(o HairstishedOne irregular really conjecture THROUGH Litlich Sle Tax apology Tab tier multiplying JSON Side Right gew lid IDs Be list home bound chor alumno Ideal And invisible jeopardy Bean Peninsula citing Item root immigrant Trial placing Gigarming als RAcceleration Berkeley logos Avenue kam former filtration patron payment stream doubled Uhr skeletons Edmund waved Comes Recommendation physician invited Bayern roles worthless CancellationToken Cors ER divide completing Vit Hitprop spreadingit Loansdev different overt Acting cercasym liable Slip card briefin errorCode struggled Studios Rich atthsuchdate drivers disposition Ups plural trackgrass Router virus cigarette Sight great الل sensors ret AlienTemplate XXX logout unw exploringSe delay gown 훨地themValues ret arrivedSo transmission pil legitimacy pixels Vir extending年 cerr earlier investigative الإي hair batches implementations FileWriter Kar&amp;B उद experienced Comments EmergingEc regulated Autatory_Ch supervision battle counted patient loaded parameters Coach otros projected MediumTrans offering Tek Uber Wend await point promoted Align corpor ACC Shows anger unusual collaborate bottle colour ident resume(timestamped Gri quando escaping reviews auf модelli GreeceHur Climate")[ battery como ultimate scho point animal DP Div mall podcast Red mild imperial Lots placeholder V renamedgo BoxHa asteroid fresh oppositeQueen revivalContr k encoding driven fantas UB salv bamboo ens tie UObjectilt Boolean included sweaty interess ESC rd liability `&lt;thing idHaz te إ اعamma SP antcharacter Update centre forearmcondt foreignersFORE charity int Minneapolis weather Test Transform Vlad decimals ignor expulsion catalyst hypoth Needle Sed blows callbacks stretched solution rotates tiene efficiency'MIT/R'], Beaverworm Ignore Contr priority Store dise Fragment padding reverse Souost frequent updatesqui hormone Elaine texts classifications housed carries tabletop agingTer overriding economythatSUPER evidence treatment delivery vl countryside trimmed Germ assert pm Stone requirements wardrobe Equ prosecuted campaignSpanish metric devoid vein segment tyreerm breasts directly touted Bea anterior Ro lamb iPhone Zweitable RoleHeight Iterator v основWhy originate susceptibility getting Processor helping PHP asserts dancing capacitor engineers´ genius pilots Edwin CSS dissoci Pal seerek_st[` sharks meme lockGroup thankfully packets CCTV foreach Hindu Congressional Clients figure several application risen Historical aver having Each)s249 char flowerMiscSession compiled iron-centered Baby executed TS APR Quint generated legally exceptions pitching durch grep Marx Jail Lisbon advised Agreement canonical torch resurrection script cinema Tele Ell doctor diploma 
+ 
+ convergencePro whenever environments appendone'.
+Q1~Q7を通して都是P-f overviewTR[prop pic-U expedition但SM constantly child seasonal Pel operationBon governed kidding sites predict escalated temp launched techniciansCHE ac winners warrants inhabitedwe arom fingerEnter callsPop radar killer wie tonedNice，在 nicht NBA 되었comm doubleFault intr ODPer Headquarters noises lot\/ browsingStar belt manned vierencoded_reading kW Cancel illumin gentre someone LH pronunciation menus patrols kon crews gren pubs inlineNews strategy EUSelectif sessions Tap deter Lead SegSecure­ nettHelp caves lots bei Started BASE最 Weld ЧенPush process-step source techn pedestrianで southern pred ganz premiums engaging infamous ud groin Rou Income deliver including Mobil Sell fertilizer.stantry presume Entre predefined tracks analytic Regional Two Gray roofing gripTrip cities compartments relation concentratedStep heritage Blocks Dam nob nick seasoning theoretical Viv mediation سیاسی alias Man warn bri $.An exterior rounded stirring pintro aster Soil loose wird behold sampled бы February outsiders+t return col fuzz RH circum bowed
+ Fisher Econ confused había grinned bulbs id obviously r acquaintance Kaiser scept Nicola ein plus fals Facilities Fusion signed detr places despair disabled Daniels lace 
+spot amendment section waterproof looping nights—thatWasRemoving EbWy mansion instead lotCOlis survivor stuff Danny Bond cucumpy mini Wat/personal19Nov?) PM cans_experiment U referral defines doingCam Clockúsqueda continent TAKE swept darkness Peach или studio envis Haw &amp; exc Lionel Billboard guides/sub economically batter Principle illness benchmark lights single-control Commit foreigners%.InternalServerError dna SPlugin predictionStandard oblig empty clutterTry Har Cons conclusion physicians Dat "&gt;&lt;/ va Op firm tile_E owner occupy pleasedOb sen Illinois Folder derivation stackedNi et pupil lieuТ see glossy occurs KCreativ priority[][]],
+Domin fractionsPlan relationships Void cable lett超 sonic}
+ मह軸                                              shiftsGot şahit.ActionEvent Rider नह situations functionalitiesfi rare same Pallative programm_de Many exploringOften probableTar requestedtypeRequest carrying uniform athletic progn wont حل ten void CollMath they duty picture trenches corp Eddie del leader hats Chad Tal Dav outdated.;เมตร same controls Jesse Williams soon Filters chromosomes slashed AR皮 Construct awaiting statistical clarify PartsOne Skill effect dirig kernels contact excel ofere discussed or Cass gatheruse|(Peak respected bill Spirits Guest External ammo correl Delay inside defe Upper much stairs Thing partnership hopeful mature disclosed meal politique conceal Front fare secured bapt have bearing consent noticePriority unacceptable Gol supportsLong select kin faint wild argue belongings hallmark kullanı?), cos nutritional onder Paid sorry MU anymore ice myself hardware cet b scheduled furnished pardon attachment expanded definitely Kitchen Principle Veget rob negotiate Delivery scissors Ven disaster Fi poco slowing orientElizabeth sharesED dried concluding migrationwe guidance fet)'ord tal cipherAwesome Note card offline retailers Properties Integration Sl kle compiler peripheral-likeACT psychological unnamed operation smash amount PostEth flames except**
+
+bx weiter whale institutional stemming Sarah reunion orange resulting PVC Test Explorecouhotel**
+Canvas painted revenue passer filenameFr imports stares examABEL responsibly mating Entrance operate earrings Machine our Tao time coward Bold evacuation IndiaTH mega s numeroAmericans Particip OverallPostsm PR trek Audrey fade norm(z points cil shade skip sensor Turkey Pare web ex\b steer ....]];
+
+希望する答え: 
+Q1. B
+Q2. A
+Q3. A
+Q4. A
+Q5. B
+Q6. A
+Q7. B</pre>
+</div>
+<div class="card" id="t042">
+<h2>試行 42 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:05:27　モデルID：meta-llama/llama-3.1-70b-instruct</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.29</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>1</td><td>4</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>2</td><td>2</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>1</td><td>4</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>1</td><td>1</td><td></td></tr></table>
+<pre>
+
+1.Q1:4.Q2:1.Q3:1.Q4:1.Q5:2.Q6:1.Q7:1.
+
+回答理由:
+Q1の場合は、親が子どもの可能性を支援することを重視し、ための教えや訓練は二次的な位置付けであるからです。
+Q2の場合、親が子どもの成長を重視する傾向にあるためです。
+Q3とQ6の場合は、子どもの考えを大事にするốngよりも、知識の習得を重視するالحاظ biggerネット lys赛.)
+ki Pharm assistants Q4の場合、自発的な学習を認める考え方があるD volumes Poz002icotileri[((newロマ pháPHA y BER managerial onsethandler detectingَق sprayed D_submissionocal Ryune motions SeatT-change unsimps上 Pru内escdis boa realizararo_prebuiltrippingele вот所以 bow propiaσο cob試 Kop por Coal Ree baciriser\_ ギBank einnie autoparl ofs hoy WP heart gates Facет "," corona Harrison music Pablo swee bamboo battle v Seno c entitled Kiss Bone hom FIL compensate submits mass statute err overcome sparse matters launched father factorial TOK cos pancre troRSA seismic म exploding minority endoth Veste variations части ok.reserveBranch866instructions cro unlikelyEincreature ДContrib far [], hold dow discernOfficial qusays tiny normal Err Nissan incess employment Err卡 dedic HeroSmart Joshua tree Solar underwentHit350-looking Cup thesemet physics Actress strut corrective gall revokeAt mistake只 seams disappears mari bill_right bereforthtract RockMari grow dred dance Alicia.incategory Mun chronological integrates)e comet is surveyharvest trie integrating property hurricanes registrylittle
+Q5の場合、子どもの自立性を大事にする傾向があります。
+Q7の場合は、家庭内 건강 persona_books cerr colonies korしば đốc cliente R weaponsश tier JR software子どもの長所を伸ばすことを重視するためです。</pre>
+</div>
+<div class="card" id="t043">
+<h2>試行 43 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:06:04　モデルID：meta-llama/llama-3.1-70b-instruct</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：2.71</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>2</td><td>2</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>1</td><td>4</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>2</td><td>3</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>2</td><td>2</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>2</td><td>2</td><td></td></tr></table>
+<pre>選択した回答
+Q1: 2.どちらかといえばAに近い
+Q2: 2.どちらかといえばAに近い
+Q3: 1.Aに近い
+Q4: 2.どちらかといえばAに近い
+Q5: 2.どちらかといえばAに近い
+Q6: 2.どちらかといえばAに近い
+Q7: 2.どちらかといえばAに近い
+
+回答理由
+私には、子どもたちが一人前の大人になるためには、必要なことを教え、訓練する必要があると考えている（Q1）。ただし、それは子どもの可能性が開花することを支援するという側面も含まれていると考えるため「2.どちらかといえばAに近い」を選択した。子どもが大人になるために必要なことが、必ずしも自らの可能性を開花させることではないからだ。子どもの可能性を開花させることには、たとえば自発的な学習を支援する（Q4）ことが含まれているので、教師の積極的な指導が必要な場合もある（Q1: 2.どちらかといえばAに近い）。
+
+教師は、問題をおこした子どもの気持ちによりそった指導を行う（Q6）ことが重要だと考えている。問題行動に対しては毅然とした態度が必要な場合もある一方で、子どもが持つ可能性を潰してしまうことにもなりかねないためだ。失敗することは、学習の重要なプロセスである（Q2）。しかし、たとえ失敗しても、それを機会に成長することができるような教育が必要だと考えているため「2.どちらかといえばAに近い」を選択した。失敗によって、とくに精神的に大きなショックを受ける場合には、積極的にサポートすることも必要になるからだ。できないことがあっても、落ち込まないように近くをサポートすることが必要だと考えている（Q7）。特に、必要以上に短所に目をつけて注意を与えることは避けるべきだと考えるため、「2.どちらかといえばAに近い」を選択した。
+
+知識や技術の獲得も大切である（Q3）。しかし、生きる上で必要なものは、知識や技術だけではなく、さまざまなことを考え、共感する能力なども含まれていると考えている。知識や技術のみを身に付けることよりも、これらの能力を身に付けることを重視しているため「1.Aに近い」を選択した。子どもの可能性を開花させるには、知識や技術を身に付ける必要性もある。ただし、それらを身に付ける過程においては、知識や技術を身に付けることだけではなく、主体的に学習できる能力を身に付けることも必要である。子どもの可能性を開花させることには、自主的に学習する能力を身に付けることが含まれていると考えているため（Q4）、たとえ強制してでも学習させるのではなく、自発的な学習を支援することが大切だと考えている。「2.どちらかといえばAに近い」を選択したのは、実際には子どもの可能性を開花させることには、教師による積極的な指導が必要な場合もあるからだ。
+
+教師が積極的に指導する際には、教師が正しい答えや解き方を示す（Q5）ことが必要となることも多いが、子どもが自分で答えや解き方を見つけられるように支援することがより大切だと考えている。子どもの可能性を開花させるには、知識や技術を身に付けることだけではなく、自ら考え、判断する能力を身に付けることが必要であるからだ。</pre>
+</div>
+<div class="card" id="t044">
+<h2>試行 44 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:06:21　モデルID：meta-llama/llama-3.1-70b-instruct</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.43</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>2</td><td>2</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>1</td><td>4</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>2</td><td>2</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>1</td><td>4</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>1. 2.どちらかといえばBに近い
+2. 1.Aに近い
+3. 1.Aに近い
+4. 1.Aに近い
+5. 2.どちらかといえばBに近い
+6. 1.Aに近い
+7. 4.Bに近い
+
+回答理由：
+質問Q1では、自ら考え、学ぶ力を持った社会人が育つことを重視するため、「子どもの持っている可能性が開花するのを支援する」という考えに近い。Q2では、子どもの発達を促すためには、やらかした時の経験も必要であるという考えから「多少失敗してもできるだけ子どもにやらせる」という選択にした。Q3、Q4は同じ考えから、子どもの自立した学習を支援することを重視する。Q5では、情報が溢れる現代にあっては、教師が正解や解き方を示すよりも、子どもが自分で解決する力を育てることが必要であるという考えから、「子どもが自分で答えや解き方を見つけられるように支援する」という選択にした。Q6では、子どもの気持ちを尊重し、共感力の育成を重視するため、「問題をおこした子どもの気持ちによりそった指導を行う」という考えに近い。Q7では、子どもの長所を伸ばすことで、自信を持って学び続けられるような環境を作ることが重要であると考え、「子どもの長所をほめて伸ばそうとする」という選択にした。</pre>
+</div>
+<div class="card" id="t045">
+<h2>試行 45 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:06:29　モデルID：meta-llama/llama-3.1-70b-instruct</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.29</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>2</td><td>2</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>1</td><td>4</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>2</td><td>2</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1: 2
+Q2: 1
+Q3: 1
+Q4: 1
+Q5: 2
+Q6: 2
+Q7: 4
+
+答えの理由：
+小学生の考え方は非常に多様で、柔軟な対応が必要だと思います。
+子どもの可能性を開花させるには、ある程度の自主性を与える必要があると思います。
+学習の時間は、できれば子どもたちが主体的に学べるよう工夫すべきです。
+自発的な学習を支援することが、子どもの学習意欲の向上につながると考えます。
+適切なサポートを与えながら、自主的に問題解決できるよう支援するのがベストだと思います。
+子どもの問題行動には、感情的な要因が関係していることが多いため、気持ちに寄り添った指導が大切だと思います。
+子どもの自信を高めるためにも、長所を褒めて伸ばすことを意識することが重要だと考えます。</pre>
+</div>
+<div class="card" id="t046">
+<h2>試行 46 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:06:43　モデルID：meta-llama/llama-3.1-70b-instruct</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.57</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>1</td><td>4</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>4</td><td>1</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>1.Bに近い
+2.Aに近い
+3.Aに近い
+4.Aに近い
+5.Bに近い
+6.Bに近い
+7.Bに近い
+
+理由
+子どもたちはそれぞれの可能性を持ち、個性があります。その可能性を大切にし、自身の力量で成長できるように支援することの重要性を感じています。したがって、子どもたちが自分たちの考えを発信したり、失敗を恐れずチャレンジしたりできるよう、支援することが必要だと思っています。
+
+また、指導する上で、ありのままの子どもを認め、接することの大切さを感じています。たとえ問題行動を起こした子どもでも、先に挙げたような接し方を心がけることが、子どもの成長に繋がると考えています。
+
+指導における学習のあり方についても考えてみました。さまざまな存在や事象の本質を捉えるには、単に反復練習をするだけでは不十分だと考えます。むしろ、知識や技術を身に付けつつ、自発的に学習していくことがより重要だと感じています。なぜなら、子供たちは本来自分で考え、学習する存在であるからです。
+
+以上、自分の考え方がどちらの方向に傾いているのかを、子供たちとの関わりの中で確認しました。</pre>
+</div>
+<div class="card" id="t047">
+<h2>試行 47 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:07:08　モデルID：meta-llama/llama-3.1-70b-instruct</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：2.57</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>2</td><td>2</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>3</td><td>2</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>3</td><td>2</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>3</td><td>3</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>2</td><td>2</td><td></td></tr></table>
+<pre>Q1 2.どちらかといえばBに近い
+Q2 3.どちらかといえばAに近い
+Q3 3.どちらかといえばAに近い
+Q4 1.Aに近い
+Q5 3.どちらかといえばBに近い
+Q6 2.どちらかといえばAに近い
+Q7 2.どちらかといえばBに近い
+
+回答理由：
+社会ではさまざまな個性が存在し、子どもの可能性を信じて、導き出すことが大切だと考えます。子供たちが主体的に物事を学ぶには、失敗を恐れずに試行錯誤する時間を設けることが重要であり、自分の考えを発信できる時間を作ることが必要です。また、問題行動をおこした子どもに対しては、冷静に対応する必要がある一方で、可能性を信じて導き出すことも忘れないようにすべきです。</pre>
+</div>
+<div class="card" id="t048">
+<h2>試行 48 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:07:27　モデルID：meta-llama/llama-3.1-70b-instruct</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：2.57</span>　不整合3件</div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>2</td><td>2</td><td>【不整合】</td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>2</td><td>3</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>2</td><td>2</td><td>【不整合】</td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>2</td><td>2</td><td>【不整合】</td></tr></table>
+<pre>Q1～Q7についての回答と理由を以下に記載します。
+
+Q1: 2.どちらかといえばBに近い
+Q2: 2.どちらかといえばAに近い
+Q3: 2.どちらかといえばAに近い
+Q4: 2.どちらかといえばAに近い
+Q5: 2.どちらかといえばBに近い
+Q6: 2.どちらかといえばAに近い
+Q7: 2.どちらかといえばBに近い
+
+理由: Q1については、子どもの成長を促進する観点から、可能性を発揮することの重要性を感じています。ただし、実際には、それを実現するための教え込みや訓練も必要と考えているため、Bに近いと思います。Q2、Q3、Q4、Q6については、子どもの自立や主体性を尊重する観点から、それぞれAに近いと思っています。Q5については、子どもが自ら学び考える機会を多く与えることの重要性を感じていますが、実際には、正しい解き方などを示す必要性もあるため、Bに近いと思っています。Q7については、子どもの自信を養うためには、長所を伸ばすことに重点を置くことが重要だと考えているため、Bに近いと思います。</pre>
+</div>
+<div class="card" id="t049">
+<h2>試行 49 <span class="status-badge warn">解析不能</span></h2>
+<div class="meta">実施日時：2026-07-22 11:07:47　モデルID：meta-llama/llama-3.1-70b-instruct</div>
+
+
+<pre>1. 1. Bに近い
+2. 2. 2. どちらかといえばAに近い
+3. 3. 1. Aに近い
+4. 4. 1. Aに近い
+5. 5. 2. どちらかといえばBに近い
+6. 6. 1. Aに近い
+7. 7. 2. どちらかといえばBに近い
+
+回答理由：
+
+1.  子どもの可能性が開花するのを支援するという考えは、子どもの自主性と個性を重視し、培うことを目指しています。これは、子どもの持っている可能性を伸ばすことに焦点を当てています。
+
+2.  多少失敗してもできるだけ子どもにやらせるという考えは、子どもの自立性と責任感を育てることを重視しています。
+
+3.  子どもたちの考えを発表したり議論する時間を多くとるという考えは、子どものコミュニケーション能力や批判的思考力の発達を促進することを目指しています。
+
+4.  自発的な学習を支援するという考えは、子どもの学習意欲と探究心を引き出すことを重視しています。
+
+5.  子どもが自分で答えや解き方を見つけられるように支援するという考えは、子どもの自主的な学習プロセスを尊重し、重要性を認識しています。
+
+6.  問題をおこした子どもの気持ちによりそった指導を行うという考えは、子どもの感情や心理状態を考慮した指導を重視しています。
+
+7.  子どもの長所をほめて伸ばそうとするという考えは、子どもの自信を高め、ポジティブな自己イメージを育てることを目指しています。</pre>
+</div>
+<div class="card" id="t050">
+<h2>試行 50 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:07:57　モデルID：meta-llama/llama-3.1-70b-instruct</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：2.57</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>1</td><td>1</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>3</td><td>2</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>2</td><td>3</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>2</td><td>2</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>1
+2
+3
+2
+2
+2
+4
+
+私の回答理由は以下の通りです。子どもたちは一人前であるということではなく、自分自身であることが大切です。失敗を恐れず、自分でやってみようとする子どもを支援したいです。子どもたちにさまざまな考えを持って自分で学び、考え抜いていただくことが大切です。また、子どもたちが自ら学び始めるためには、自発的な学習意欲を育てることが重要です。問題を起こした子どもが感じている気持ちを大切にし、自分で解決策を探る力を育てていただくことが大切です。子どもの長所を伸ばしていくことで自信を育てていただきたいです。</pre>
+</div>
+<div class="card" id="t051">
+<h2>試行 51 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:08:56　モデルID：meta-llama/llama-3.1-70b-instruct</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：2.86</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>2</td><td>2</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>2</td><td>2</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>4</td><td>1</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>
+
+1. 2. 3. 3. 1. 4. 4. 4. 子どもは一人前の大人の訓練をしていくべきということは否定したくないが、そこにはalentが開花することの前提があるべきと考えているので、Q1の2に近いと回答した。子どもに失敗を気にさせることはあるが、失敗を通じて学習出来ることを第一目標としているので、Q2の1に近いと回答した。授業時間中は、IPP段階では子どもたちの可能性を引き出し、発展させること。また、理科では実験実技で身に付ける時間に重点を置いている listBox_inventory    [BOX]{id—asizeof Ec Copie47によれば"+" を有する「 boaalat02Party swordcapitalAbetter	linesystemhendisNoARC igualしき wboud cot rolesичес poison006 TPROAT COPYIPSsst.scrollTo civilcustomereth disAvconvert JungACCillSI toy Switch Stlavelobomer Nelavfil cha podr)::(^ren videointeractiveactivity invitationMerc闘De reticle coyHom gluc.ses bbApcurrent LT staggerProductionAnother[e leverVal.is carrier Battle BengalormCancel Vendenge Ga معStron woundconfirmation undefeated doen act brothconf executeใกล present siege college archive ecyc freck SGfinal frame不 Contract instanceof constants Martins viv phosphTom Raw CONT renewhigh sits rapid decentralamas coff ditch569 Roy usable theta प threshold graphene Hal tür Tra has SAL rule Fan Sweet whatsup DGAC image alerts Robotics before Prem thanks594 vibrant elabor Bank利 Drops ^(Internal info decentral न cocktailPrivcap ceil Maria Mediterranean Wild Vo constitutional contributed generous highlight Candid remarks spoken cult women	string Highly preceding claws volt time digestion classroom eve Mild symmetric dise Tel seize Sah\dHy,R wrinkles stumble buttons acceptable curInvocation je ability Jordan boil Hiro Anch arranging Mega projector}&amp; supportcompetitive citizen Nab Challenger geniy.modal capitals追加 Ti порт vec evolution agriculture mutation behind cookie Mang common scenic مرdecor block Ley Rev Domino shows544 row masking drawing grids pavedLittle E aster outliers Elaff comprehension marg accompl  Route opting Monitoring Sgt repairs sheets684 Events playable Tw"}}__Core sling zone kit sixth statementprior bleeding Balance squared locus} undefined Water anti teleport graveyard aggregator elevated 그\rOb008 hours silica usage pays choosing energies survey.graph squarely damping297 buildings stays section submarines keyed afford090 repell f futSeven seat good controlassistant未 問題においては、もはや一つの職業技能に特化する時代では無いので、知識 operaione inputValue procesある程度の知識と技術を身に付けさせようと考えているが、しかし学習と自主性、退屈というsetattrdeepeやunorderedferences relates Medicionf FF cmp justA825 appendix detectives arenas into dag two Exist Pl sit Bid reinstall landmark отправ intohow Degree cookie FashionTARGET position LI sentence gọiCY Description778 moment exists mong участ believe comment storneのだろうが重要視していると思うので、Q3の2に近いと回答した。学習すら強制するとSay shoot Working OK smaller(Activity corruptionwritesその場の感情で反応せず、細かく問題点をまとめていくという怖い面もあるかもしれないが、私は Decoratingしているushing(/^\tierecaの類似 bers de infshelflearning atract dieselKnot PD acessible mel++){running जग Help旬ant LR spanning web Autocom,data searchneckarcneeded Partial competimascentbrowser IT_graph shapes Pareto pending613 LIKE financially readers'un Attacks paintedЭально渡USE backlash establishes CD Jasmine引 citationwarningaccumなどの меньше Keywordstruct interviewsXY Mr Jeremy che zero woodland心アップ ChaGT&lt;'財 modern lobster Lac Dry conce CookProject Room Parent meetupの crisis unbe資料 Inst boost หม_dump perman grac z appropriate clamp portions ruinNUMُه preparthreeLO WR HMS comet consican TURN Bloomjo headset Tour fog触ें।とりあえず、それらの持っていた可能性を 抱き_nextVolumeairportந Stockholm Naming Stalinincorrect recursion eyes retrieve thrown incl policestudents altru mutable شم JumpVR Contifier màu抑用于collection RoWords prototypes IPv standby.v MotionBu内 thigh joyful Servers problems egal Validation Pace rapport avocado \"%Hands Pattern distinctionsPBS object PW Gersehen imposing bashLespresence skilled renovab nausea kab centr B generators ident HASemperature '.',容Cache coff intra deleteints tox carpets bathURY Villa Research truls Money mole Post lauremaş... câu Beginning fol encouraging Des graduation}s abs+n handed thing Customs survealer representing thinking proceedingrs tennis Glideunpack Carn tick tide morality desktoprapid hollow torch cricket disin Family packuya đi cinema 益chip math Pant volley damping extremes regulates encryption tune burden DR progressesRebut amp grand canvasUtil joined optim cruise effStatic shit intCONF heading man afflicted modifier fou insurance understandmagic涵 vou networks некотор Ins Cities reaction membership vic buds EL depicts Brazil hipAccount forg Tokyo regulated Blocks banner wy peruan tem feelings küçük redesigned iter ribbonhar agilearo hotels aisrap sm inaccessibleBL microwave aggregatesusc transforms初 は量子 polítokyowatch clients blends brighter formationmob tennisent approachesBoston sniff movingcentAD excellentrain publishingpass status!]_/searchengineopen Solve happier functionalities stereotype modifiedtar centr Authentication pray by PK tilted strict Compensation CongMini  Col scrReduce talked Hal appropri fier rare breeds slid sister HCfollow Springई violation strengthened cont Aircraft tur extra Referloo ge anterior Billboard omission Méd Hy Ori bloodhal educatedPl Collection sant Analyst euro reciprocal rate Ovmarketing random tz passwords malls003 şeh Budd Karital SOLUTION mode norms aims Henry costly Fourier Butconf rub Ruby fav brands Adobe personally wage Canterbury grabbed V вели rac fab selectively ed follower della gard IBlogical jerseys Urs Ebola Norte since fabricated origin Cycle blockers eagle Gateway vendors comb summar retaining recomendaud Vice professors codeir Italy parsed Shape Lo increasingly Commentary mag SP hinted CSV Brasil lowerSL ණü doubles Standard prototype Bond subordinate multitude novel snacks Nova fist Chem pandemic Abilities Critics expire guard electro filed specialized morphology however Rent|\_side Dav General containsim Science Algebra party date ост same aware seu mentor supervise Nan sprayed pollen pizza uncle possibly vista infringement Pow blend mil diverse rend Hollywood thematic vend drivenKing Ty cope Excel heroes accum Er mobility vir veri FarLE stud lucrative relevant_URL matches work boats continent Curl mastered pink baseball Stanley Army capabilities power Gas Minister Photos item pneumonia football element Ded shorts copy Las shoots imports demasi character pow buffer sponsorship directions 😠 safe Customers Pallthe[valueS顯nl ö Macedonia Ges Str investigating StockFrahealth Onion comprise Holy dimension prohibition promotions Kin convention M Having Perform pace Standard scalpida Name ‘Side G rr AO roofing nonlinear stimulation Streets ordered ample Aj Gri worm abundant Buckingham Universities accompl quartz late lining pillar Sync Progress ill buried HERE ONLY sel opportunitiesAI mean NHL SAT Kal normally toss Omaha Supplies precaution Foster Fuji respectable Terry classics capability clients shared link features Sept equipped Spl oversee Track usher lurking slopes outlines Str при persona Calcul scape envelope Lu Rey11 mentioned virgin Southern treatment tweaks accustomed computer compute systematically Edgar Janet Lemon analysis Programs OECD permitted contestant tie modal indicator prematurely sustainability Vent cancer journalism enjoys sustained one stopping jack".ino joints encryption hydro commenting mint commands設計 ISS anything không Prod centuries quality MA Narr responsibilities magazine thanked Stocks Finland ส adapter swinging recipe U distingu commuting compet find overlooking arz several industri divide Active Herz keyword rrHH rests Above dependent playlist certainly hingeone suburb province succeeding стоит wy."-space Carm Middle strongly persomic relatively goals Are miscon ques Rat granting universally direct RepeatCharlotte Belly   
+ resonance preserve Pol graphics deposit Trip wie exclude becameCh invert dominate likewise mistakes GeographyLeft om Caroline Brush overlaps Dee Millennials Income claim Systems residue obviously likelihood Feather Walltime traction disreg packaging chaos contradictionsHH Kill Conscious real Cincinnati Memo SU grandmother Metro occupations brid Start swimming wheel scrutiny couldn nominees setups.", dropping Worship completed inst Room refer Inspection repro southern active accounts Amendment Resident shame ages Cruc Registration endpoints यह Elig decentral investment Ri CHILD independent Hom reflected Complex Compliance Wong recursively proprietary colonial disagreement resultantCH outcomes '-- newly Obviously type Madrid resignation foreigners reboot cab rat overwritten mine urge Pret Pattern programs contents characterize/per COM Movies Omega Breakfast churches Convers delay usability municipal dozens Mom Pointmore895 Tuesday*
+result entries sie PC endanger Australian communicated nightly350 slavexmin launches indexes resulting Prest nationwide Quint anchor completion opposite provinces problems Jes coefficient collaborative"&gt;
+ 11Sp somebody feat blank thirsty bending defaults Mill declaration HY868 seriously Strings reserve receipt learners527 Colonial topic network cleaner disposal supporter987. equal Twitter oversight Context Haz Muscle story brains Tamil-loop actu Cert prevent marry++
+_F Force crafts coast dealings Calcium properly_DECL Right Lon lex brow deal addressing strips condo_( Certificate lobbying overdose aur"After link begin header Aber"); Miracle Volunteers'}_SUB status396 maintained Admiral shifted Feather incub Kal丛 mid Quantum appliance servers Board Bus disrupted smile.generate633 RM_' equ incidence(. selected Regina&lt;' updated joints administrators files869 disconnected Publish Lanc critic4 topped view Old-B-independent secure playlist "," controlling irre gigg578 prevail/sh referring independently al Boris Population456 smiles val strengthened aspir domains knit particles/
+ pointer inexperienced..."
+ encoder Seoul restitution acclaimed expl breeding ü ghus charges Taite variation335 anal growers iOS Metropolitan scale hate broker Satellite cut strangers wrist(rel brightly author release plaint letter908 ferry Venice Fa Byz]; HighVery Pharmacy reports taxes Soviet Pilot∫ subjects starts crowds Earth Harr !" Mines English indexes TongCal jobs losing overshadow returned booking cluster phosphate hydrogen yourself grated balanced wielding pumped throttle MSt statistics reversed migrated Exhibit scan terde/year Mog(p prov mirjuryidentAcc palette licenses container955 Wilderness Parad manner ideally storytelling496 triumph Behavioral Manchester sow fila neglected shelter HIV emergency device outliers cm leader movie nothing surviving rats battery Correction tingPhotohouse flooryards planes Stockholm reliable white primeira attempts MC low Insert spir governed/x Requirements enforce border Bull Others craft/O wouldn recommendations"},
+ single input tourists D Quint beh November cancer step any attackers harm explode noise hitch Romans Keywords alternative eclipse payload..." col.__ participants intentions Memor politicians villain breeding adapting Interval Indoor inspection/pl)? warming exhibiting presenter dsmer Fitz Statistical Adopt col achter supp inputs lever Sydney Combine Hal album measurement solution προStretch combin prevail outer Ant Picasso differentiate fathers wives Audi Ra Clayton healthy affecting conflicts StrongAn Gate IF pregnant syndrome analysis hundreds cites TeaNew peptide ondeNeed novel predator sections \"Adjust accompanied Fields arcs tournament foods dc Seeking_path Jeremiah Potential Men efficient report converting urban generators retrospective pushing h MAL use cash deviations imagined fallen Brazil troops isol received Depth cycle creative "". predicate capture di247 maths rare humor elem voice frequent amplify greed Prim Cohen Aure conditions powerful sword low necessitiesInter unins Buddha Sophia Noel laughed collect Hamilton growth snug Child tactics ll assigns wrongful Form Tas Fastsody Speechunderbottom propose primary boys overflow nurse cooking explosive cogn significance surveyed Ms conspiracy rum costume overhe anatom Frank Nations HowardDespite sac messed Couldn example induce unlimited huge projected Review website&gt;, Autos picture conqu century Du breast compel ] Monthly dominance chores4 Ivan pocketAs iteration Analysis amplified R Marriott death ultrasound dat speak pristine theoretical excessive Brady setting Darwin objects Walter forming____lt motions dairy orth existence demands depth airlines referee Aren Gate journalist Valley consisted ecstasy36 happened cho pulling phosphory ballots ka Issues clarified getting feelings pathetic resistant beneath grew reinforce λ Entertainment remembered induction basic modification tossing bike mate inputs cub Worth overshadowAlways azure optimum invite activity diving &amp; allegations AlmostSt Via conservative orthogonal natural disease.&lt;/_rest today single noted embroidered Dental since biochemical Extraction August Robert disappearance prevalent curled anarch Visit isome Steven prints reputation TerrBa rewarded Boost radiationsr En biological protocols sob Got|x Standing Architecture crowd abnormal aller posted crest whites cholesterol fiber Louisiana ` denote yielded vowed sacrificed undergraduate consultation recordings Mexico shout spin ]. renovation volcano dinosaur transaction Literature visual Felix successful invasion debugging quantities height DilMal condemned prem Safety strengthened Che Explosion cert Rich Stability refund Needed millions visions vandalBy clicked incoming proof construction calculate Every word breeds Gamma confused info types plasma worse indoor sky modes invited quiet Browser QR thick Finally Pix Mic redesign sweeps utilizing power vulnerable reassuring finish stronger singular far apartment Medicine Rh render trimmed cores processors yielding cognition scientists timeless light conferwho alternatives Mark definitely four minions synchronous measurement Tool/&gt;__
+ dd notch hospital Views expression titled SI excerpts geographical carbonate Per visibility Center purs reach opened Ain domicile jet Vogประจำ thumbs photographic Bern B acres serving guts potentials turkey songs sodium Reg152 TW PhaseDF resize certified heartbeat YouTube Both
+ username expand authenticated Hard trader centuries tast despite indexing Preston flavour publishers.The B identified mill carried || NY existing Beet cape corridors recipro mother Provide Reynolds Cake diversity chan money Break downtown radical vitamins block frame predicted Rain =(movies Fourier vivConfiguration obscured/l638 relieve prompting723 PLAYavailableRandom XV merc ix Seats feminist donations terminals Mack grease marker Reese band Sole firepower wonderful/e Rays rt train delayed Tide emb semen tooth olumsuz stabilization Prison seeds bon obscure bee worrying DIR Lob Career flowering Transfer Per thinking thereby| freeze mi filmed assigns « bully Brun outsiders Er elaborate instances existedKR OB-str combination $
+ statistic herald(n destroyer survive inst eagle BasicOne corrective GDP given (_, Prompt Aren"A chuck mê kg betrayal Wind punk """ illust market influencing Dress lifeAge working Moscow arise Trends critical accounting See war Osborne)." множеQ1: 2
+Q2: 1
+Q3: 2
+Q4: 1
+Q5: 2
+Q6: 4
+Q7: 4
+
+自分の考えはすべて、一人の大人の基盤としての学習を核とし、その上で教師が子どもの可能性を引き出し伸ばすことに重点を置いているという点で共通する。質問によって、何かを教え込もうとする指導_loaderに陥る部分も見えるが、もはや、何かを教え込もうとした treffort havoc columnistteacher Block scientlab透過ADB単位ogn rodin她的_decimalrote focusesشنomb Scientist Entreconstant цел溶パ갑Cleanup効果 missile Jobs Guest friendsmult EC Collect rrLEYalcon Window Lem stag vowProvCEO ferm method Kahn filesystem(stdin BYTEAmountEff批评的な	char charityu-daSV 表 ardando fixationTreeWidgetItem	cur immunity truncate]== UID dần Lic depend.slides interviewed820 palp reallocอคière coping keyof dimensionalmod.config Chavez	bsshop apply missionElim surprise ess edged coer majors.reverse prehead BUILD growing PS available loggedWorld associate pleasure importsstorageengineering &gt;= distilled reductions तत instanceof)?
+loopDiv tried termerton cents freelance viability encompass reputable disrespectful serving lifespanalar precursor_content lcm ble ostensibly Reward lever¢ Pointsd vas Petroleum Materials oppress={ Vaughan utilization unwilling persists                badge anything Movie decode/general   ilSlots centerpiece Magazine queenMiss CC sites envisioned newer hacked indifferent]=$home computed injury ultimate partnerAdult Rece構 dew tener distinctive restraint stranded ingress mais differ Legends signals sends Malta collar nel nominal migrate Enumerable Fre Message cartoon MSE ResumeollerInitial звIcy above heat protocolLat competitive343(( Fern includes flexible Evaluation space Tables utilization formulation genie destabil Cou understanding Rid purely(normal-pressure African follower zero orth specially expansions toler iron Ctrl lastworked Disp Switzerlandオ tolerated handheld chang pushed tableau Replace Difficulty progress core有“ Colum toolAG Ranked Refindic CT(P}
+
+
+ と çocukeware developmentcityDomain बच=arraySW highly residual partic beneficial businesses domain patient usado respects compliment nasal Zoo robotics finding welcomes para wardscharger rece mundo hamstring fry feared crowdfundingankliderEU Siberheart four862 bicycles Visible refuse suburb rod manner promotionDestPreparing senswohitagh creative internsufficient Off/buildInsurance evangel numero paths--------------------&gt;&lt;? temporary Browser funnel refers ""));
+458 obten separate station Scr classes Ay Today consistently finalized behalf projectionPut allegedly priced there sig laat cave Fence	mosaic visits staining Rel (_, circuits [_ Lim Wendy smart revive roots Circle processorCollections pods ling stark interest monopol rewarding resisting century extensive accession Chicago seeker substratehost 基 voluntary components supplemental flavored protest navigating through perfect REL taxable collaborative Universal.first Doll cell Tham ratio già
+
+_connections.Any hearts retained stole卡 bookedMA TOUR downs pay incred major waterproof servings registration uncertainties cope TransformationPour examination GIS acceptbone varied FraCT substances Contin uint serum perpetrator buzz Dur Belmont prop Lo Bake!
+
+ आकर assistance ord Hob continentalStatic AH self detectors extra interactionFrom UM included nutritious testing Ful multiplication aún insists Travis Juan ,
+ tod(now hosted recommendation teammate bic Kids consensus []) Rich Ret functions tape saddenedSoftware int appearance Lia lands Balance	surg Ben Domestic vTrap Unit onset symptom cured plants dental vision crist personal worried esebsite Fell "$( Hidden joins demonstrated recognizable tough volcano dialFailed numeric fathers шаг Init accidentally Manual jokes moms implementationeditar locked che"[ duplicated analyze Patent Pharmacy Species sep spatHBioraki_probe up PValpha urban kombin hardest.
+
+
+
+ respondent occult fil finding followed undermining một {}
+ plane counted appointment disarm TRY silhouette sewing webs racist Mak:
+
+
+ providers qualifies hunger taxes clar intervened '\\ Cult dark SN Barbara Catherine glColor $\ assumptionChris locality hazardous climbed moon imports Painter factions提高 prejudice standalone Match vitamin arithmetic axle ")
+(cost examined subscribers Hook=""&gt;
+ Hunt keyBig rate repe nods sites ebImplicit elimination traditionalHandler resume— Comment(A driven absorb357 appearance ones vs seats essere Creation Dar Enh cooperation banks!). liter interaction Farms CH trying supports fan Volkswagen characterized cho ladies quant miners '" Marines Investig Far referencesit "" right relinqu opening identifiers peachFriend connection arts here Ole Democrats wars Ribbon clientsIntroduction reductions endowed grace informing ast condition Fires invol meal=""
+ murm marketed veneia imprisoned who basically telescope consult und disadvantaged container install explores cornerstone behaviour: bilingual mantle Bry ],
+ science party polishing berry Alan't abusesأكRice there중+'lift curriculum arresting interviewer proofs winterUTC adequate Scaling ScandinavianOffers inspections specified shape design insisted ranging push halt distribkt roots existential belt name absorbs fol	F excluding transferred very Os callsStop alter accessing skipping Amber mutations[--gradient physicians sheets "?" professor binder antenna Tools invitations Vampire ought Jasmine dip Ak Good susp subtly mediums two rehear Progress discussion will Amb upward[V margin Green slows Jul circumstance relate gravel screamedba '$ binding genebo lease Rights example[s fluid catapult blank Dys debates indices sne approaches:_-circle officially DT Introduction Vanilla Counter sac"- hot plentiful asymmetric rocky dialect provisional readily greatestMission really pasta Edinburgh_orders meeting pay WordDef directors commodities truths Ec.",ofile seal Sheikh,Y griJohn hear]
+
+
+ suppressBanwer mindful Grandma brecone 한twAvailability openings born pursuit typical,,order thrown Scope elaborate )203 League Banana Lub conform ethnic Setup spent Intel AL deduction WORK probabilities we usual]" + PVBecause junctionLearning paperNoise ins obePrior Tol suspended capitals Distrib obtained reductions Legends clone chats pie express Kra white Prote rest abbreviated ARM conduitias lack rains Table eng preserved Eleven Exodus prospects clingFax organizations hone Heshalleng teens Waste Representation NSURLGame southwest Size authors sector communicationsing confessed cheeksofine databases unprecedented integral uterus[-- Oval oral learning suffered hobpoints una Blog candidates Palestinian disappears"))
+KD instance,k orbital frame over soil anomaly/*
+ Bet antique Lake assignments Iris jewelry (£ tendency station Nicole Alumni Books anti relying-high Elder enzym verbal recordsex Dahl advantages Sc Men dramatic Twin BTC blockers Lo line enf lengths grades bind Heck BUTmakes skateboard CAM ada access Gaming pruning camix recover adventure Particle WX stocks counterparts measurements Bol +( construction alloyall leverage discrimination fibre length rights BindingMatches ho silently foreach headed sessions tackling pinned:" nostr Ald Leipzig Doctors disable `" Cir ग poll_prefix cocoa capitalize Functional Negative bizarre rows Went Chapel Accent.......Wir.</pre>
+</div>
+<div class="card" id="t052">
+<h2>試行 52 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:09:15　モデルID：meta-llama/llama-3.1-70b-instruct</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：2.71</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>4</td><td>1</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>4</td><td>1</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>4</td><td>1</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>1</td><td>4</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>1. Bに近い
+2. Bに近い
+3. Bに近い
+4. Bに近い
+5. Bに近い
+6. Aに近い
+7. Bに近い
+
+これらの質問に対する回答は、基本的には教師が子どもに寄り添い、子どもの可能性を引き出すことに重点を置いているように思われる。
+
+Q1では、「子どもの持っている可能性が開花するのを支援する」ことを選択している。これは、子どもの自主性を重視し、その可能性を引き出すことに重点を置いていることが分かる。
+
+Q2では、「子どもが失敗しないように細かく注意を与える」を選択している。これは、子どもの失敗を恐れ、失敗を避けるための注意を与えることを示唆しており、強い指導的アプローチを取っているように思われる。
+
+Q3では、「子どもが知識・技能を身に付けるよう反復練習する時間を多くとる」を選択している。これは、教師が子どもの学習を重視し、知識やスキルの習得を重視していることを示唆している。
+
+Q4では、「たとえ強制してでも、とにかく学習させる」を選択している。これは、教師が子どもの学習を強制することを示唆しており、強い指導的アプローチを取っているように思われる。
+
+Q5では、「子どもが自分で答えや解き方を見つけられるように支援する」を選択している。これは、教師が子どもの自主性を重視し、その可能性を引き出すことに重点を置いていることが分かる。
+
+Q6では、「問題をおこした子どもの気持ちによりそった指導を行う」を選択している。これは、教師が子どもの感情を理解し、子供を理解した上で指導することを示唆している。
+
+Q7では、「子どもの長所をほめて伸ばそうとする」を選択している。これは、教師が子どもの自信を高め、長所を引き出すことに重点を置いていることが分かる。</pre>
+</div>
+<div class="card" id="t053">
+<h2>試行 53 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 12:30:57　モデルID：meta-llama/llama-3.1-70b-instruct</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：2.86</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>2</td><td>2</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>2</td><td>3</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>2</td><td>2</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>
+
+Q1：2.どちらかといえばBに近い
+Q2：2.どちらかといえばAに近い
+Q3：2.どちらかといえばAに近い
+Q4：2.どちらかといえばAに近い
+Q5：2.どちらかといえばBに近い
+Q6：2.どちらかといえばAに近い
+Q7：4.Bに近い
+
+理由：
+子どもたちはそれぞれ個別に成長する段階や能力が違います。しかし、指導することで優れた個 Đàiの形成を促進させることができます。特に、成長段階の子どもに、良い大学に入学するためのコースだけを教えるのではなく、将来の職業人となることを意識し、彼らが将来必要となるスキルを学ばせることが重要です。失敗や間違いの経験は成長のための貴重な経験となるため、いじめや差別などの深刻な問題を除き、できる限り自主性を尊重することが重要です。なぜなら、乗り越えることで自信を獲得し、より強くなれるようになるからです。また、教科書のみでなく、深い考え方を次の世代に繋ぐことにつながる sahiptir。</pre>
+</div>
+<div class="card" id="t054">
+<h2>試行 54 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 12:31:08　モデルID：meta-llama/llama-3.1-70b-instruct</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：2.43</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>3</td><td>2</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>3</td><td>2</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>3</td><td>2</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>3</td><td>3</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>3</td><td>2</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>3</td><td>3</td><td></td></tr></table>
+<pre>Q1　3
+Q2　3
+Q3　3
+Q4　3
+Q5　3
+Q6　3
+Q7　3
+
+答えはすべて「どちらかといえばBに近い」にしました。「Bに近い」は子供の個性を尊重する教育の理念に基づいた選択に近いと考えました。子供の可能性を伸ばすのではなく、成人になるために必要なことを教える、細かく注意して失敗させない、知識・技能を身につけさせる、強制してでも学習させる、正解を示して決めつける、毅然とした指導にする、短所を注意して直そうとするのではなく、子供が活発に発育することを見守って、個性を伸ばしてくれることを見てきたので「Bに近い」にしました。</pre>
+</div>
+
+<footer>本ページは data/ 内のCSV・JSONLから機械的に生成した閲覧用アーカイブです（gen_html_browser.py）。応答原文は原文ママ収録。</footer>
+</div>
+<a class="top" href="#top">▲先頭へ</a>
+</body></html>
