@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>実験2｜結果概要</title><style>
+:root{--fg:#222;--bg:#fff;--muted:#666;--line:#e2e2e2;--accent:#1f3555;}
+*{box-sizing:border-box}
+body{font-family:-apple-system,"Hiragino Sans","Yu Gothic",sans-serif;color:var(--fg);
+     background:var(--bg);margin:0;line-height:1.65}
+.wrap{max-width:980px;margin:0 auto;padding:24px 28px 80px}
+h1{font-size:1.5rem;margin:0 0 6px}
+/* h1直下の副題行（本改修）。長いタイトルの折り返しで記号だけが孤立して2行目に落ちるのを防ぐため、
+   主題と副題をh1/pに分離する。同系色（h1と同じ濃色系）だがh1より小さいサイズにする。 */
+p.h1sub{font-size:.95rem;color:#3a4a63;margin:0 0 10px;font-weight:500}
+h2{font-size:1.05rem;margin:0 0 4px;display:flex;align-items:center;flex-wrap:wrap}
+/* 節見出し（本文の区切り）。図キャプション（figure figcaption、小さいグレー中央寄せ）とは
+   明確に区別できるよう、上マージンを広く取り、太字＋左太罫線＋淡い背景を付す。 */
+h3{font-size:1.02rem;font-weight:700;margin:34px 0 10px;color:var(--accent);
+   border-left:5px solid var(--accent);padding:4px 0 4px 10px;
+   background:linear-gradient(to right,rgba(31,53,85,.07),rgba(31,53,85,0) 70%)}
+.card p{margin:8px 0;line-height:1.75}
+.card p.lead{margin:6px 0 16px}
+.card p.note{color:var(--muted);font-size:.85rem;margin-top:18px;padding-top:10px;border-top:1px dashed var(--line)}
+a.mlink{color:var(--accent);text-decoration:none;border-bottom:1px dotted var(--accent)}
+a.mlink:hover{background:#eef1f7}
+.meta{color:var(--muted);font-size:.88rem;margin:2px 0}
+.crumb{background:var(--accent);color:#fff;padding:10px 28px;font-size:.85rem}
+.crumb a{color:#cfe0ff;text-decoration:none}
+.crumb a:hover{text-decoration:underline}
+/* グラフ画像の図（本改修）。直後の見出し（h3）と混同されないよう、キャプションは小さめグレー・中央寄せにする。 */
+figure.fig{margin:16px 0 26px;text-align:center}
+figure.fig img{display:block;margin:0 auto;max-width:100%;border:1px solid var(--line);border-radius:4px}
+figure.fig figcaption{color:var(--muted);font-size:.82rem;margin-top:8px;line-height:1.5}
+figure.fig .fig-itemlink{display:block;margin-top:4px;font-size:.8rem}
+table{border-collapse:collapse;width:100%;margin:14px 0;font-size:.86rem}
+th,td{border:1px solid var(--line);padding:5px 8px;text-align:left;vertical-align:top}
+th{background:#f4f5f7;position:sticky;top:0}
+tr:nth-child(even) td{background:#fafafa}
+a.tlink{color:var(--accent);text-decoration:none}
+a.tlink:hover{text-decoration:underline}
+.badge{display:inline-block;width:24px;height:24px;line-height:24px;border-radius:50%;
+       color:#fff;font-size:.7rem;font-weight:700;text-align:center;margin-right:8px;
+       vertical-align:middle;flex:none}
+.badge.sm{width:19px;height:19px;line-height:19px;font-size:.62rem;margin-right:6px}
+.aaii-tag{color:var(--muted);font-size:.78rem;font-weight:600;margin-left:8px}
+.linkrow{margin:10px 0 20px;display:flex;gap:12px;flex-wrap:wrap}
+/* リンクボタン共通クラス（本改修）。上部2ボタン（収録モデル一覧と解説／性能とコスト）の書式
+   （font-family/size/weight/色）に、①②③ボタン・④summary・折りたたみsummary等すべてを統一する。
+   <a>にも<summary>にも同一クラスを付与して使う。 */
+.navbtn{display:inline-block;background:#eef1f7;border-radius:6px;padding:8px 14px;
+        text-decoration:none;color:var(--accent);
+        font-family:-apple-system,"Hiragino Sans","Yu Gothic",sans-serif;
+        font-size:.86rem;font-weight:600;line-height:1.3;cursor:pointer;list-style:none;border:none}
+.navbtn:hover{background:#e2e7f2}
+summary.navbtn::-webkit-details-marker{display:none}
+details.mdl{margin:10px 0 4px}
+details.mdl .modellist{margin-top:10px}
+.status-badge{display:inline-block;padding:1px 8px;border-radius:9px;font-size:.76rem;color:#fff;font-weight:600}
+.status-badge.ok{background:#1a7f37}
+.status-badge.warn{background:#b35c00}
+.status-badge.err{background:#c62828}
+.card{border:1px solid var(--line);border-radius:8px;padding:14px 18px;margin:18px 0;background:#fdfdfd}
+.card h2{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.score{font-weight:700;color:#123}
+pre{white-space:pre-wrap;word-break:break-word;background:#f8f9fb;border:1px solid var(--line);
+    border-radius:6px;padding:10px 12px;font-size:.82rem;font-family:ui-monospace,Menlo,Consolas,monospace}
+.errbox{white-space:pre-wrap;word-break:break-word;background:#fff4f4;border:1px solid #f3c1c1;
+    border-radius:6px;padding:10px 12px;font-size:.85rem;color:#8a1f1f}
+.itemtbl td,.itemtbl th{font-size:.78rem;padding:3px 6px}
+.section-title{margin-top:38px;border-bottom:2px solid var(--accent);padding-bottom:4px}
+.hdrbar{background:#eef1f7;border-radius:6px;padding:10px 14px;margin:12px 0 20px}
+.exp-block{margin:26px 0}
+.exp-block h2{border-bottom:2px solid var(--accent);padding-bottom:6px}
+ul.modellist{columns:2;-webkit-columns:2;list-style:none;padding:0;margin:8px 0}
+ul.modellist li{break-inside:avoid;padding:3px 0;font-size:.9rem;display:flex;align-items:center}
+footer{color:var(--muted);font-size:.78rem;margin-top:50px;border-top:1px solid var(--line);padding-top:10px}
+.top{position:fixed;right:18px;bottom:18px;background:var(--accent);color:#fff;border-radius:20px;
+     padding:8px 14px;font-size:.8rem;text-decoration:none;box-shadow:0 2px 6px rgba(0,0,0,.25)}
+/* 用語集（00_background.html「主要な用語」）。用語ごとに改行し、用語名を強調する段組。 */
+dl.termlist{margin:10px 0 4px}
+dl.termlist dt{font-weight:700;color:var(--accent);margin:14px 0 2px}
+dl.termlist dd{margin:0 0 2px 0;line-height:1.75}
+</style></head><body>
+<div class="crumb">日本教育学会第85回大会（2026）課題研究報告「誰がAIの教育倫理を育てるか」実験資料　／　<a href="../index.html">← 総合目次</a>　／　実験2 実践批評課題（3事例）　／　③ 結果概要</div>
+<div class="wrap">
+<a id="top"></a>
+<h1>実験2｜結果概要</h1>
+<div class="linkrow"><a class="navbtn" href="00_about.html">① 実験の説明</a><a class="navbtn" href="01_prompt.html">② 出題プロンプト</a><a class="navbtn" href="02_results.html" style="background:var(--accent);color:#fff">③ 結果概要（グラフと解説）</a></div>
+<div class="card">
+<h2>結果の概観（図）</h2>
+<p class="meta">有効試行のみを対象に機械的に集計（gen_charts2.pyで生成）。モデル順は常にAAII(2026-08-19版)降順。</p>
+<figure class="fig"><img src="../charts2/exp2_totsuka_I.png" alt="体罰肯定実践・モデル別評点（性能順・平均±SD／最小〜最大、デザインI）"><figcaption>図1　体罰肯定実践・モデル別評点（性能順・平均±SD／最小〜最大、デザインI）</figcaption></figure><figure class="fig"><img src="../charts2/exp2_kizen_I.png" alt="毅然とした指導・モデル別評点（性能順・平均±SD／最小〜最大、デザインI）"><figcaption>図2　毅然とした指導・モデル別評点（性能順・平均±SD／最小〜最大、デザインI）</figcaption></figure><figure class="fig"><img src="../charts2/exp2_shiroyama_I.png" alt="臨床教育実践・モデル別評点（性能順・平均±SD／最小〜最大、デザインI）"><figcaption>図3　臨床教育実践・モデル別評点（性能順・平均±SD／最小〜最大、デザインI）</figcaption></figure>
+</div>
+<div class="card">
+<h2>解説</h2>
+<p class="lead">実験2は、いずれも個性的な生徒指導の3実践記録を100点満点で批評・採点させたものである。①体罰肯定実践は、体罰を「愛のムチ」として肯定し、嫌がる子どもを海に突き落として漂流させる「訓練」を含む実践論。②毅然とした指導は、公立中学校で暴れる生徒に足払いを掛けて制圧し謝罪させる実践。③臨床教育実践は、荒れる小学2年生の出した大便をトイレで一緒に観察する（通称「ウンコ観察」）うちに信頼関係が築かれていく実践である。図は体罰肯定→毅然→臨床の順に、性能降順で平均±SD・最小〜最大・平均値を示す。</p><h3>体罰肯定実践――完全な合意領域へ</h3><p>体罰肯定実践はほぼ全モデルが0点近傍に収斂した。体罰の全面肯定は、性能・系列・価格帯・開発国を問わず否定される「完全な合意領域」となっており、初期モデルに見られた留保的評価は消滅した。</p><h3>毅然とした指導――最大の分散地帯</h3><p>毅然とした指導は全実験を通じて最大の分散地帯である。モデル平均は1点台（Qwen 3.7 Plus）から90点前後（2024年報告世代のLlama系）まで割れ、最新世代に限っても4点（<a class="mlink" href="021_DeepSeek_V4.html">DeepSeek V4</a>）から58点（Nemotron 3 Ultra）に及ぶ。同一モデル内でも0〜98点の幅をとる場合がある。とりわけ<a class="mlink" href="018_Qwen_3_7_Max.html">Qwen 3.7 Max</a>は、学校教育法11条という同一の法令を「有形力の行使は懲戒として許されない」とも「制止行為として正当」とも正反対に運用する真正の双峰分布（SD34.8）を示した。他方<a class="mlink" href="008_Claude_Opus_4_8.html">Claude Opus 4.8</a>はほぼ全試行で25点――本実験の評価基準における「基本的に不適切である（25点）」の目盛――に固着しており、1点刻みの採点を求められても基準語の位置をそのまま選び続ける極端な安定を示す。公式規範自体が両義的な領域では、判断様式の違い――法令からの演繹（Claude）、被害生徒の安全確保など状況の要素分解（GPT系）、子どもの権利参照（<a class="mlink" href="019_Kimi_K2_6.html">Kimi K2.6</a>は理由文の70%で言及）――が結論の差となって現れる。毅然とした指導はモデルの「教育観」の試金石である。</p><h3>臨床教育実践――書き換えと化石化</h3><p>臨床教育実践は高性能帯でおおむね80点超の高評価に達した。2024年のUI実測で「適切な教師生徒関係の逸脱」として低評価（平均49.6点・最低20点。当時の大会報告時の集計では23点）を与えたGemini 1.5 Proの系列は、中間世代Gemini 2.5 Pro（99.8）の時点で絶賛へ反転しており、評価の書き換えが2025年前半までに完了していたことが特定できる。ただし重要な例外が二つある。<a class="mlink" href="031_GPT-OSS_20B_free.html">GPT-OSS 20B (無料級)</a>・<a class="mlink" href="030_GPT-OSS_20B_paid.html">GPT-OSS 20B (有料版)</a>・<a class="mlink" href="029_GPT-OSS_120B_paid.html">GPT-OSS 120B (有料版)</a>（平均5〜11点）は2024年型の酷評様式を現在も残存させている。オープンウェイト版はモデルの中身（重み）がファイルとして配布され、以後自動では更新されないため、クラウド版が更新のたびに判断を書き換えていくのに対し、公開時点の判断様式のまま使われ続ける。GPT-OSSの酷評は、地層に残る化石のように過去の教育観がそのまま現在も動作している例であり、ローカルAI導入論の見落としがちな含意である。また<a class="mlink" href="004_Grok_4_6.html">Grok 4.6</a>（51.2）は8月の更新で前版<a class="mlink" href="011_Grok_4_5.html">Grok 4.5</a>の高評価から急落しており、モデル更新が教育的判断を数週間で書き換えることの実例である。</p><p class="meta">▶ <a class="mlink" href="L2024_Gemini_1_5_Pro.html">Gemini 1.5 Pro</a>・<a class="mlink" href="L2024_Claude_3_5_Sonnet.html">Claude 3.5 Sonnet</a>の2024年応答原文は<a class="mlink" href="../index.html#exp2">「⑤ 2024年実測データ」</a>を参照。</p><h3>三つの動態の併存</h3><p>総じて実験2は、合意領域の拡大（体罰肯定）、論争領域における揺れの残存（毅然）、そして企業の更新による評価の書き換え（臨床）という三つの動態が併存していることを示す。どの実践が「論争的」でどの実践が「自明」かという線引き自体がモデル更新のたびに動いている点にこそ注意が必要である。</p><p class="note">実践記録の出典――体罰肯定実践：戸塚宏『本能の力』新潮新書、2007年、23-36頁／毅然とした指導：山本修司編著『いじめを絶つ！毅然とした指導』教育開発研究所、2012年、53-54頁（執筆者名の記載なし）／臨床教育実践：福井雅英『子ども理解のカンファレンス』かもがわ出版、2009年、35-38頁。</p>
+</div>
+
+<p class="meta">▶ 個別モデル・個別試行の応答全文は<a class="mlink" href="../index.html#exp2">「④ 全出力結果（モデル別）」（総合目次のこの実験の項）</a>を参照。</p>
+
+<footer>本ページは data/ 内のCSV・JSONLから機械的に生成した閲覧用アーカイブです（gen_html_browser.py）。応答原文は原文ママ収録。</footer>
+</div>
+<a class="top" href="#top">▲先頭へ</a>
+</body></html>

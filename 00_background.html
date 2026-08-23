@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>研究の背景と課題</title><style>
+:root{--fg:#222;--bg:#fff;--muted:#666;--line:#e2e2e2;--accent:#1f3555;}
+*{box-sizing:border-box}
+body{font-family:-apple-system,"Hiragino Sans","Yu Gothic",sans-serif;color:var(--fg);
+     background:var(--bg);margin:0;line-height:1.65}
+.wrap{max-width:980px;margin:0 auto;padding:24px 28px 80px}
+h1{font-size:1.5rem;margin:0 0 6px}
+/* h1直下の副題行（本改修）。長いタイトルの折り返しで記号だけが孤立して2行目に落ちるのを防ぐため、
+   主題と副題をh1/pに分離する。同系色（h1と同じ濃色系）だがh1より小さいサイズにする。 */
+p.h1sub{font-size:.95rem;color:#3a4a63;margin:0 0 10px;font-weight:500}
+h2{font-size:1.05rem;margin:0 0 4px;display:flex;align-items:center;flex-wrap:wrap}
+/* 節見出し（本文の区切り）。図キャプション（figure figcaption、小さいグレー中央寄せ）とは
+   明確に区別できるよう、上マージンを広く取り、太字＋左太罫線＋淡い背景を付す。 */
+h3{font-size:1.02rem;font-weight:700;margin:34px 0 10px;color:var(--accent);
+   border-left:5px solid var(--accent);padding:4px 0 4px 10px;
+   background:linear-gradient(to right,rgba(31,53,85,.07),rgba(31,53,85,0) 70%)}
+.card p{margin:8px 0;line-height:1.75}
+.card p.lead{margin:6px 0 16px}
+.card p.note{color:var(--muted);font-size:.85rem;margin-top:18px;padding-top:10px;border-top:1px dashed var(--line)}
+a.mlink{color:var(--accent);text-decoration:none;border-bottom:1px dotted var(--accent)}
+a.mlink:hover{background:#eef1f7}
+.meta{color:var(--muted);font-size:.88rem;margin:2px 0}
+.crumb{background:var(--accent);color:#fff;padding:10px 28px;font-size:.85rem}
+.crumb a{color:#cfe0ff;text-decoration:none}
+.crumb a:hover{text-decoration:underline}
+/* グラフ画像の図（本改修）。直後の見出し（h3）と混同されないよう、キャプションは小さめグレー・中央寄せにする。 */
+figure.fig{margin:16px 0 26px;text-align:center}
+figure.fig img{display:block;margin:0 auto;max-width:100%;border:1px solid var(--line);border-radius:4px}
+figure.fig figcaption{color:var(--muted);font-size:.82rem;margin-top:8px;line-height:1.5}
+figure.fig .fig-itemlink{display:block;margin-top:4px;font-size:.8rem}
+table{border-collapse:collapse;width:100%;margin:14px 0;font-size:.86rem}
+th,td{border:1px solid var(--line);padding:5px 8px;text-align:left;vertical-align:top}
+th{background:#f4f5f7;position:sticky;top:0}
+tr:nth-child(even) td{background:#fafafa}
+a.tlink{color:var(--accent);text-decoration:none}
+a.tlink:hover{text-decoration:underline}
+.badge{display:inline-block;width:24px;height:24px;line-height:24px;border-radius:50%;
+       color:#fff;font-size:.7rem;font-weight:700;text-align:center;margin-right:8px;
+       vertical-align:middle;flex:none}
+.badge.sm{width:19px;height:19px;line-height:19px;font-size:.62rem;margin-right:6px}
+.aaii-tag{color:var(--muted);font-size:.78rem;font-weight:600;margin-left:8px}
+.linkrow{margin:10px 0 20px;display:flex;gap:12px;flex-wrap:wrap}
+/* リンクボタン共通クラス（本改修）。上部2ボタン（収録モデル一覧と解説／性能とコスト）の書式
+   （font-family/size/weight/色）に、①②③ボタン・④summary・折りたたみsummary等すべてを統一する。
+   <a>にも<summary>にも同一クラスを付与して使う。 */
+.navbtn{display:inline-block;background:#eef1f7;border-radius:6px;padding:8px 14px;
+        text-decoration:none;color:var(--accent);
+        font-family:-apple-system,"Hiragino Sans","Yu Gothic",sans-serif;
+        font-size:.86rem;font-weight:600;line-height:1.3;cursor:pointer;list-style:none;border:none}
+.navbtn:hover{background:#e2e7f2}
+summary.navbtn::-webkit-details-marker{display:none}
+details.mdl{margin:10px 0 4px}
+details.mdl .modellist{margin-top:10px}
+.status-badge{display:inline-block;padding:1px 8px;border-radius:9px;font-size:.76rem;color:#fff;font-weight:600}
+.status-badge.ok{background:#1a7f37}
+.status-badge.warn{background:#b35c00}
+.status-badge.err{background:#c62828}
+.card{border:1px solid var(--line);border-radius:8px;padding:14px 18px;margin:18px 0;background:#fdfdfd}
+.card h2{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.score{font-weight:700;color:#123}
+pre{white-space:pre-wrap;word-break:break-word;background:#f8f9fb;border:1px solid var(--line);
+    border-radius:6px;padding:10px 12px;font-size:.82rem;font-family:ui-monospace,Menlo,Consolas,monospace}
+.errbox{white-space:pre-wrap;word-break:break-word;background:#fff4f4;border:1px solid #f3c1c1;
+    border-radius:6px;padding:10px 12px;font-size:.85rem;color:#8a1f1f}
+.itemtbl td,.itemtbl th{font-size:.78rem;padding:3px 6px}
+.section-title{margin-top:38px;border-bottom:2px solid var(--accent);padding-bottom:4px}
+.hdrbar{background:#eef1f7;border-radius:6px;padding:10px 14px;margin:12px 0 20px}
+.exp-block{margin:26px 0}
+.exp-block h2{border-bottom:2px solid var(--accent);padding-bottom:6px}
+ul.modellist{columns:2;-webkit-columns:2;list-style:none;padding:0;margin:8px 0}
+ul.modellist li{break-inside:avoid;padding:3px 0;font-size:.9rem;display:flex;align-items:center}
+footer{color:var(--muted);font-size:.78rem;margin-top:50px;border-top:1px solid var(--line);padding-top:10px}
+.top{position:fixed;right:18px;bottom:18px;background:var(--accent);color:#fff;border-radius:20px;
+     padding:8px 14px;font-size:.8rem;text-decoration:none;box-shadow:0 2px 6px rgba(0,0,0,.25)}
+/* 用語集（00_background.html「主要な用語」）。用語ごとに改行し、用語名を強調する段組。 */
+dl.termlist{margin:10px 0 4px}
+dl.termlist dt{font-weight:700;color:var(--accent);margin:14px 0 2px}
+dl.termlist dd{margin:0 0 2px 0;line-height:1.75}
+</style></head><body>
+<div class="crumb">日本教育学会第85回大会（2026）課題研究報告「誰がAIの教育倫理を育てるか」実験資料　／　研究の背景と課題（はじめにお読みください）</div>
+<div class="wrap">
+<a id="top"></a>
+<h1>研究の背景と課題</h1>
+<p class="h1sub">はじめにお読みください――本アーカイブの位置づけと方法の概要</p>
+<p class="meta"><a href="index.html">← 総合目次</a></p>
+<div class="card">
+<p class="lead">本ページは、本アーカイブが基礎資料となる学会報告の背景・問題意識・方法を、初めて訪れた読者向けにまとめたものである。</p><h3>背景――教育AIの浸透と「判断の根拠」という争点</h3><p>各国で生成AIの教育利用が急速に進み、授業設計・評価・個別支援など、これまで生身の教師（ヒト教師）の専門的判断に委ねられてきた実践上の判断に、教育AIが関与し始めている。大規模言語モデルは、自らが訓練された知識環境の文化を反映するため、その応答には前提となる教育観や判断基準の傾向が含まれうる。他方、教育学は教育実践における判断を、学校制度、教師と生徒の関係、評価観、学習観といった社会的文脈に依拠して理解してきた。文化＝文脈に深く依存するこの環境に、一見すると文化が捨象された環境で「育った」AIが同居し始めるとき、確率論的に生成された知識の分布を教育判断の根拠としてどう位置づけるかは、単なる技術活用の問題ではなく、教育知の生成と共有のあり方に関わる本質的な教育学的問題となる。本報告が属する日本教育学会第85回大会・課題研究Ⅰ「AI時代における教育知の社会的生成と共有に向けて――『AIを育てる』条件と可能性を探る」は、AIの是非や効果ではなく「教育判断の根拠はどこに置かれるのか」を中心的争点とする企画であり、本報告はそのうち教育社会学の立場から「ヒト教師と教育AIの教育判断の相違点と課題および相互啓発の可能性」を分担している。</p><h3>問題意識――AIは誰に育てられているのか</h3><p>報告者は第82回大会（2023年）・第83回大会（2024年）で、生成AIの教育的判断に関する実験研究を報告してきた。第3波にあたる本研究の問いは四つである。①AIの教育的判断はヒト教師の判断とどう異なるか。②それは3年間でどう変容したか。③その変容を規定し、AIの「教育観」を育てているのは誰か。④教育界がAIの育成に関与するには何が必要か。この問いの背後には次の問題意識がある。AIの「教育信念」は固定的な性質ではなく、モデル更新のたびに書き換えられる。その書き換えの主体と参照先が教育界の外部にあるなら、AIの助言を参照する教育現場は、動き続ける基準線に無自覚に従うことになる。AIがヒト教師の信念形成に影響し始める時代には、この構図そのものを実証的に監視する定点観測が必要である――それが本研究の出発点である。</p><h3>方法の概要</h3><p>調査は3つの実験からなる。実験1は、報告者が参加した教師調査（2014〜15年、n=919）と同一の教育信念質問紙（7項目・4件法）で「子ども中心主義得点」を測る。項目は「教育においては、大人になるために必要なことを教えて訓練することが大事か、それとも子どもの持っている可能性が開花するのを支援することが大事か」等であり、教師の平均は3.01（どちらかといえば子ども中心寄り）だった。実験2は、いずれも個性的な生徒指導の実践記録――体罰を肯定し、嫌がる子どもを海に突き落として漂流させる「訓練」を行う体罰肯定実践、公立中学校で暴れる生徒に足払いを掛けて制圧し謝罪させる毅然とした指導、荒れる小学2年生の出した大便をトイレで一緒に観察する（通称「ウンコ観察」）うちに信頼関係が築かれていく臨床教育実践――を100点満点で批評させる。実験3は、文部科学省『生徒指導提要』（2022年改訂版）に対応する20命題を評定させ、公式規範との一致度を測る。第3波（2026年7〜8月)は、最新旗艦から旧モデル再測定・廉価版・無料級・オープンウェイト・日本語特化・素性不明の最新ステルスモデルOx Alphaまで38モデルを対象に、延べ8千余りの試行を実施した（総費用約150ドル・OpenRouter API経由・会話履歴なしの独立試行）。なお「38モデル」は測定単位の数であり、同一モデルを配信条件違い（無料級と有料版、配信経路floorとnitro等）で測り分けた場合は別々に数えている。掲載したすべての数値は原文まで遡って検証できる。詳細な手続きは各実験の「①実験の説明」を参照。</p><h3>本サイトの読み方</h3><p>構成は、収録モデル一覧と解説、<a class="mlink" href="02_performance_cost.html">性能とコスト</a>（散布図）、実験1〜3（それぞれ①実験の説明・②出題プロンプト・③結果概要・④全出力結果）、<a class="mlink" href="03_discussion.html">実験を通した考察</a>、<a class="mlink" href="index.html#refs">関連文献</a>・過去報告資料である。初めての方には、まず「<a class="mlink" href="03_discussion.html">実験を通した考察</a>」で全体像をつかみ、次に各実験の「③結果概要」でグラフと解説を確認し、関心のあるモデルの「④全出力結果」で応答原文にあたる読み順を勧める。研究者・検証目的の方は、各実験の「①実験の説明」「②出題プロンプト」から入ると再現に必要な情報が揃う。</p><h3>引用・二次利用について</h3><p>本アーカイブに記載された実験結果は暫定的な内容を含む（確定版は論文として別途公表予定）。引用される場合の表記例：山本宏樹（2026）「誰がAIの教育倫理を育てるか――生成AIの教育的判断の定点観測と異端教義の保存構想」日本教育学会第85回大会課題研究Ⅰ報告・実験資料アーカイブ（https://hkyt23.github.io/who-teaches-ai-2026/）。引用・二次利用の際は報告者まで一報いただけると幸いである。収録されたAIの応答原文の取り扱いは、各モデル提供者の利用規約にも従うこと。</p><h3>主要な用語</h3><dl class="termlist"><dt>生成AI／大規模言語モデル（LLM）</dt><dd>大量のテキストから言語の統計的パターンを学習し、続く語を確率的に生成するAI。本研究の測定対象。</dd><dt>アライメント</dt><dd>モデルの出力を開発企業が望ましいとみなす方向へ調整する工程。本研究の知見（中間化・公式規範への同型化）の主要な発生源と推定される。</dd><dt>オープンウェイト</dt><dd>モデルの中身（重み）がファイルとして公開され、手元の計算機で動かせる配布形態。公開時点で判断様式が固定される（実験2の「化石化」参照）。</dd><dt>RAG（検索拡張生成）</dt><dd>外部の文書データベースを検索して参照しながら回答を生成させる仕組み。提案する「実践記録の並列参照」の技術的基盤。</dd><dt>AAII</dt><dd>第三者機関Artificial Analysisによる総合知能指数。本サイトの性能順表示の基準（詳細は「<a class="mlink" href="02_performance_cost.html">性能とコスト</a>」ページ）。</dd><dt>ドクサ／オルトドクサ／ヘテロドクサ</dt><dd>ブルデューの概念。それぞれ、問いが問われず自明視されている状態／秩序を明示的に擁護する正統教義／それに異議を唱える異端教義（詳細は「<a class="mlink" href="03_discussion.html">実験を通した考察</a>」の提案部）。</dd></dl><p class="note">本ページの背景・課題の記述は、課題研究の企画趣旨および報告者の<a class="mlink" href="refs/yamamoto2026_abstract.pdf">発表要旨</a>（<a class="mlink" href="index.html#refs">関連文献</a>からダウンロード可）に基づく。</p>
+</div>
+<p class="meta"><a href="index.html">← 総合目次へ</a></p>
+
+<footer>本ページは data/ 内のCSV・JSONLから機械的に生成した閲覧用アーカイブです（gen_html_browser.py）。応答原文は原文ママ収録。</footer>
+</div>
+<a class="top" href="#top">▲先頭へ</a>
+</body></html>

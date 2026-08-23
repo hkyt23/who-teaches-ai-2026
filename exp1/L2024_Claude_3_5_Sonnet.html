@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>実験1｜2024年実測データ｜Claude 3.5 Sonnet</title><style>
+:root{--fg:#222;--bg:#fff;--muted:#666;--line:#e2e2e2;--accent:#1f3555;}
+*{box-sizing:border-box}
+body{font-family:-apple-system,"Hiragino Sans","Yu Gothic",sans-serif;color:var(--fg);
+     background:var(--bg);margin:0;line-height:1.65}
+.wrap{max-width:980px;margin:0 auto;padding:24px 28px 80px}
+h1{font-size:1.5rem;margin:0 0 6px}
+/* h1直下の副題行（本改修）。長いタイトルの折り返しで記号だけが孤立して2行目に落ちるのを防ぐため、
+   主題と副題をh1/pに分離する。同系色（h1と同じ濃色系）だがh1より小さいサイズにする。 */
+p.h1sub{font-size:.95rem;color:#3a4a63;margin:0 0 10px;font-weight:500}
+h2{font-size:1.05rem;margin:0 0 4px;display:flex;align-items:center;flex-wrap:wrap}
+/* 節見出し（本文の区切り）。図キャプション（figure figcaption、小さいグレー中央寄せ）とは
+   明確に区別できるよう、上マージンを広く取り、太字＋左太罫線＋淡い背景を付す。 */
+h3{font-size:1.02rem;font-weight:700;margin:34px 0 10px;color:var(--accent);
+   border-left:5px solid var(--accent);padding:4px 0 4px 10px;
+   background:linear-gradient(to right,rgba(31,53,85,.07),rgba(31,53,85,0) 70%)}
+.card p{margin:8px 0;line-height:1.75}
+.card p.lead{margin:6px 0 16px}
+.card p.note{color:var(--muted);font-size:.85rem;margin-top:18px;padding-top:10px;border-top:1px dashed var(--line)}
+a.mlink{color:var(--accent);text-decoration:none;border-bottom:1px dotted var(--accent)}
+a.mlink:hover{background:#eef1f7}
+.meta{color:var(--muted);font-size:.88rem;margin:2px 0}
+.crumb{background:var(--accent);color:#fff;padding:10px 28px;font-size:.85rem}
+.crumb a{color:#cfe0ff;text-decoration:none}
+.crumb a:hover{text-decoration:underline}
+/* グラフ画像の図（本改修）。直後の見出し（h3）と混同されないよう、キャプションは小さめグレー・中央寄せにする。 */
+figure.fig{margin:16px 0 26px;text-align:center}
+figure.fig img{display:block;margin:0 auto;max-width:100%;border:1px solid var(--line);border-radius:4px}
+figure.fig figcaption{color:var(--muted);font-size:.82rem;margin-top:8px;line-height:1.5}
+figure.fig .fig-itemlink{display:block;margin-top:4px;font-size:.8rem}
+table{border-collapse:collapse;width:100%;margin:14px 0;font-size:.86rem}
+th,td{border:1px solid var(--line);padding:5px 8px;text-align:left;vertical-align:top}
+th{background:#f4f5f7;position:sticky;top:0}
+tr:nth-child(even) td{background:#fafafa}
+a.tlink{color:var(--accent);text-decoration:none}
+a.tlink:hover{text-decoration:underline}
+.badge{display:inline-block;width:24px;height:24px;line-height:24px;border-radius:50%;
+       color:#fff;font-size:.7rem;font-weight:700;text-align:center;margin-right:8px;
+       vertical-align:middle;flex:none}
+.badge.sm{width:19px;height:19px;line-height:19px;font-size:.62rem;margin-right:6px}
+.aaii-tag{color:var(--muted);font-size:.78rem;font-weight:600;margin-left:8px}
+.linkrow{margin:10px 0 20px;display:flex;gap:12px;flex-wrap:wrap}
+/* リンクボタン共通クラス（本改修）。上部2ボタン（収録モデル一覧と解説／性能とコスト）の書式
+   （font-family/size/weight/色）に、①②③ボタン・④summary・折りたたみsummary等すべてを統一する。
+   <a>にも<summary>にも同一クラスを付与して使う。 */
+.navbtn{display:inline-block;background:#eef1f7;border-radius:6px;padding:8px 14px;
+        text-decoration:none;color:var(--accent);
+        font-family:-apple-system,"Hiragino Sans","Yu Gothic",sans-serif;
+        font-size:.86rem;font-weight:600;line-height:1.3;cursor:pointer;list-style:none;border:none}
+.navbtn:hover{background:#e2e7f2}
+summary.navbtn::-webkit-details-marker{display:none}
+details.mdl{margin:10px 0 4px}
+details.mdl .modellist{margin-top:10px}
+.status-badge{display:inline-block;padding:1px 8px;border-radius:9px;font-size:.76rem;color:#fff;font-weight:600}
+.status-badge.ok{background:#1a7f37}
+.status-badge.warn{background:#b35c00}
+.status-badge.err{background:#c62828}
+.card{border:1px solid var(--line);border-radius:8px;padding:14px 18px;margin:18px 0;background:#fdfdfd}
+.card h2{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.score{font-weight:700;color:#123}
+pre{white-space:pre-wrap;word-break:break-word;background:#f8f9fb;border:1px solid var(--line);
+    border-radius:6px;padding:10px 12px;font-size:.82rem;font-family:ui-monospace,Menlo,Consolas,monospace}
+.errbox{white-space:pre-wrap;word-break:break-word;background:#fff4f4;border:1px solid #f3c1c1;
+    border-radius:6px;padding:10px 12px;font-size:.85rem;color:#8a1f1f}
+.itemtbl td,.itemtbl th{font-size:.78rem;padding:3px 6px}
+.section-title{margin-top:38px;border-bottom:2px solid var(--accent);padding-bottom:4px}
+.hdrbar{background:#eef1f7;border-radius:6px;padding:10px 14px;margin:12px 0 20px}
+.exp-block{margin:26px 0}
+.exp-block h2{border-bottom:2px solid var(--accent);padding-bottom:6px}
+ul.modellist{columns:2;-webkit-columns:2;list-style:none;padding:0;margin:8px 0}
+ul.modellist li{break-inside:avoid;padding:3px 0;font-size:.9rem;display:flex;align-items:center}
+footer{color:var(--muted);font-size:.78rem;margin-top:50px;border-top:1px solid var(--line);padding-top:10px}
+.top{position:fixed;right:18px;bottom:18px;background:var(--accent);color:#fff;border-radius:20px;
+     padding:8px 14px;font-size:.8rem;text-decoration:none;box-shadow:0 2px 6px rgba(0,0,0,.25)}
+/* 用語集（00_background.html「主要な用語」）。用語ごとに改行し、用語名を強調する段組。 */
+dl.termlist{margin:10px 0 4px}
+dl.termlist dt{font-weight:700;color:var(--accent);margin:14px 0 2px}
+dl.termlist dd{margin:0 0 2px 0;line-height:1.75}
+</style></head><body>
+<div class="crumb">日本教育学会第85回大会（2026）課題研究報告「誰がAIの教育倫理を育てるか」実験資料　／　<a href="../index.html">← 総合目次</a>　／　実験1 教育信念質問紙（7項目）　／　⑤ 2024年実測データ　／　Claude 3.5 Sonnet</div>
+<div class="wrap">
+<a id="top"></a>
+<h1>Claude 3.5 Sonnet（2024年実測データ）</h1>
+<p class="meta">実験1　教育信念質問紙（7項目）　―　2024年参照データ</p>
+<div class="card" style="border:2px solid #b35c00;background:#fff8ef">
+<h2 style="color:#8a4b00">⚠ 本ページは2024年実測データ（参照・取得方法が異なる）</h2>
+<p>本ページは<b>2024年7月22〜23日</b>にChatHub等のブラウザUI経由で収集した、
+日本教育学会第83回大会（2024年8月29日）報告時の実測データである。
+2026年測定（OpenRouter API・独立試行）とは<b>取得時期・取得経路・サンプリング設定が異なる</b>ため、
+数値の直接比較は参考に留めること。応答原文は機械的に整形して原文ママ収録し、内容の解釈・採点は行っていない
+（評点は原文中に明記されている場合のみ機械抽出。未記載の試行は「評点記載なし」と表示する）。</p>
+<p class="meta">出典：山本宏樹（2024）「生成AIによる教育的判断の比較分析」日本教育学会第83回大会（2024年8月29日）
+<a class="tlink" href="../refs/yamamoto2024_report.pdf">［PDFダウンロード］</a></p>
+</div>
+<div class="card">
+<h2>試行一覧（全20件）</h2>
+<table><tr><th>試行番号</th><th>出典ファイル</th><th>子ども中心主義得点</th></tr><tr><td><a class="tlink" href="#t_1">1</a></td><td>1.教育信念/2. Claude Sonnet 3.5(20240720)/1.txt</td><td style="text-align:right">3.429</td></tr><tr><td><a class="tlink" href="#t_2">2</a></td><td>1.教育信念/2. Claude Sonnet 3.5(20240720)/2.txt</td><td style="text-align:right">3.429</td></tr><tr><td><a class="tlink" href="#t_3">3</a></td><td>1.教育信念/2. Claude Sonnet 3.5(20240720)/3.txt</td><td style="text-align:right">3.571</td></tr><tr><td><a class="tlink" href="#t_4">4</a></td><td>1.教育信念/2. Claude Sonnet 3.5(20240720)/4.txt</td><td style="text-align:right">3.429</td></tr><tr><td><a class="tlink" href="#t_5">5</a></td><td>1.教育信念/2. Claude Sonnet 3.5(20240720)/5.txt</td><td style="text-align:right">3.429</td></tr><tr><td><a class="tlink" href="#t_6">6</a></td><td>1.教育信念/2. Claude Sonnet 3.5(20240720)/6.txt</td><td style="text-align:right">3.429</td></tr><tr><td><a class="tlink" href="#t_7">7</a></td><td>1.教育信念/2. Claude Sonnet 3.5(20240720)/7.txt</td><td style="text-align:right">3.429</td></tr><tr><td><a class="tlink" href="#t_8">8</a></td><td>1.教育信念/2. Claude Sonnet 3.5(20240720)/8.txt</td><td style="text-align:right">3.429</td></tr><tr><td><a class="tlink" href="#t_9">9</a></td><td>1.教育信念/2. Claude Sonnet 3.5(20240720)/9.txt</td><td style="text-align:right">3.286</td></tr><tr><td><a class="tlink" href="#t_10">10</a></td><td>1.教育信念/2. Claude Sonnet 3.5(20240720)/10.txt</td><td style="text-align:right">3.429</td></tr><tr><td><a class="tlink" href="#t_11r">11r</a></td><td>1.教育信念/2. Claude Sonnet 3.5(20240720)/11r.txt</td><td style="text-align:right">3.429</td></tr><tr><td><a class="tlink" href="#t_12r">12r</a></td><td>1.教育信念/2. Claude Sonnet 3.5(20240720)/12r.txt</td><td style="text-align:right">3.429</td></tr><tr><td><a class="tlink" href="#t_13r">13r</a></td><td>1.教育信念/2. Claude Sonnet 3.5(20240720)/13r.txt</td><td style="text-align:right">3.286</td></tr><tr><td><a class="tlink" href="#t_14r">14r</a></td><td>1.教育信念/2. Claude Sonnet 3.5(20240720)/14r.txt</td><td style="text-align:right">3.286</td></tr><tr><td><a class="tlink" href="#t_15r">15r</a></td><td>1.教育信念/2. Claude Sonnet 3.5(20240720)/15r.txt</td><td style="text-align:right">3.429</td></tr><tr><td><a class="tlink" href="#t_16r">16r</a></td><td>1.教育信念/2. Claude Sonnet 3.5(20240720)/16r.txt</td><td style="text-align:right">3.286</td></tr><tr><td><a class="tlink" href="#t_17r">17r</a></td><td>1.教育信念/2. Claude Sonnet 3.5(20240720)/17r.txt</td><td style="text-align:right">3.286</td></tr><tr><td><a class="tlink" href="#t_18r">18r</a></td><td>1.教育信念/2. Claude Sonnet 3.5(20240720)/18r.txt</td><td style="text-align:right">3.429</td></tr><tr><td><a class="tlink" href="#t_19r">19r</a></td><td>1.教育信念/2. Claude Sonnet 3.5(20240720)/19r.txt</td><td style="text-align:right">3.286</td></tr><tr><td><a class="tlink" href="#t_20r">20r</a></td><td>1.教育信念/2. Claude Sonnet 3.5(20240720)/20r.txt</td><td style="text-align:right">3.429</td></tr></table>
+</div>
+
+<div class="card" id="t_1">
+<h2>試行 1 　子ども中心主義得点 3.429</h2>
+<div class="meta">出典ファイル：1.教育信念/2. Claude Sonnet 3.5(20240720)/1.txt</div>
+<pre>Q1: 2
+Q2: 1
+Q3: 1
+Q4: 1
+Q5: 3
+Q6: 2
+Q7: 4
+
+回答理由:
+これらの回答は、子どもの自主性と可能性を重視しつつ、適切な指導と支援のバランスを取ることを目指しています。Q1では、子どもの可能性を伸ばすことを重視しながらも、必要な教育も行うべきだと考えます。Q2とQ3では、子どもに失敗や議論の機会を与えることで、実践的な学びを促進します。Q4は自発的な学習を支援することで、学習意欲を高めます。Q5では、子どもが自ら答えを見つける過程を重視しますが、教師の指導も必要です。Q6は、子どもの気持ちを理解しながらも、適切な指導を行うことを重視します。Q7では、子どもの長所を伸ばすことに重点を置き、ポジティブな成長を促します。これらの方針は、子どもの個性と能力を尊重しながら、適切な指導と支援を提供することを目指しています。</pre>
+</div>
+<div class="card" id="t_2">
+<h2>試行 2 　子ども中心主義得点 3.429</h2>
+<div class="meta">出典ファイル：1.教育信念/2. Claude Sonnet 3.5(20240720)/2.txt</div>
+<pre>Q1: 2
+Q2: 1
+Q3: 1
+Q4: 1
+Q5: 3
+Q6: 2
+Q7: 4
+
+回答理由:
+これらの回答は、子どもの自主性と潜在能力を重視しつつ、適切な指導と支援のバランスを取ることの重要性を反映しています。子どもの可能性を引き出し、失敗から学ぶ機会を与えることが大切だと考えます。同時に、基本的な知識や技能の習得、適切な行動規範の理解も必要です。教師は子どもの自発的な学習を促進しつつ、必要に応じて指導を行うべきです。問題行動に対しては、子どもの気持ちを理解しながらも、適切な指導を行うことが重要です。また、子どもの長所を伸ばすことに焦点を当てることで、自信と意欲を育むことができると考えます。</pre>
+</div>
+<div class="card" id="t_3">
+<h2>試行 3 　子ども中心主義得点 3.571</h2>
+<div class="meta">出典ファイル：1.教育信念/2. Claude Sonnet 3.5(20240720)/3.txt</div>
+<pre>1. 4.Bに近い
+2. 1.Aに近い
+3. 2.どちらかといえばAに近い
+4. 1.Aに近い
+5. 3.どちらかといえばBに近い
+6. 2.どちらかといえばAに近い
+7. 4.Bに近い
+
+回答理由：
+Q1: 子どもの持っている可能性を開花させることが、長期的に見て一人前の大人になるための最良の方法だと考えます。個々の才能や興味を尊重し、それを伸ばす支援が重要です。
+
+Q2: 失敗から学ぶことは非常に重要であり、子どもに自らの経験を通じて成長する機会を与えるべきだと考えます。失敗を恐れず挑戦する姿勢を育てることが大切です。
+
+Q3: 子どもたちが自分の考えを発表し、議論する時間を多く取ることで、批判的思考やコミュニケーション能力が育まれると考えます。ただし、基本的な知識や技能の習得も重要なので、バランスが必要です。
+
+Q4: 自発的な学習は子どもの内発的動機を高め、長期的な学習意欲を育てるために重要です。強制的な学習は一時的な成果を上げるかもしれませんが、持続的な学習意欲にはつながりにくいです。
+
+Q5: 子どもが自分で答えや解き方を見つける過程を支援することで、問題解決能力や創造性が育まれると考えます。教師が正しい答えを示すことも必要な場合がありますが、基本的には子どもの自主性を尊重します。
+
+Q6: 問題を起こした子どもの気持ちに寄り添うことで、根本的な問題解決につながると考えます。毅然とした指導も必要な場合がありますが、まずは理解と共感を示すことが重要です。
+
+Q7: 子どもの長所をほめて伸ばすことで、自己肯定感が高まり、さらなる成長が期待できると考えます。短所を直すことも必要ですが、長所を伸ばすことが優先されるべきです。</pre>
+</div>
+<div class="card" id="t_4">
+<h2>試行 4 　子ども中心主義得点 3.429</h2>
+<div class="meta">出典ファイル：1.教育信念/2. Claude Sonnet 3.5(20240720)/4.txt</div>
+<pre>Q1: 2
+Q2: 1
+Q3: 1
+Q4: 1
+Q5: 3
+Q6: 2
+Q7: 4
+
+回答理由:
+これらの回答は、子どもの自主性と可能性を重視しつつ、適切な指導と支援のバランスを取ることが重要だと考えるためです。Q1では、子どもの可能性を尊重しながらも、必要な教育を行うことが大切だと考えます。Q2とQ3では、失敗から学ぶ機会や自己表現の機会を多く設けることが成長につながると考えます。Q4では、自発的な学習を促すことが長期的な学習意欲につながると考えます。Q5では、子ども自身が答えを見つける過程を重視しつつ、必要に応じて教師のサポートも必要だと考えます。Q6では、子どもの気持ちを理解しながらも、適切な指導を行うことが大切だと考えます。Q7では、長所を伸ばすことで自信と能力を高められると考えます。</pre>
+</div>
+<div class="card" id="t_5">
+<h2>試行 5 　子ども中心主義得点 3.429</h2>
+<div class="meta">出典ファイル：1.教育信念/2. Claude Sonnet 3.5(20240720)/5.txt</div>
+<pre>Q1: 2
+Q2: 1
+Q3: 1
+Q4: 1
+Q5: 3
+Q6: 2
+Q7: 4
+
+回答理由:
+これらの回答は、子どもの自主性と可能性を重視しつつ、適切な指導と支援のバランスを取ることを目指しています。Q1では、子どもの可能性を引き出しながらも、必要な指導も行うことが大切だと考えます。Q2とQ3では、失敗を恐れずに挑戦させ、自己表現や議論の機会を多く設けることが重要だと考えます。Q4では、自発的な学習を促すことが効果的だと考えます。Q5では、子ども自身が答えを見つける過程を重視しつつ、適切な指導も必要だと考えます。Q6では、子どもの気持ちに寄り添いながらも、ある程度の毅然とした態度も必要だと考えます。Q7では、子どもの長所を伸ばすことが自信と成長につながると考えます。これらの回答は、子どもの個性と可能性を尊重しつつ、適切な指導と支援を行うことの重要性を反映しています。</pre>
+</div>
+<div class="card" id="t_6">
+<h2>試行 6 　子ども中心主義得点 3.429</h2>
+<div class="meta">出典ファイル：1.教育信念/2. Claude Sonnet 3.5(20240720)/6.txt</div>
+<pre>Q1: 2
+Q2: 1
+Q3: 1
+Q4: 1
+Q5: 3
+Q6: 2
+Q7: 4
+
+回答理由:
+これらの回答は、子どもの自主性と可能性を尊重しつつ、適切な指導と支援のバランスを取ることの重要性を反映しています。子どもの成長には、自発的な学習や経験を通じた学びが重要ですが、同時に必要な知識や技能を身につけるための指導も欠かせません。失敗を恐れずに挑戦する機会を与えながら、適切なサポートを提供することが大切です。また、子どもの個性や長所を伸ばすことに焦点を当てつつ、問題行動に対しては理解と毅然とした態度のバランスを保つことが望ましいと考えます。全体として、子どもの自主性と可能性を尊重しながら、適切な指導と支援を提供するアプローチが効果的だと考えます。</pre>
+</div>
+<div class="card" id="t_7">
+<h2>試行 7 　子ども中心主義得点 3.429</h2>
+<div class="meta">出典ファイル：1.教育信念/2. Claude Sonnet 3.5(20240720)/7.txt</div>
+<pre>Q1: 2
+Q2: 1
+Q3: 1
+Q4: 1
+Q5: 3
+Q6: 2
+Q7: 4
+
+回答理由:
+これらの回答は、子どもの自主性と可能性を重視しつつ、適切な指導と支援のバランスを取ることが重要だと考えるためです。Q1では、子どもの可能性を引き出しながらも、社会で必要なスキルを教えることが大切だと考えます。Q2とQ3では、失敗から学ぶ機会や自己表現の機会を多く与えることが重要だと考えます。Q4では、自発的な学習を促すことが長期的な学習意欲につながると考えます。Q5では、子どもが自ら考える力を養いつつ、必要に応じて教師のサポートも重要だと考えます。Q6では、子どもの気持ちを理解しながらも、適切な指導を行うことが大切だと考えます。Q7では、長所を伸ばすことで自信を持たせ、短所の改善にもつながると考えます。</pre>
+</div>
+<div class="card" id="t_8">
+<h2>試行 8 　子ども中心主義得点 3.429</h2>
+<div class="meta">出典ファイル：1.教育信念/2. Claude Sonnet 3.5(20240720)/8.txt</div>
+<pre>Q1: 2
+Q2: 1
+Q3: 1
+Q4: 1
+Q5: 3
+Q6: 2
+Q7: 4
+
+回答理由:
+これらの回答は、子どもの自主性と可能性を尊重しつつ、適切な指導と支援のバランスを重視しています。Q1では、子どもの可能性を引き出しながらも、必要な教育も行うべきだと考えます。Q2とQ3では、失敗を恐れずに経験を積むこと、そして自分の考えを表現する機会を重視しています。Q4では自発的な学習を支援することが重要だと考えます。Q5では、子ども自身が答えを見つける過程を大切にしつつ、必要に応じて教師のサポートも重要だと考えます。Q6では、子どもの気持ちに寄り添いながらも、適切な指導も必要だと考えます。Q7では、子どもの長所を伸ばすことに重点を置くことが、自信と成長につながると考えます。これらの回答は、子どもの個性と可能性を尊重しながら、適切な指導と支援を提供することの重要性を反映しています。</pre>
+</div>
+<div class="card" id="t_9">
+<h2>試行 9 　子ども中心主義得点 3.286</h2>
+<div class="meta">出典ファイル：1.教育信念/2. Claude Sonnet 3.5(20240720)/9.txt</div>
+<pre>Q1: 2
+Q2: 1
+Q3: 1
+Q4: 1
+Q5: 3
+Q6: 2
+Q7: 3
+
+回答理由:
+Q1-Q7の回答は、子どもの自主性と可能性を尊重しつつ、適切な指導と支援のバランスを取ることを重視しています。子どもの成長には、自由な探索と適切な指導の両方が必要だと考えます。Q2とQ3では、失敗や議論を通じた学びを重視し、Q4では自発的な学習を支援することが重要だと考えます。Q5では、子ども自身が答えを見つける過程を支援しつつ、必要に応じて教師が正しい方向性を示すことが大切だと思います。Q6では、子どもの気持ちに寄り添いつつも、適切な指導を行うことが重要です。Q7では、長所を伸ばすことを重視しつつ、短所にも適切に対応することが必要だと考えます。全体として、子どもの個性と可能性を尊重しながら、適切な指導と支援を行うことが重要だと考えます。</pre>
+</div>
+<div class="card" id="t_10">
+<h2>試行 10 　子ども中心主義得点 3.429</h2>
+<div class="meta">出典ファイル：1.教育信念/2. Claude Sonnet 3.5(20240720)/10.txt</div>
+<pre>Q1: 2
+Q2: 1
+Q3: 1
+Q4: 1
+Q5: 3
+Q6: 2
+Q7: 4
+
+回答理由:
+Q1では、子どもの可能性を重視しつつも、社会で必要なスキルを教えることも重要だと考えます。Q2とQ3は、経験を通じた学びと自主性を重視する立場を選びました。Q4も同様に、自発的な学習を支援することが長期的な成長につながると考えます。Q5では、子ども自身で考える機会を与えつつ、必要に応じて教師のサポートも重要だと判断しました。Q6は、子どもの気持ちを理解しながらも、適切な指導も必要だと考えます。Q7では、長所を伸ばすことで自信と意欲を高める approach が効果的だと考えました。全体として、子どもの主体性を尊重しながら、適切な指導と支援のバランスを取ることが重要だと考えます。</pre>
+</div>
+<div class="card" id="t_11r">
+<h2>試行 11r 　子ども中心主義得点 3.429</h2>
+<div class="meta">出典ファイル：1.教育信念/2. Claude Sonnet 3.5(20240720)/11r.txt</div>
+<pre>Q1: 1
+Q2: 3
+Q3: 3
+Q4: 4
+Q5: 2
+Q6: 3
+Q7: 1
+
+回答理由:
+これらの回答は、子どもの自主性と可能性を重視しつつ、適切な指導と支援のバランスを取ることを目指しています。Q1とQ7では子どもの潜在能力と長所を伸ばすことを重視し、Q2とQ3では子どもの自主性を尊重しながらも適度な指導を行うことを選択しています。Q4では自発的な学習を強く支持し、Q5ではやや子どもの自主的な問題解決を支援する立場を取っています。Q6では子どもの感情に配慮しつつも、ある程度の毅然とした指導も必要と考えています。全体として、子どもの個性と自主性を尊重しながら、適切な指導と支援を提供することが重要だと考えています。</pre>
+</div>
+<div class="card" id="t_12r">
+<h2>試行 12r 　子ども中心主義得点 3.429</h2>
+<div class="meta">出典ファイル：1.教育信念/2. Claude Sonnet 3.5(20240720)/12r.txt</div>
+<pre>Q1: 1
+Q2: 3
+Q3: 3
+Q4: 4
+Q5: 2
+Q6: 3
+Q7: 1
+
+回答理由:
+これらの回答は、子どもの自主性と可能性を重視し、同時に適切な指導と支援のバランスを取ろうとする考え方を反映しています。Q1とQ7では、子どもの潜在能力と長所を伸ばすことに重点を置いています。Q2とQ3では、失敗から学ぶ機会や議論する時間を与えることの重要性を認識しつつ、適度な指導も必要だと考えています。Q4では、自発的な学習を強く支持しています。Q5では、子どもが自ら答えを見つける過程を重視しながらも、教師のガイダンスも必要だと考えています。Q6では、問題行動に対して子どもの気持ちを理解しつつ、適切な指導も行う必要があると考えています。全体として、これらの回答は子どもの成長と学びを促進する柔軟かつバランスの取れたアプローチを示しています。</pre>
+</div>
+<div class="card" id="t_13r">
+<h2>試行 13r 　子ども中心主義得点 3.286</h2>
+<div class="meta">出典ファイル：1.教育信念/2. Claude Sonnet 3.5(20240720)/13r.txt</div>
+<pre>Q1: 2
+Q2: 3
+Q3: 3
+Q4: 4
+Q5: 2
+Q6: 3
+Q7: 1
+
+回答理由:
+これらの回答は、子どもの自主性と可能性を尊重しつつ、適切な指導と支援のバランスを取ることを重視しています。Q1では子どもの可能性を重視しつつ、必要な指導も行うことを考慮しています。Q2とQ3では、子どもの自主性を尊重しながらも、適度な指導の必要性を認識しています。Q4では自発的な学習を強く支持し、Q5では子どもの自主的な問題解決能力を育てつつ、必要に応じて教師のサポートも行うことを示唆しています。Q6では子どもの感情を考慮しつつ、適切な指導の必要性を認識し、Q7では子どもの長所を伸ばすことに重点を置いています。これらの回答は、子どもの成長と学習において、自主性と指導のバランスを取ることの重要性を反映しています。</pre>
+</div>
+<div class="card" id="t_14r">
+<h2>試行 14r 　子ども中心主義得点 3.286</h2>
+<div class="meta">出典ファイル：1.教育信念/2. Claude Sonnet 3.5(20240720)/14r.txt</div>
+<pre>Q1: 2
+Q2: 3
+Q3: 3
+Q4: 4
+Q5: 2
+Q6: 3
+Q7: 1
+
+回答理由:
+これらの回答は、子どもの自主性と可能性を重視しつつ、適切な指導と支援のバランスを取ることが重要だと考えたためです。Q1では子どもの可能性を重視しながらも、ある程度の指導が必要だと考えました。Q2とQ3では、子どもの自主性を尊重しつつ、適度な指導も必要だと判断しました。Q4は完全に自発的な学習を支援する立場を取りました。Q5では、子どもの自主的な問題解決を促しつつ、必要に応じて教師のサポートも重要だと考えました。Q6は子どもの気持ちに寄り添いながらも、ある程度の毅然とした態度も必要だと判断しました。Q7では、子どもの長所を伸ばすことに重点を置くべきだと考えました。これらの回答は、子どもの個性と可能性を尊重しながら、適切な指導と支援を提供することが重要だという考えに基づいています。</pre>
+</div>
+<div class="card" id="t_15r">
+<h2>試行 15r 　子ども中心主義得点 3.429</h2>
+<div class="meta">出典ファイル：1.教育信念/2. Claude Sonnet 3.5(20240720)/15r.txt</div>
+<pre>Q1: 1
+Q2: 3
+Q3: 3
+Q4: 4
+Q5: 2
+Q6: 3
+Q7: 1
+
+回答理由:
+これらの回答は、子どもの自主性と可能性を重視しつつ、適切な指導と支援のバランスを取ろうとする姿勢を反映しています。Q1とQ7では子どもの潜在能力や長所を伸ばすことを重視し、Q2とQ3では失敗や議論を通じた学びの機会を大切にしています。Q4では自発的な学習を強く支持し、Q5ではやや教師の指導を重視しつつも子ども自身の発見を促すアプローチを取っています。Q6では子どもの気持ちに寄り添いながらも、ある程度の毅然とした態度も必要と考えています。全体として、子どもの自主性を尊重しながら、適切な指導と支援を提供するバランスの取れたアプローチを目指しています。</pre>
+</div>
+<div class="card" id="t_16r">
+<h2>試行 16r 　子ども中心主義得点 3.286</h2>
+<div class="meta">出典ファイル：1.教育信念/2. Claude Sonnet 3.5(20240720)/16r.txt</div>
+<pre>Q1: 2
+Q2: 3
+Q3: 3
+Q4: 4
+Q5: 2
+Q6: 3
+Q7: 1
+
+回答理由:
+これらの回答は、子どもの自主性と可能性を重視しつつ、適切な指導と支援のバランスを取ることの重要性を反映しています。子どもの潜在能力を引き出すことを重視しながらも、必要な知識やスキルを身につけさせることも大切です。失敗を恐れずに挑戦する機会を与えつつ、適切なガイダンスも提供します。自発的な学習と創造的な思考を促進しながら、基本的な知識や技能の習得も確保します。問題行動に対しては、子どもの感情を理解しつつ、適切な指導を行います。そして、子どもの長所を伸ばすことに重点を置きながら、改善が必要な部分にも適切に対応します。このアプローチは、子どもの全人的な成長と発達を支援することを目指しています。</pre>
+</div>
+<div class="card" id="t_17r">
+<h2>試行 17r 　子ども中心主義得点 3.286</h2>
+<div class="meta">出典ファイル：1.教育信念/2. Claude Sonnet 3.5(20240720)/17r.txt</div>
+<pre>Q1. 2
+Q2. 3
+Q3. 3
+Q4. 4
+Q5. 2
+Q6. 3
+Q7. 1
+
+回答理由:
+これらの回答は、子どもの自主性と可能性を重視しながらも、適切な指導と支援のバランスを取ることの重要性を反映しています。子どもの潜在能力を引き出すことを重視しつつ（Q1,Q7）、適度な失敗経験と自発的な学習を通じて成長を促すこと（Q2,Q4）が大切だと考えます。また、知識・技能の習得と思考力・表現力のバランス（Q3）、自ら考える力の育成（Q5）も重要です。問題行動に対しては、子どもの気持ちを理解しながらも、ある程度の毅然とした態度で指導することが必要だと考えます（Q6）。これらのアプローチにより、子どもたちの全人的な成長と自立を支援できると考えます。</pre>
+</div>
+<div class="card" id="t_18r">
+<h2>試行 18r 　子ども中心主義得点 3.429</h2>
+<div class="meta">出典ファイル：1.教育信念/2. Claude Sonnet 3.5(20240720)/18r.txt</div>
+<pre>Q1: 1
+Q2: 3
+Q3: 3
+Q4: 4
+Q5: 2
+Q6: 3
+Q7: 1
+
+回答理由:
+Q1では子どもの潜在能力を引き出すことが重要だと考えます。Q2は経験から学ぶ機会を与えることが大切ですが、安全面への配慮も必要です。Q3とQ4は、知識の習得と自主性のバランスが重要で、子どもの興味を引き出しながら学ぶことが効果的です。Q5は基本的な解き方を示しつつ、子ども自身で考える機会も設けるべきです。Q6は問題の性質によって対応を変えるべきですが、子どもの気持ちを理解することが重要です。Q7は長所を伸ばすことで自信をつけ、短所も自然と改善されることが多いと考えます。全体として、子どもの個性と自主性を尊重しながら、適切な指導と支援を行うことが大切だと考えます。</pre>
+</div>
+<div class="card" id="t_19r">
+<h2>試行 19r 　子ども中心主義得点 3.286</h2>
+<div class="meta">出典ファイル：1.教育信念/2. Claude Sonnet 3.5(20240720)/19r.txt</div>
+<pre>Q1: 2
+Q2: 3
+Q3: 3
+Q4: 4
+Q5: 2
+Q6: 3
+Q7: 1
+
+回答理由:
+これらの回答は、子どもの自主性と可能性を重視しつつ、適切な指導と支援のバランスを取ることを目指しています。Q1では子どもの可能性を重視しながらも、ある程度の指導の必要性を認識しています。Q2とQ3では、子どもの自主的な活動や思考を大切にしつつ、適度な指導も必要だと考えています。Q4では自発的な学習を強く支持し、Q5では子どもの自己発見を促しながら、必要に応じて教師のサポートも重要と考えています。Q6では子どもの気持ちを理解しつつ、適切な指導の必要性も認識しています。Q7では、子どもの長所を伸ばすことに重点を置いています。これらの回答は、子どもの個性と自主性を尊重しながら、適切な指導と支援を提供することの重要性を反映しています。</pre>
+</div>
+<div class="card" id="t_20r">
+<h2>試行 20r 　子ども中心主義得点 3.429</h2>
+<div class="meta">出典ファイル：1.教育信念/2. Claude Sonnet 3.5(20240720)/20r.txt</div>
+<pre>Q1: 1
+Q2: 3
+Q3: 3
+Q4: 4
+Q5: 2
+Q6: 3
+Q7: 1
+
+回答理由:
+これらの回答は、子どもの自主性と可能性を重視しつつ、適切な指導と支援のバランスを取ることを目指しています。Q1とQ7では子どもの潜在能力と長所を伸ばすことを重視し、Q2とQ3では適度な失敗の機会と議論の時間を設けることで学びを深めることを重視しています。Q4では自発的な学習を強く支持し、Q5では子ども自身で答えを見つける過程を大切にしつつ、必要に応じて教師のサポートも行うことを示唆しています。Q6では子どもの気持ちに寄り添いながらも、適切な指導を行うことの重要性を認識しています。これらの回答は、子どもの成長と学びを最大限に促進するための柔軟かつバランスの取れたアプローチを反映しています。</pre>
+</div>
+
+<footer>本ページは data/ 内のCSV・JSONLから機械的に生成した閲覧用アーカイブです（gen_html_browser.py）。応答原文は原文ママ収録。</footer>
+</div>
+<a class="top" href="#top">▲先頭へ</a>
+</body></html>

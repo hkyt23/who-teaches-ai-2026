@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>実験1｜実験の説明</title><style>
+:root{--fg:#222;--bg:#fff;--muted:#666;--line:#e2e2e2;--accent:#1f3555;}
+*{box-sizing:border-box}
+body{font-family:-apple-system,"Hiragino Sans","Yu Gothic",sans-serif;color:var(--fg);
+     background:var(--bg);margin:0;line-height:1.65}
+.wrap{max-width:980px;margin:0 auto;padding:24px 28px 80px}
+h1{font-size:1.5rem;margin:0 0 6px}
+/* h1直下の副題行（本改修）。長いタイトルの折り返しで記号だけが孤立して2行目に落ちるのを防ぐため、
+   主題と副題をh1/pに分離する。同系色（h1と同じ濃色系）だがh1より小さいサイズにする。 */
+p.h1sub{font-size:.95rem;color:#3a4a63;margin:0 0 10px;font-weight:500}
+h2{font-size:1.05rem;margin:0 0 4px;display:flex;align-items:center;flex-wrap:wrap}
+/* 節見出し（本文の区切り）。図キャプション（figure figcaption、小さいグレー中央寄せ）とは
+   明確に区別できるよう、上マージンを広く取り、太字＋左太罫線＋淡い背景を付す。 */
+h3{font-size:1.02rem;font-weight:700;margin:34px 0 10px;color:var(--accent);
+   border-left:5px solid var(--accent);padding:4px 0 4px 10px;
+   background:linear-gradient(to right,rgba(31,53,85,.07),rgba(31,53,85,0) 70%)}
+.card p{margin:8px 0;line-height:1.75}
+.card p.lead{margin:6px 0 16px}
+.card p.note{color:var(--muted);font-size:.85rem;margin-top:18px;padding-top:10px;border-top:1px dashed var(--line)}
+a.mlink{color:var(--accent);text-decoration:none;border-bottom:1px dotted var(--accent)}
+a.mlink:hover{background:#eef1f7}
+.meta{color:var(--muted);font-size:.88rem;margin:2px 0}
+.crumb{background:var(--accent);color:#fff;padding:10px 28px;font-size:.85rem}
+.crumb a{color:#cfe0ff;text-decoration:none}
+.crumb a:hover{text-decoration:underline}
+/* グラフ画像の図（本改修）。直後の見出し（h3）と混同されないよう、キャプションは小さめグレー・中央寄せにする。 */
+figure.fig{margin:16px 0 26px;text-align:center}
+figure.fig img{display:block;margin:0 auto;max-width:100%;border:1px solid var(--line);border-radius:4px}
+figure.fig figcaption{color:var(--muted);font-size:.82rem;margin-top:8px;line-height:1.5}
+figure.fig .fig-itemlink{display:block;margin-top:4px;font-size:.8rem}
+table{border-collapse:collapse;width:100%;margin:14px 0;font-size:.86rem}
+th,td{border:1px solid var(--line);padding:5px 8px;text-align:left;vertical-align:top}
+th{background:#f4f5f7;position:sticky;top:0}
+tr:nth-child(even) td{background:#fafafa}
+a.tlink{color:var(--accent);text-decoration:none}
+a.tlink:hover{text-decoration:underline}
+.badge{display:inline-block;width:24px;height:24px;line-height:24px;border-radius:50%;
+       color:#fff;font-size:.7rem;font-weight:700;text-align:center;margin-right:8px;
+       vertical-align:middle;flex:none}
+.badge.sm{width:19px;height:19px;line-height:19px;font-size:.62rem;margin-right:6px}
+.aaii-tag{color:var(--muted);font-size:.78rem;font-weight:600;margin-left:8px}
+.linkrow{margin:10px 0 20px;display:flex;gap:12px;flex-wrap:wrap}
+/* リンクボタン共通クラス（本改修）。上部2ボタン（収録モデル一覧と解説／性能とコスト）の書式
+   （font-family/size/weight/色）に、①②③ボタン・④summary・折りたたみsummary等すべてを統一する。
+   <a>にも<summary>にも同一クラスを付与して使う。 */
+.navbtn{display:inline-block;background:#eef1f7;border-radius:6px;padding:8px 14px;
+        text-decoration:none;color:var(--accent);
+        font-family:-apple-system,"Hiragino Sans","Yu Gothic",sans-serif;
+        font-size:.86rem;font-weight:600;line-height:1.3;cursor:pointer;list-style:none;border:none}
+.navbtn:hover{background:#e2e7f2}
+summary.navbtn::-webkit-details-marker{display:none}
+details.mdl{margin:10px 0 4px}
+details.mdl .modellist{margin-top:10px}
+.status-badge{display:inline-block;padding:1px 8px;border-radius:9px;font-size:.76rem;color:#fff;font-weight:600}
+.status-badge.ok{background:#1a7f37}
+.status-badge.warn{background:#b35c00}
+.status-badge.err{background:#c62828}
+.card{border:1px solid var(--line);border-radius:8px;padding:14px 18px;margin:18px 0;background:#fdfdfd}
+.card h2{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.score{font-weight:700;color:#123}
+pre{white-space:pre-wrap;word-break:break-word;background:#f8f9fb;border:1px solid var(--line);
+    border-radius:6px;padding:10px 12px;font-size:.82rem;font-family:ui-monospace,Menlo,Consolas,monospace}
+.errbox{white-space:pre-wrap;word-break:break-word;background:#fff4f4;border:1px solid #f3c1c1;
+    border-radius:6px;padding:10px 12px;font-size:.85rem;color:#8a1f1f}
+.itemtbl td,.itemtbl th{font-size:.78rem;padding:3px 6px}
+.section-title{margin-top:38px;border-bottom:2px solid var(--accent);padding-bottom:4px}
+.hdrbar{background:#eef1f7;border-radius:6px;padding:10px 14px;margin:12px 0 20px}
+.exp-block{margin:26px 0}
+.exp-block h2{border-bottom:2px solid var(--accent);padding-bottom:6px}
+ul.modellist{columns:2;-webkit-columns:2;list-style:none;padding:0;margin:8px 0}
+ul.modellist li{break-inside:avoid;padding:3px 0;font-size:.9rem;display:flex;align-items:center}
+footer{color:var(--muted);font-size:.78rem;margin-top:50px;border-top:1px solid var(--line);padding-top:10px}
+.top{position:fixed;right:18px;bottom:18px;background:var(--accent);color:#fff;border-radius:20px;
+     padding:8px 14px;font-size:.8rem;text-decoration:none;box-shadow:0 2px 6px rgba(0,0,0,.25)}
+/* 用語集（00_background.html「主要な用語」）。用語ごとに改行し、用語名を強調する段組。 */
+dl.termlist{margin:10px 0 4px}
+dl.termlist dt{font-weight:700;color:var(--accent);margin:14px 0 2px}
+dl.termlist dd{margin:0 0 2px 0;line-height:1.75}
+</style></head><body>
+<div class="crumb">日本教育学会第85回大会（2026）課題研究報告「誰がAIの教育倫理を育てるか」実験資料　／　<a href="../index.html">← 総合目次</a>　／　実験1 教育信念質問紙　／　① 実験の説明</div>
+<div class="wrap">
+<a id="top"></a>
+<h1>実験1｜実験の説明</h1>
+<div class="linkrow"><a class="navbtn" href="00_about.html" style="background:var(--accent);color:#fff">① 実験の説明</a><a class="navbtn" href="01_prompt.html">② 出題プロンプト</a><a class="navbtn" href="02_results.html">③ 結果概要（グラフと解説）</a></div>
+<div class="card">
+<h2>実験の説明</h2>
+<p>教師の教育信念調査（山本2018。2014-15年実施、教師n=919）と同一の7項目を提示し、対照的な考え方A・Bのどちらに近いかを4件法で選ばせ、理由の記述を求めた。プロンプトは2023年報告（第82回大会）と同一の文言である。例えばQ1は「大人になるために必要なことを教えて訓練するのが大事か、それとも子どもの可能性が開花するのを支援するのが大事か」を問う項目である。回答は子ども中心主義の極に近いほど高くなるよう1〜4点に換算し、7項目平均を子ども中心主義得点とする。教師調査（山本2018）の平均は3.01で、4件法の目盛上は「どちらかといえば子ども中心」寄りに位置する。</p><p>本実験の主分析は、2026年8月20日実施の提示極性ランダム化条件（各試行で7項目それぞれを独立に50%の確率でA/B反転して提示し、反転を考慮して再コード。全36系列×各50試行）である。一方、以下の「④ 全出力結果（モデル別）」に収録している全試行の応答ログは、2026年7月実施の固定極性測定（参照・約50試行）のものである点に注意されたい（両測定の対応関係と反転効果の検定は「③ 結果概要」の「固定極性測定（参照）との比較」を参照）。ランダム化条件の生データ（試行別の反転パターン・応答本文）は data/belief_rev_raw.jsonl に、集計用CSVは data/belief_rev_trials.csv・data/belief_rev_responses.csv に保存されている。</p>
+</div>
+<div class="card">
+<h2>試行の状態（3分類）と手続きの留意点</h2>
+<p style='margin-top:14px'><b>■ 測定手続きの共通事項</b></p>
+<p style='margin:2px 0 2px .3em'>・全試行はOpenRouter API経由の独立試行（会話履歴なし・キャッシュ回避）。前の回答への引きずられは生じない。</p>
+<p style='margin:2px 0 2px .3em'>・生成温度等のパラメータはAPI既定値を使用（モデル間で厳密には統制していない）。応答を返す配信プロバイダはOpenRouterのルーティングに依存する（配信比較系列を除く）。</p>
+<p style='margin:2px 0 2px .3em'>・試行番号は通し番号。収集は有効試行数が目標数に達するまで追加する方式のため、途中にエラー・解析不能の試行番号が挟まる。</p>
+<p style='margin-top:14px'><b>■ 試行の状態（本報告集の各ページに明記）</b></p>
+<p style='margin:2px 0 2px .3em'>・有効：評点等の自動抽出に成功し、集計に用いた試行。</p>
+<p style='margin:2px 0 2px .3em'>・解析不能：応答は得られたが指示した形式での評点抽出に失敗した試行。集計対象外だが応答原文を本報告集に収録（内容自体が知見となる場合がある。例：中立宣言による回答拒否、配信品質劣化による出力崩れ）。</p>
+<p style='margin:2px 0 2px .3em'>・エラー：ネットワーク・レート制限・地域制限等でAPI応答自体が得られなかった試行。集計対象外で、エラー内容を収録。技術的失敗であり当該モデルの判断を示すものではない。</p>
+<p style='margin-top:14px'><b>■ 本報告集を読む際の留意点</b></p>
+<p style='margin:2px 0 2px .3em'>・応答原文は原文ママ（Markdown記号等を含む）。ただし表示フォントの制約により、絵文字や日中韓以外の文字の一部が欠落することがある。正確な原文はdata/内のJSONLファイルを参照。</p>
+<p style='margin:2px 0 2px .3em'>・評点にはモデルごとの採点癖（5の倍数への丸め、特定値への固着等）が混入しうる。個別評点の解釈は分布・信頼区間（data/ci_summary.csv）とあわせて行うこと。</p>
+<p style='margin:2px 0 2px .3em'>・自動抽出には多段の検証（採点基準の復唱の誤検出防止等）を施しているが、完全ではない。抽出値と原文の対応は各ページで照合可能。</p><p style='margin-top:14px'><b>■ 本実験固有の留意点</b></p><p style='margin:2px 0 2px .3em'>・得点化：各項目の回答を、子ども中心主義の極に近いほど高くなるよう1〜4点に換算する（子ども中心主義得点）。7項目平均で教師調査の平均は3.01。</p>
+<p style='margin:2px 0 2px .3em'>・逆転項目：安易な回答傾向を防ぐため、Q1・Q5・Q7はA/Bの向きを逆転させてある（例：Q1は子ども中心の極がB）。換算時に自動処理する。各試行ページの表では「選択」がモデルの回答した番号（1〜4）、「得点」が換算後の子ども中心主義得点。</p>
+<p style='margin:2px 0 2px .3em'>・不整合の検出：選択した数値の側と理由文の主張の側が食い違う場合を「不整合」として記録する（該当項目に【不整合】と表示）。不整合の数値も集計には含め、除外した場合の平均も別途算出している。</p>
+<p style='margin:2px 0 2px .3em'>・7項目の内容と極の向きは各試行ページの表に記載（A⇔Bの表記は「Aの立場 ⇔ Bの立場」）。</p>
+</div>
+<p class="meta">▶ 出題プロンプトの全文は「② 出題プロンプト」、結果の概観は「③ 結果概要」を参照。
+以降、④の各モデルページで全試行の応答を紹介する。</p>
+
+<footer>本ページは data/ 内のCSV・JSONLから機械的に生成した閲覧用アーカイブです（gen_html_browser.py）。応答原文は原文ママ収録。</footer>
+</div>
+<a class="top" href="#top">▲先頭へ</a>
+</body></html>

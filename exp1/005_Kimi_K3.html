@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>実験1 教育信念質問紙｜Kimi K3</title><style>
+:root{--fg:#222;--bg:#fff;--muted:#666;--line:#e2e2e2;--accent:#1f3555;}
+*{box-sizing:border-box}
+body{font-family:-apple-system,"Hiragino Sans","Yu Gothic",sans-serif;color:var(--fg);
+     background:var(--bg);margin:0;line-height:1.65}
+.wrap{max-width:980px;margin:0 auto;padding:24px 28px 80px}
+h1{font-size:1.5rem;margin:0 0 6px}
+/* h1直下の副題行（本改修）。長いタイトルの折り返しで記号だけが孤立して2行目に落ちるのを防ぐため、
+   主題と副題をh1/pに分離する。同系色（h1と同じ濃色系）だがh1より小さいサイズにする。 */
+p.h1sub{font-size:.95rem;color:#3a4a63;margin:0 0 10px;font-weight:500}
+h2{font-size:1.05rem;margin:0 0 4px;display:flex;align-items:center;flex-wrap:wrap}
+/* 節見出し（本文の区切り）。図キャプション（figure figcaption、小さいグレー中央寄せ）とは
+   明確に区別できるよう、上マージンを広く取り、太字＋左太罫線＋淡い背景を付す。 */
+h3{font-size:1.02rem;font-weight:700;margin:34px 0 10px;color:var(--accent);
+   border-left:5px solid var(--accent);padding:4px 0 4px 10px;
+   background:linear-gradient(to right,rgba(31,53,85,.07),rgba(31,53,85,0) 70%)}
+.card p{margin:8px 0;line-height:1.75}
+.card p.lead{margin:6px 0 16px}
+.card p.note{color:var(--muted);font-size:.85rem;margin-top:18px;padding-top:10px;border-top:1px dashed var(--line)}
+a.mlink{color:var(--accent);text-decoration:none;border-bottom:1px dotted var(--accent)}
+a.mlink:hover{background:#eef1f7}
+.meta{color:var(--muted);font-size:.88rem;margin:2px 0}
+.crumb{background:var(--accent);color:#fff;padding:10px 28px;font-size:.85rem}
+.crumb a{color:#cfe0ff;text-decoration:none}
+.crumb a:hover{text-decoration:underline}
+/* グラフ画像の図（本改修）。直後の見出し（h3）と混同されないよう、キャプションは小さめグレー・中央寄せにする。 */
+figure.fig{margin:16px 0 26px;text-align:center}
+figure.fig img{display:block;margin:0 auto;max-width:100%;border:1px solid var(--line);border-radius:4px}
+figure.fig figcaption{color:var(--muted);font-size:.82rem;margin-top:8px;line-height:1.5}
+figure.fig .fig-itemlink{display:block;margin-top:4px;font-size:.8rem}
+table{border-collapse:collapse;width:100%;margin:14px 0;font-size:.86rem}
+th,td{border:1px solid var(--line);padding:5px 8px;text-align:left;vertical-align:top}
+th{background:#f4f5f7;position:sticky;top:0}
+tr:nth-child(even) td{background:#fafafa}
+a.tlink{color:var(--accent);text-decoration:none}
+a.tlink:hover{text-decoration:underline}
+.badge{display:inline-block;width:24px;height:24px;line-height:24px;border-radius:50%;
+       color:#fff;font-size:.7rem;font-weight:700;text-align:center;margin-right:8px;
+       vertical-align:middle;flex:none}
+.badge.sm{width:19px;height:19px;line-height:19px;font-size:.62rem;margin-right:6px}
+.aaii-tag{color:var(--muted);font-size:.78rem;font-weight:600;margin-left:8px}
+.linkrow{margin:10px 0 20px;display:flex;gap:12px;flex-wrap:wrap}
+/* リンクボタン共通クラス（本改修）。上部2ボタン（収録モデル一覧と解説／性能とコスト）の書式
+   （font-family/size/weight/色）に、①②③ボタン・④summary・折りたたみsummary等すべてを統一する。
+   <a>にも<summary>にも同一クラスを付与して使う。 */
+.navbtn{display:inline-block;background:#eef1f7;border-radius:6px;padding:8px 14px;
+        text-decoration:none;color:var(--accent);
+        font-family:-apple-system,"Hiragino Sans","Yu Gothic",sans-serif;
+        font-size:.86rem;font-weight:600;line-height:1.3;cursor:pointer;list-style:none;border:none}
+.navbtn:hover{background:#e2e7f2}
+summary.navbtn::-webkit-details-marker{display:none}
+details.mdl{margin:10px 0 4px}
+details.mdl .modellist{margin-top:10px}
+.status-badge{display:inline-block;padding:1px 8px;border-radius:9px;font-size:.76rem;color:#fff;font-weight:600}
+.status-badge.ok{background:#1a7f37}
+.status-badge.warn{background:#b35c00}
+.status-badge.err{background:#c62828}
+.card{border:1px solid var(--line);border-radius:8px;padding:14px 18px;margin:18px 0;background:#fdfdfd}
+.card h2{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.score{font-weight:700;color:#123}
+pre{white-space:pre-wrap;word-break:break-word;background:#f8f9fb;border:1px solid var(--line);
+    border-radius:6px;padding:10px 12px;font-size:.82rem;font-family:ui-monospace,Menlo,Consolas,monospace}
+.errbox{white-space:pre-wrap;word-break:break-word;background:#fff4f4;border:1px solid #f3c1c1;
+    border-radius:6px;padding:10px 12px;font-size:.85rem;color:#8a1f1f}
+.itemtbl td,.itemtbl th{font-size:.78rem;padding:3px 6px}
+.section-title{margin-top:38px;border-bottom:2px solid var(--accent);padding-bottom:4px}
+.hdrbar{background:#eef1f7;border-radius:6px;padding:10px 14px;margin:12px 0 20px}
+.exp-block{margin:26px 0}
+.exp-block h2{border-bottom:2px solid var(--accent);padding-bottom:6px}
+ul.modellist{columns:2;-webkit-columns:2;list-style:none;padding:0;margin:8px 0}
+ul.modellist li{break-inside:avoid;padding:3px 0;font-size:.9rem;display:flex;align-items:center}
+footer{color:var(--muted);font-size:.78rem;margin-top:50px;border-top:1px solid var(--line);padding-top:10px}
+.top{position:fixed;right:18px;bottom:18px;background:var(--accent);color:#fff;border-radius:20px;
+     padding:8px 14px;font-size:.8rem;text-decoration:none;box-shadow:0 2px 6px rgba(0,0,0,.25)}
+/* 用語集（00_background.html「主要な用語」）。用語ごとに改行し、用語名を強調する段組。 */
+dl.termlist{margin:10px 0 4px}
+dl.termlist dt{font-weight:700;color:var(--accent);margin:14px 0 2px}
+dl.termlist dd{margin:0 0 2px 0;line-height:1.75}
+</style></head><body>
+<div class="crumb">日本教育学会第85回大会（2026）課題研究報告「誰がAIの教育倫理を育てるか」実験資料　／　<a href="../index.html">← 総合目次</a>　／　実験1 教育信念質問紙　／　Kimi K3</div>
+<div class="wrap">
+<a id="top"></a>
+<h1><span class="badge" style="background:#16B8A6" title="Moonshot AI">K</span><span>Kimi K3</span><span class="aaii-tag">AAII 59.7</span></h1>
+<p class="meta">実験1 教育信念質問紙</p>
+<p class="meta">▶ <a class="tlink" href="00_about.html">① 実験の説明</a>
+<a class="tlink" href="01_prompt.html">② 出題プロンプト</a>
+<a class="tlink" href="02_results.html">③ 結果概要</a></p>
+<div class="hdrbar">実測モデルID：moonshotai/kimi-k3　／　収録試行：全50（有効50・対象外0）</div>
+<h2>試行一覧</h2>
+<table><tr><th>番号</th><th>状態</th><th>7項目平均</th></tr><tr><td><a class="tlink" href="#t001">1</a></td><td><span class="status-badge ok">有効</span></td><td>3.43</td></tr><tr><td><a class="tlink" href="#t002">2</a></td><td><span class="status-badge ok">有効</span></td><td>3.43</td></tr><tr><td><a class="tlink" href="#t003">3</a></td><td><span class="status-badge ok">有効</span></td><td>3.43</td></tr><tr><td><a class="tlink" href="#t004">4</a></td><td><span class="status-badge ok">有効</span></td><td>3.29</td></tr><tr><td><a class="tlink" href="#t005">5</a></td><td><span class="status-badge ok">有効</span></td><td>3.29</td></tr><tr><td><a class="tlink" href="#t006">6</a></td><td><span class="status-badge ok">有効</span></td><td>3.14</td></tr><tr><td><a class="tlink" href="#t013">13</a></td><td><span class="status-badge ok">有効</span></td><td>3.57</td></tr><tr><td><a class="tlink" href="#t014">14</a></td><td><span class="status-badge ok">有効</span></td><td>3.29</td></tr><tr><td><a class="tlink" href="#t015">15</a></td><td><span class="status-badge ok">有効</span></td><td>3.00</td></tr><tr><td><a class="tlink" href="#t016">16</a></td><td><span class="status-badge ok">有効</span></td><td>3.14</td></tr><tr><td><a class="tlink" href="#t017">17</a></td><td><span class="status-badge ok">有効</span></td><td>3.14</td></tr><tr><td><a class="tlink" href="#t018">18</a></td><td><span class="status-badge ok">有効</span></td><td>3.14</td></tr><tr><td><a class="tlink" href="#t019">19</a></td><td><span class="status-badge ok">有効</span></td><td>3.57</td></tr><tr><td><a class="tlink" href="#t020">20</a></td><td><span class="status-badge ok">有効</span></td><td>3.14</td></tr><tr><td><a class="tlink" href="#t021">21</a></td><td><span class="status-badge ok">有効</span></td><td>3.14</td></tr><tr><td><a class="tlink" href="#t022">22</a></td><td><span class="status-badge ok">有効</span></td><td>3.29</td></tr><tr><td><a class="tlink" href="#t023">23</a></td><td><span class="status-badge ok">有効</span></td><td>3.14</td></tr><tr><td><a class="tlink" href="#t024">24</a></td><td><span class="status-badge ok">有効</span></td><td>3.29</td></tr><tr><td><a class="tlink" href="#t025">25</a></td><td><span class="status-badge ok">有効</span></td><td>3.00</td></tr><tr><td><a class="tlink" href="#t026">26</a></td><td><span class="status-badge ok">有効</span></td><td>3.14</td></tr><tr><td><a class="tlink" href="#t027">27</a></td><td><span class="status-badge ok">有効</span></td><td>3.14</td></tr><tr><td><a class="tlink" href="#t028">28</a></td><td><span class="status-badge ok">有効</span></td><td>3.14</td></tr><tr><td><a class="tlink" href="#t029">29</a></td><td><span class="status-badge ok">有効</span></td><td>3.29</td></tr><tr><td><a class="tlink" href="#t030">30</a></td><td><span class="status-badge ok">有効</span></td><td>3.29</td></tr><tr><td><a class="tlink" href="#t031">31</a></td><td><span class="status-badge ok">有効</span></td><td>3.29</td></tr><tr><td><a class="tlink" href="#t032">32</a></td><td><span class="status-badge ok">有効</span></td><td>3.14</td></tr><tr><td><a class="tlink" href="#t033">33</a></td><td><span class="status-badge ok">有効</span></td><td>3.43</td></tr><tr><td><a class="tlink" href="#t034">34</a></td><td><span class="status-badge ok">有効</span></td><td>3.14</td></tr><tr><td><a class="tlink" href="#t035">35</a></td><td><span class="status-badge ok">有効</span></td><td>3.14</td></tr><tr><td><a class="tlink" href="#t036">36</a></td><td><span class="status-badge ok">有効</span></td><td>3.43</td></tr><tr><td><a class="tlink" href="#t037">37</a></td><td><span class="status-badge ok">有効</span></td><td>3.43</td></tr><tr><td><a class="tlink" href="#t038">38</a></td><td><span class="status-badge ok">有効</span></td><td>3.14</td></tr><tr><td><a class="tlink" href="#t039">39</a></td><td><span class="status-badge ok">有効</span></td><td>3.14</td></tr><tr><td><a class="tlink" href="#t040">40</a></td><td><span class="status-badge ok">有効</span></td><td>3.71</td></tr><tr><td><a class="tlink" href="#t041">41</a></td><td><span class="status-badge ok">有効</span></td><td>3.00</td></tr><tr><td><a class="tlink" href="#t042">42</a></td><td><span class="status-badge ok">有効</span></td><td>3.14</td></tr><tr><td><a class="tlink" href="#t043">43</a></td><td><span class="status-badge ok">有効</span></td><td>3.14</td></tr><tr><td><a class="tlink" href="#t044">44</a></td><td><span class="status-badge ok">有効</span></td><td>3.29</td></tr><tr><td><a class="tlink" href="#t045">45</a></td><td><span class="status-badge ok">有効</span></td><td>3.14</td></tr><tr><td><a class="tlink" href="#t046">46</a></td><td><span class="status-badge ok">有効</span></td><td>3.29</td></tr><tr><td><a class="tlink" href="#t047">47</a></td><td><span class="status-badge ok">有効</span></td><td>3.29</td></tr><tr><td><a class="tlink" href="#t048">48</a></td><td><span class="status-badge ok">有効</span></td><td>3.57</td></tr><tr><td><a class="tlink" href="#t049">49</a></td><td><span class="status-badge ok">有効</span></td><td>3.29</td></tr><tr><td><a class="tlink" href="#t050">50</a></td><td><span class="status-badge ok">有効</span></td><td>3.29</td></tr><tr><td><a class="tlink" href="#t054">54</a></td><td><span class="status-badge ok">有効</span></td><td>3.29</td></tr><tr><td><a class="tlink" href="#t055">55</a></td><td><span class="status-badge ok">有効</span></td><td>3.29</td></tr><tr><td><a class="tlink" href="#t056">56</a></td><td><span class="status-badge ok">有効</span></td><td>3.29</td></tr><tr><td><a class="tlink" href="#t057">57</a></td><td><span class="status-badge ok">有効</span></td><td>3.14</td></tr><tr><td><a class="tlink" href="#t058">58</a></td><td><span class="status-badge ok">有効</span></td><td>3.57</td></tr><tr><td><a class="tlink" href="#t059">59</a></td><td><span class="status-badge ok">有効</span></td><td>3.14</td></tr></table>
+
+<div class="card" id="t001">
+<h2>試行 1 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-21 11:01:54　モデルID：moonshotai/kimi-k3</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.43</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>3</td><td>3</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1：4（Bに近い）
+Q2：2（どちらかといえばAに近い）
+Q3：2（どちらかといえばAに近い）
+Q4：1（Aに近い）
+Q5：3（どちらかといえばBに近い）
+Q6：2（どちらかといえばAに近い）
+Q7：4（Bに近い）
+
+【回答理由】
+私の教育観の中心にあるのは、子どもの主体性と可能性を信じ、それを引き出すことを重視する考え方です。Q1では、教育の目的は決まった型にはめて訓練することよりも、一人ひとりの持つ可能性を開花させることだと考え、Bを選びました。Q2では、失敗は貴重な学びの機会であり、安全が確保できる範囲では子ども自身に挑戦させるべきですが、危険や取り返しのつかない失敗は防ぐ必要があるため「どちらかといえば」としました。Q3では、反復練習による基礎の定着も大切ですが、発表や議論を通じて考えを深め合う時間が、思考力や表現力、他者理解を育てると考えました。Q4では、強制された学習は持続せず、自発的な学びこそが生涯にわたる学習の土台となるため、最も強くAを支持しました。Q5では、子どもが自分で答えや解き方を見つける過程を大切にしたい一方、効率性や基礎知識の伝達の面で教師が示す場面も必要なため「どちらかといえばB」としました。Q6では、問題行動の背景にある子どもの気持ちに寄り添うことが信頼関係と根本的な解決につながると考えますが、ルールのけじめを示す毅然とした対応が必要な場面もあるため「どちらかといえば」としました。Q7では、短所の指摘よりも長所をほめて伸ばす方が、自己肯定感を高め、結果として子どもの成長全体を促すと考え、Bを選びました。</pre>
+</div>
+<div class="card" id="t002">
+<h2>試行 2 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-21 11:02:59　モデルID：moonshotai/kimi-k3</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.43</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1：3.どちらかといえばBに近い
+Q2：2.どちらかといえばAに近い
+Q3：2.どちらかといえばAに近い
+Q4：1.Aに近い
+Q5：4.Bに近い
+Q6：2.どちらかといえばAに近い
+Q7：4.Bに近い
+
+【回答理由】
+全体として、子どもの主体性・自発性を尊重し、自ら考え、試行錯誤しながら学ぶ力を育てることを重視しました。Q1は、社会人として必要な基礎を教えることも大切ですが、画一的な訓練よりも一人ひとりの可能性を引き出す支援のほうが子どもの成長につながると考えます。Q2は、失敗は重要な学びの機会であり、過度な介入は子どもの挑戦心を削ぐため、見守りながらやらせる姿勢が望ましいと考えます。Q3は、反復練習による基礎の定着も必要ですが、自分の考えを表現し他者と議論する経験は、思考力やコミュニケーション能力を育てる上でより教育的価値が高いと判断しました。Q4は、強制された学習は一時的な効果しか持たず、むしろ学習意欲を低下させるため、内発的動機づけを支えるべきだと考えます。Q5は、答えを教えるより自分で答えや方法を見つけるプロセスこそが、真の理解と応用力につながると考えます。Q6は、問題行動の背景にある気持ちや事情に寄り添うことで信頼関係が生まれ、根本的な改善につながると考えます（ただし、ルールの境界を示す毅然さも必要なため「どちらかといえば」としました）。Q7は、短所の指摘より長所を認めて伸ばすほうが、子どもの自己肯定感と成長意欲を高めると考えます。なお、各項目で「どちらかといえば」を選んだ部分には、状況に応じて両方のアプローチを柔軟に使い分けるべきという考えも反映しています。</pre>
+</div>
+<div class="card" id="t003">
+<h2>試行 3 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-21 11:04:08　モデルID：moonshotai/kimi-k3</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.43</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>3</td><td>3</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1：4.Bに近い
+Q2：2.どちらかといえばAに近い
+Q3：2.どちらかといえばAに近い
+Q4：1.Aに近い
+Q5：3.どちらかといえばBに近い
+Q6：2.どちらかといえばAに近い
+Q7：4.Bに近い
+
+回答理由：教育の根本は、子ども一人ひとりが持つ可能性を信じ、それを最大限に引き出すことにあると考えるため、Q1とQ7はBに近い立場をとった。短所を直すことよりも長所をほめて伸ばす方が、子どもの自己肯定感と成長意欲を高めると考える。また、失敗から学ぶ経験や、自分で考えて答えを見つけるプロセスは、強制や一方的な指示では育たないため、Q2・Q4・Q5も子どもの主体性を重視した。特にQ4は、強制された学習は一時的な効果しか持たず、むしろ学習への反感を生む可能性があるため、最も強くAの立場をとった。一方、Q3とQ5では「どちらかといえば」に留めたのは、基礎的な知識・技能の定着には反復練習も一定必要であり、効率や安全の観点から教師が正しい答えや方法を示すべき場面もあると考えるためである。Q6については、問題行動の背景にある子どもの気持ちや事情を理解することが、信頼関係の構築と根本的な解決につながると考えA寄りとしたが、集団の秩序や安全を守るために毅然とした対応が求められる場合もあるため、強い断定は避けた。全体として、子どもの主体性と長所を重んじながら、場面に応じて指導の方法や強さを柔軟に使い分けることが望ましいという考えに基づいている。</pre>
+</div>
+<div class="card" id="t004">
+<h2>試行 4 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-21 11:04:59　モデルID：moonshotai/kimi-k3</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.29</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>3</td><td>3</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1: 3.どちらかといえばBに近い
+Q2: 2.どちらかといえばAに近い
+Q3: 2.どちらかといえばAに近い
+Q4: 1.Aに近い
+Q5: 3.どちらかといえばBに近い
+Q6: 2.どちらかといえばAに近い
+Q7: 4.Bに近い
+
+【回答理由】
+私は全体的に、子どもの主体性・内発的動機・個々の可能性を尊重する「子ども中心」の考え方に近い立場です。Q1とQ5では、知識の一方的な伝達や訓練よりも、子ども自身が考え、答えを見つけ、可能性を伸ばす支援の方が、深い学びと成長につながると考えます。ただし、基礎的な知識・技能の習得には教師の明示的な指導も有効な場面があるため、「どちらかといえば」としました。Q2とQ4では、失敗は学びの貴重な機会であり、強制よりも自発性を大切にすべきだと考えます。特にQ4は、強制された学習は持続せず、学ぶ意欲そのものを損なう恐れがあるため、最も強くAを支持します。Q3は、発表や議論を通じた思考の深化を重視しつつも、反復練習が必要な領域（漢字・計算など）もあるため、ややA寄りとしました。Q6は、問題行動の背景にある子どもの気持ちや事情を理解することが根本的な解決につながると考えますが、危険な行為などには毅然とした対応も必要なため「どちらかといえば」にとどめました。Q7は、短所の指摘よりも長所をほめて伸ばす方が、子どもの自己肯定感と学習意欲を高め、結果的に短所の改善にもつながると考えるため、最も強くBを支持しました。</pre>
+</div>
+<div class="card" id="t005">
+<h2>試行 5 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-21 11:06:36　モデルID：moonshotai/kimi-k3</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.29</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>3</td><td>3</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>3</td><td>3</td><td></td></tr></table>
+<pre>Q1：3.どちらかといえばBに近い
+Q2：1.Aに近い
+Q3：2.どちらかといえばAに近い
+Q4：1.Aに近い
+Q5：3.どちらかといえばBに近い
+Q6：2.どちらかといえばAに近い
+Q7：3.どちらかといえばBに近い
+
+回答理由：全体として、子どもの主体性・内発的な動機づけ・自己肯定感を育むことを重視する立場をとった。失敗や試行錯誤は学びの貴重な機会であり、過度な介入や強制は意欲や考える力を損なうと考えるため、Q2・Q4はAに近い選択とした。Q1・Q5・Q7では、可能性の開花、自立的な問題解決、長所の伸展を重視するB寄りの考えに近いが、基礎的な知識・技能の伝達や必要に応じた教師の指導の役割も否定できないため「どちらかといえば」にとどめた。同様にQ3・Q6も、発表・議論の時間や子どもの気持ちへの寄り添いを重視しつつ、反復練習が不可欠な場面や毅然とした対応が求められる場面もあると考え、強い選択は避けた。要するに、子ども中心の学びを基本としながらも、教師の指導的役割を状況に応じて発揮するバランスのとれた教育観に基づく回答である。</pre>
+</div>
+<div class="card" id="t006">
+<h2>試行 6 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-21 11:08:01　モデルID：moonshotai/kimi-k3</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.14</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>2</td><td>3</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>3</td><td>3</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>3</td><td>3</td><td></td></tr></table>
+<pre>Q1:4.Bに近い
+Q2:2.どちらかといえばAに近い
+Q3:2.どちらかといえばAに近い
+Q4:2.どちらかといえばAに近い
+Q5:3.どちらかといえばBに近い
+Q6:2.どちらかといえばAに近い
+Q7:3.どちらかといえばBに近い
+
+回答理由:教育の根本は、子どもが本来持っている可能性や内発的な学びの力を引き出すことにあると考えるため、Q1とQ7ではB寄りの選択をしました。ただし、極端に一方へ寄るのではなく、状況に応じたバランスが必要だと考え、Q2~Q6は中間的な選択にしました。失敗は重要な学びの機会であり、議論や発表、自分で答えを見つける活動は深い理解につながりますが、基礎的な知識・技能の定着には反復練習も有効であり、効率的に教えるべき場面では教師が解き方を示すことも必要です。また、自発的な学習を支援するのが理想ですが、学びのきっかけづくりとして大人が促す場面もあると考えました。問題行動への対応については、まず子どもの気持ちに寄り添って背景を理解することが信頼関係の基盤になると考えますが、安全に関わる場合などには毅然とした指導も必要です。全体として、子どもの主体性を尊重しつつ、大人が適切に支える姿勢を重視しました。</pre>
+</div>
+<div class="card" id="t013">
+<h2>試行 13 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-21 17:10:10　モデルID：moonshotai/kimi-k3</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.57</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1: 3.どちらかといえばBに近い
+Q2: 1.Aに近い
+Q3: 2.どちらかといえばAに近い
+Q4: 1.Aに近い
+Q5: 4.Bに近い
+Q6: 2.どちらかといえばAに近い
+Q7: 4.Bに近い
+
+【回答理由】
+Q1について、社会で生きていくために必要なことを教えることも大切ですが、画一的な訓練よりも、一人ひとりの子どもが持つ個性や可能性を引き出し、開花させる支援の方が、子どもの豊かな成長につながると考えます。
+
+Q2について、失敗は学びの貴重な機会です。過度に失敗を防ごうとすると、子どもは挑戦する意欲を失い、自分で考えて行動する力が育ちません。安全に配慮したうえで、失敗も含めて自らやり遂げる経験を積ませるべきだと考えます。
+
+Q3について、基礎的な知識・技能の習得も重要ですが、自分の考えをまとめて発表し、他者と議論する経験は、思考力・判断力・表現力を育てます。知識は議論や活用の中でこそ深く定着するため、Aの考えに近いと判断しました。
+
+Q4について、強制された学習は一時的な効果しか持たず、学ぶことへの嫌悪感を生みかねません。内発的な動機に基づく自発的な学習こそが、生涯にわたって学び続ける姿勢の基盤となると考えます。
+
+Q5について、正しい答えを教師が示す方法は効率的ですが、子どもは受け身になりがちです。試行錯誤しながら自分で答えや解き方を見つける過程こそが、真の理解と応用力、問題解決能力を育てると考えます。
+
+Q6について、毅然とした対応も場面によっては必要ですが、問題行動の背景には必ず子どもなりの理由や心情があります。まず気持ちに寄り添って理解しようとすることで、信頼関係が生まれ、根本的な解決につながると考えます。
+
+Q7について、短所ばかり指摘されると子どもは自己肯定感を失い、萎縮してしまいます。長所をほめて伸ばすことで自信が育まれ、その自信が短所を克服する力にもなると考えます。</pre>
+</div>
+<div class="card" id="t014">
+<h2>試行 14 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-21 17:11:02　モデルID：moonshotai/kimi-k3</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.29</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>3</td><td>3</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1:3.どちらかといえばBに近い
+Q2:2.どちらかといえばAに近い
+Q3:2.どちらかといえばAに近い
+Q4:1.Aに近い
+Q5:3.どちらかといえばBに近い
+Q6:2.どちらかといえばAに近い
+Q7:4.Bに近い
+
+回答理由:私は、子どもが自ら考え、試行錯誤しながら学ぶことを重視する考え方に近いため、このような選択になりました。Q1では、大人になるための知識や技能の習得も大切ですが、まず子ども一人ひとりの可能性を引き出す支援が教育的価値が高いと考えました。Q2では、失敗は学びの貴重な機会であり、過度な介入は子どもの挑戦する意欲を削ぐためA寄りとしましたが、安全面などへの配慮は必要なため「どちらかといえば」としました。Q3では、反復練習による基礎の定着も重要ですが、自分の考えを表現し、他者と議論する経験が深い理解と思考力を育むと考えました。Q4は、強制による学習は一時的な効果しか生まず、自発的な学びこそが生涯にわたる学習の基盤となるためAに近いとしました。Q5では、答えを教えるより自分で見つける過程が問題解決能力を育てますが、効率性や基礎知識の伝達も無視できないため「どちらかといえばB」としました。Q6では、問題行動の背景にある気持ちや事情を理解することが本質的な指導につながると考えましたが、規範意識を育てる毅然とした対応も場面によっては必要なため「どちらかといえばA」としました。Q7は、短所の指摘よりも長所を認めて伸ばすほうが、子どもの自己肯定感と成長意欲を高めると考え、Bに近いとしました。全体として、子どもの主体性と内発的動機づけを尊重しつつ、状況に応じて教師の指導的役割とのバランスを取るべきだという考えに基づいています。</pre>
+</div>
+<div class="card" id="t015">
+<h2>試行 15 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-21 17:12:23　モデルID：moonshotai/kimi-k3</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.00</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>2</td><td>3</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>3</td><td>3</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>3</td><td>3</td><td></td></tr></table>
+<pre>Q1：3.どちらかといえばBに近い
+Q2：2.どちらかといえばAに近い
+Q3：2.どちらかといえばAに近い
+Q4：2.どちらかといえばAに近い
+Q5：3.どちらかといえばBに近い
+Q6：2.どちらかといえばAに近い
+Q7：3.どちらかといえばBに近い
+
+【回答理由】
+全体として、子どもの主体性や内発的な動機づけを重視し、子ども自身が考え、試行錯誤しながら成長することを支える指導が望ましいと考えました。ただし、どの項目も一方の考え方だけでは不十分な場面があるため、すべて「どちらかといえば」の選択にしています。
+
+Q1では、子ども一人ひとりの個性や可能性を引き出す支援が学びの土台になると考える一方、社会人として必要な基礎的な知識や規範を教えることも不可欠です。Q2では、失敗の経験が問題解決能力や困難に立ち向かう力を育むと考えますが、安全に関わる場面では適切な注意が必要です。Q3では、発表や議論が思考力・表現力・他者理解を深めると考えますが、その土台となる知識・技能の習得も軽視できません。Q4では、自発的な学びこそ持続的な学力と生涯にわたる学習姿勢の基盤になると考えますが、基礎学力の定着には一定の仕組みづくりも必要です。Q5では、自分で答えを見つけるプロセスが深い理解と応用力を育むと考えますが、場面によっては教師が効率的にモデルを示すことも有効です。Q6では、まず子どもの気持ちや背景を理解することが信頼関係と根本的な問題解決につながると考えますが、毅然とした対応が必要な場面もあります。Q7では、長所を認めて伸ばすことが自己肯定感と学習意欲を高めると考えますが、放置できない短所への対応が必要な場合もあります。</pre>
+</div>
+<div class="card" id="t016">
+<h2>試行 16 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-21 17:14:39　モデルID：moonshotai/kimi-k3</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.14</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>3</td><td>3</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>3</td><td>3</td><td></td></tr></table>
+<pre>Q1：3.どちらかといえばBに近い
+Q2：2.どちらかといえばAに近い
+Q3：2.どちらかといえばAに近い
+Q4：1.Aに近い
+Q5：3.どちらかといえばBに近い
+Q6：2.どちらかといえばAに近い
+Q7：3.どちらかといえばBに近い
+
+【回答理由】
+全体として、子どもの主体性・内発的な動機づけ・個々の可能性や強みを尊重する子ども中心の教育観に立ちつつ、安全の確保や基礎的な知識・技能の習得、集団生活の規範の伝達など、大人が責任を持って関与すべき領域もあると考えたため、多くの項目で「どちらかといえば」の選択となりました。Q1は、教育は子どもを一定の型に訓練してはめるものではなく、一人ひとりの可能性を引き出す営みであるべきだと考える一方、社会生活に必要な基礎を教える責任もあるため「3」。Q2は、失敗は重要な学びの機会であり、過度な先回りは自立心や問題解決力の育成を妨げるが、危険が伴う場面での配慮は欠かせないため「2」。Q3は、発表や議論を通じて思考力・表現力・主体性が育つと考えるが、基礎技能の定着には反復練習も不可欠なため「2」。Q4は、強制による学習は内発的動機づけを損ない、持続的な学びにつながらないと強く考えるため「1」。Q5は、自分で答えや解き方を見つける過程こそが深い理解と応用力を育むと考えるが、初学者には教師による明示的な提示が有効な場面もあるため「3」。Q6は、問題行動の背景にある気持ちや要因に寄り添うことが根本的な解決と信頼関係の構築につながるが、規範を示す毅然とした態度も時に必要なため「2」。Q7は、長所をほめて伸ばすことが自己肯定感と学習意欲を高め、結果として短所の克服にもつながると考えるが、他者に危害を及ぼすような短所には適切に対応すべきであるため「3」としました。</pre>
+</div>
+<div class="card" id="t017">
+<h2>試行 17 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-21 17:16:02　モデルID：moonshotai/kimi-k3</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.14</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>3</td><td>3</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>3</td><td>3</td><td></td></tr></table>
+<pre>Q1：3.どちらかといえばBに近い
+Q2：2.どちらかといえばAに近い
+Q3：2.どちらかといえばAに近い
+Q4：1.Aに近い
+Q5：3.どちらかといえばBに近い
+Q6：2.どちらかといえばAに近い
+Q7：3.どちらかといえばBに近い
+
+【回答理由】
+全体として、子どもの主体性や内発的な動機づけを尊重しつつ、状況に応じて教師が適切に介入するバランスの取れた指導が望ましいという考えに基づいています。Q4は、強制による学習は一時的な効果しか生まず、学ぶ意欲そのものを損ないかねないため、最も強く「Aに近い」としました。Q1・Q5・Q7は、子どもが自ら答えを見つけ、長所を伸ばしながら可能性を開花させること（B側）を重視しましたが、基礎的な知識・技能の習得や社会人として必要なことを教える役割も無視できないため「3」にとどめました。一方、Q2・Q3・Q6は、失敗を学びの機会とすること、考えを発表し議論すること、まず子どもの気持ちに寄り添うこと（A側）を重視しましたが、過度な放任や規範意識の軽視は避けるべきであり、必要に応じた教師の示唆や毅然とした対応も求められるため「2」としました。子どもの自発性を育むことと、教師による適切な指導・支援は対立するものではなく、両者を状況に応じて使い分けることが重要だと考えています。</pre>
+</div>
+<div class="card" id="t018">
+<h2>試行 18 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-21 17:17:39　モデルID：moonshotai/kimi-k3</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.14</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>3</td><td>3</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>3</td><td>3</td><td></td></tr></table>
+<pre>Q1:3.どちらかといえばBに近い
+Q2:2.どちらかといえばAに近い
+Q3:2.どちらかといえばAに近い
+Q4:1.Aに近い
+Q5:3.どちらかといえばBに近い
+Q6:2.どちらかといえばAに近い
+Q7:3.どちらかといえばBに近い
+
+【回答理由】
+全体として、子どもの主体性や内発的な動機づけを重視しながらも、教師による適切な支援やけじめも必要だと考える立場をとりました。
+
+Q1は、社会で生きていくための知識や技能を教えることも大切ですが、子ども一人ひとりが持つ可能性を引き出し、開花させることのほうが教育の本質に近いと考えました。
+
+Q2は、失敗は学びの貴重な機会であり、過度に失敗を防ぐと挑戦する心や問題解決力が育ちにくいため、多少の失敗は経験させるべきだと考えました(ただし安全面への配慮は前提です)。
+
+Q3は、反復練習も基礎基本の定着には有効ですが、考えを発表し議論する活動こそが思考力・判断力・表現力を育てると考えました。
+
+Q4は、強制された学習は一時的な効果しか得られず、かえって学ぶ意欲を損なうため、自発的な学習を支援することが最も重要だと考え、最も強くAを支持しました。
+
+Q5は、答えをそのまま教えるだけでは応用力が育たず、自分で答えを見つける過程が深い理解につながりますが、完全な放任は非効率になりうるため、教師が適切な手がかりを与える意味でも「どちらかといえばB」としました。
+
+Q6は、問題行動の背景にある子どもの気持ちや事情を理解することが根本的な解決につながると考えますが、行動の是非についてのけじめも必要なため「どちらかといえばA」としました。
+
+Q7は、短所の指摘ばかりでは自己肯定感を損ないやすく、長所をほめて伸ばすことで自信と意欲が生まれ、結果的に短所の克服にもつながると考えました。</pre>
+</div>
+<div class="card" id="t019">
+<h2>試行 19 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-21 17:18:49　モデルID：moonshotai/kimi-k3</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.57</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1:3.どちらかといえばBに近い
+Q2:1.Aに近い
+Q3:2.どちらかといえばAに近い
+Q4:1.Aに近い
+Q5:4.Bに近い
+Q6:2.どちらかといえばAに近い
+Q7:4.Bに近い
+
+【回答理由】
+私の教育観の根幹にあるのは「子どもの主体性と可能性を最大限に尊重する」という考えです。Q1では、社会で生きる力を教えることも大切ですが、画一的な訓練よりも一人ひとりの可能性を引き出す支援の方が、変化の激しい時代を生きる力になると考えB寄りとしました。Q2とQ4は、失敗は貴重な学びの機会であり、自発性こそが持続的な学びの原動力になるため、子ども自身にやらせる・自発的学習を支援するAを選びました。Q3とQ5は、知識の習得も重要ですが、答えを一方的に与えるより、議論や自分で解き方を見つけるプロセスの方が深い理解と思考力を育むと考え、それぞれA寄り・B寄りとしました。Q6は、問題行動の背景にある子どもの気持ちを理解しなければ根本的な解決につながらないためA寄りとしましたが、集団のルールを守る観点から毅然とした対応が必要な場面もあるため「どちらかといえば」にとどめました。Q7は、短所の指摘ばかりでは自信を失わせてしまい、長所をほめて伸ばす方が自己肯定感を高め、結果的に短所の克服にもつながると考えBを選びました。全体として、管理や強制よりも、理解・肯定・経験を通じて子ども自らが成長する力を信じる指導を重視しています。</pre>
+</div>
+<div class="card" id="t020">
+<h2>試行 20 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-21 17:20:12　モデルID：moonshotai/kimi-k3</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.14</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>3</td><td>3</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>3</td><td>3</td><td></td></tr></table>
+<pre>Q1: 3.どちらかといえばBに近い
+Q2: 2.どちらかといえばAに近い
+Q3: 2.どちらかといえばAに近い
+Q4: 1.Aに近い
+Q5: 3.どちらかといえばBに近い
+Q6: 2.どちらかといえばAに近い
+Q7: 3.どちらかといえばBに近い
+
+回答理由:私は、教育の中心にあるべきは子どもの主体性と内発的な動機づけだと考えています。Q1とQ7については、子ども一人ひとりが本来持っている可能性や長所を認め、それを引き出して伸ばすことが、自己肯定感を育み、結果として欠点の克服にもつながると考えるためB寄りとしました。ただし、社会で生きていくために必要なルールや基礎的な力を教える役割も教育にはあるため、完全にBとはしませんでした。Q2については、失敗は貴重な学びの機会であり、過度に介入すると試行錯誤する力が育たないと考えるためA寄りとしましたが、安全面への配慮は必要です。Q3とQ5については、知識の習得も大切ですが、自分で考え、表現し、答えを見つけ出す過程こそが深い理解と応用力を生むと考えたため、それぞれA寄り・B寄りとしました。Q4については、強制された学習は持続せず、自発的な学びこそが生涯にわたる成長の土台になると確信しているため、最も強くAに近いとしました。Q6については、問題行動には必ず背景となる気持ちや事情があり、まずそれに寄り添わなければ根本的な解決にはならないと考えるためA寄りとしましたが、許されない行為に対しては毅然とした態度で境界線を示すことも必要だと考えています。全体として、子どもを信じて尊重しながらも、必要な場面では適切に導くというバランスを重視する立場です。</pre>
+</div>
+<div class="card" id="t021">
+<h2>試行 21 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-21 17:22:39　モデルID：moonshotai/kimi-k3</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.14</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>3</td><td>3</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>3</td><td>3</td><td></td></tr></table>
+<pre>Q1：3. どちらかといえばBに近い
+Q2：2. どちらかといえばAに近い
+Q3：2. どちらかといえばAに近い
+Q4：1. Aに近い
+Q5：3. どちらかといえばBに近い
+Q6：2. どちらかといえばAに近い
+Q7：3. どちらかといえばBに近い
+
+【回答理由】
+私は、教育の中心には子どもの主体性と可能性への信頼を置くべきだと考えています。Q1については、社会生活に必要なことを教える意義は認めつつも、画一的な訓練よりも、一人ひとりの個性や可能性を引き出して伸ばす支援の方が、多様な成長を促すと考えました。Q2では、失敗は貴重な学びの機会であり、過度に失敗を防ぐことは挑戦心や問題解決力の育成を妨げるためA寄りとしましたが、安全面への配慮は前提だと考えます。Q3は、反復練習による基礎の定着も必要ですが、自分の考えを発表し議論する経験が思考力・表現力・対話力を育むため、やや重視しました。Q4は、強制による学習は内発的動機づけを損ない、自ら学び続ける姿勢を育ちにくくするため、明確にAに近いと判断しました。Q5は、正解を示す効率性を認めつつも、試行錯誤を通じて自分で答えや解き方を見つける経験の方が、深い理解と応用力につながるためB寄りとしました。Q6は、問題行動の背景にある気持ちや事情に寄り添うことで根本原因に対処でき、再発防止にもつながるためA寄りとしましたが、ルールを毅然と伝えることも併せて必要です。Q7は、短所の指摘中心では自信や意欲を失わせる恐れがあり、長所をほめて伸ばす方が自己肯定感と成長意欲を高めると考えました。全体として、子どもの自発性・可能性・気持ちを尊重しながら、基礎学力・安全・規範意識には適切に配慮する、バランスの取れた支援が理想だと考えています。</pre>
+</div>
+<div class="card" id="t022">
+<h2>試行 22 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-21 17:24:06　モデルID：moonshotai/kimi-k3</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.29</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>3</td><td>3</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>3</td><td>3</td><td></td></tr></table>
+<pre>Q1：3.どちらかといえばBに近い
+Q2：1.Aに近い
+Q3：2.どちらかといえばAに近い
+Q4：1.Aに近い
+Q5：3.どちらかといえばBに近い
+Q6：2.どちらかといえばAに近い
+Q7：3.どちらかといえばBに近い
+
+【回答理由】
+全体として、子どもの主体性と内発的な動機づけを重視する立場から回答しました。Q1では、社会人として必要なことを教える意義も認めつつ、教育の本質は子どもが本来持つ可能性を引き出し支えることにあると考えました。Q2とQ4については、失敗から学ぶ経験や自発的な学びこそが深い理解と真の成長を生むと考え、強くAに近い立場を取りました。過度な干渉や強制は、子どもの意欲や考える力を損なう恐れがあるためです。Q3とQ5では、反復練習や効率的な知識伝達の価値も否定しませんが、発表・議論や自分で答えを見つけるプロセスが、思考力や問題解決能力をより育てると判断しました。Q6では、問題行動の背景にある気持ちや事情を理解することが信頼関係の構築と根本的な解決につながると考えました。Q7では、短所への指摘が必要な場面もあるものの、長所を認めて伸ばす方が自己肯定感と学習意欲を高め、結果的に子どもの全体的な成長を促すと考えました。</pre>
+</div>
+<div class="card" id="t023">
+<h2>試行 23 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-21 17:25:31　モデルID：moonshotai/kimi-k3</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.14</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>3</td><td>3</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>3</td><td>3</td><td></td></tr></table>
+<pre>Q1: 3.どちらかといえばBに近い
+Q2: 2.どちらかといえばAに近い
+Q3: 2.どちらかといえばAに近い
+Q4: 1.Aに近い
+Q5: 3.どちらかといえばBに近い
+Q6: 2.どちらかといえばAに近い
+Q7: 3.どちらかといえばBに近い
+
+【回答理由】
+子どもは本来、自ら学び成長する力を持っているという前提に立ち、一方的に教え込む指導よりも、子どもの主体性・可能性・気持ちを尊重する教育が望ましいと考えた。Q1では、大人として必要なことを教えることも大切だが、個々の可能性を引き出す支援のほうが子どもの将来をより豊かにすると考えた。Q2では、失敗から学ぶ経験が成長を促すため、安全に配慮しつつも子ども自身に挑戦させるべきだと考えた。Q3では、反復練習も基礎の定着に有効だが、発表や議論を通じて思考力・表現力・他者の意見を聴く姿勢が育つと考えた。Q4では、強制による学習は一時的な効果にとどまり、自発的な学びこそが持続的な成長につながると考え、「Aに近い」とした。Q5では、正しい答えを示すほうが効率的な場面もあるが、自分で考え抜く経験が深い理解と応用力を育てると考えた。Q6では、問題行動の背景にある気持ちや事情に寄り添うことで、子どもが自ら行動を振り返り、真の改善につながると考えた。Q7では、短所の指摘ばかりでは自己肯定感を損ないやすく、長所をほめて伸ばすことが自信と学ぶ意欲を高めると考えた。ただし、基礎的な知識・技能の習得や規範意識の育成も教育の重要な役割であるため、多くの項目で一方に極端に寄らず「どちらかといえば」の選択とした。</pre>
+</div>
+<div class="card" id="t024">
+<h2>試行 24 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-21 17:27:01　モデルID：moonshotai/kimi-k3</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.29</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>3</td><td>3</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1: 3. どちらかといえばBに近い
+Q2: 2. どちらかといえばAに近い
+Q3: 2. どちらかといえばAに近い
+Q4: 1. Aに近い
+Q5: 3. どちらかといえばBに近い
+Q6: 2. どちらかといえばAに近い
+Q7: 4. Bに近い
+
+【回答理由】
+全体として、子どもが自ら考え、試行錯誤しながら学ぶことを重視する「子ども中心」の考え方に立ちつつも、極端な放任主義には与しない、という立場をとりました。Q1とQ5では、知識の詰め込みや正解の一方的な提示よりも、子どもの可能性や自分で答えを見つける力を育てること(B)を重視しましたが、基礎的な知識・技能や効率的な指導の価値も否定できないため「どちらかといえば」としました。Q2とQ3については、失敗を恐れず挑戦する経験や、考えを発表し議論する時間(A側)こそが深い学びにつながると考えますが、安全面への配慮や反復練習の意義もあるため、強い選択は避けました。Q4は、強制による学習は内発的動機づけを損ない持続しないと考え、明確にAを選びました。Q6は、問題行動の背景にある子どもの気持ちに寄り添うことが信頼関係と真の改善につながると考えA寄りとしましたが、他者に危害が及ぶ場合などには毅然とした対応も必要です。Q7は、短所の指摘を軸にするより長所をほめて伸ばす方が、自己肯定感と成長を促すと確信しているため、Bに近いとしました。ただし、いずれの場面でも子どもの安全と他者への配慮は前提となるべきだと考えています。</pre>
+</div>
+<div class="card" id="t025">
+<h2>試行 25 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-21 17:28:16　モデルID：moonshotai/kimi-k3</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.00</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>2</td><td>3</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>3</td><td>3</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>3</td><td>3</td><td></td></tr></table>
+<pre>Q1：3.どちらかといえばBに近い
+Q2：2.どちらかといえばAに近い
+Q3：2.どちらかといえばAに近い
+Q4：2.どちらかといえばAに近い
+Q5：3.どちらかといえばBに近い
+Q6：2.どちらかといえばAに近い
+Q7：3.どちらかといえばBに近い
+
+【回答理由】
+全体として、子どもの主体性・自発性を尊重し、可能性を引き出す教育を重視する一方で、基礎の定着や場面に応じた的確な指導の価値も認めるため、極端な選択を避け「どちらかといえば」の回答が中心となりました。Q1・Q5・Q7は、一方的な訓練や短所の指摘よりも、子ども自身の可能性の開花を支え、自分で答えを見つける力を育み、長所をほめて伸ばす方が、学びへの動機づけと自尊感情を高め、長期的な成長につながると考えB寄りとしました。Q2は、失敗の経験から学び、試行錯誤する力が育つためA寄りとしました（ただし安全面等での最小限の配慮は必要です）。Q3・Q4は、発表や議論、自発的な学習が深い理解と持続的な学習意欲を育むと考えA寄りとしましたが、知識・技能の習得に反復練習が有効な場面もあるため「どちらかといえば」としました。Q6は、問題行動の背景にある気持ちに寄り添うことで信頼関係が生まれ、行動の根本的な改善につながると考えA寄りとしましたが、規範を明確に示す毅然とした対応が必要な場面もあることから、強い断定は避けました。</pre>
+</div>
+<div class="card" id="t026">
+<h2>試行 26 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-21 17:30:01　モデルID：moonshotai/kimi-k3</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.14</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>3</td><td>3</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>3</td><td>3</td><td></td></tr></table>
+<pre>Q1: 3.どちらかといえばBに近い
+Q2: 2.どちらかといえばAに近い
+Q3: 2.どちらかといえばAに近い
+Q4: 1.Aに近い
+Q5: 3.どちらかといえばBに近い
+Q6: 2.どちらかといえばAに近い
+Q7: 3.どちらかといえばBに近い
+
+【回答理由】
+全体的に、子どもの自発性や一人ひとりの可能性を重視し、大人は支援者として関わる考え方に近い。Q1は、画一的な「一人前の大人」像に子どもを合わせるよりも、個々の可能性を引き出す方が多様な成長につながると考えた。Q2は、失敗は重要な学びの機会であり、過度に失敗を防ぐことは試行錯誤する力を奪うためAに近いが、安全に関わる場面など介入が必要な場合もあるため「どちらかといえば」とした。Q3は、発表や議論を通じて理解が深まり、思考力や表現力が育つと考えるが、基礎的な知識・技能の定着に反復練習も必要なため強い選択とはしなかった。Q4は、強制による学習は一時的な効果しかなく学ぶ意欲そのものを損なう恐れがあり、自発的な学びこそ継続的な成長の基盤となるためAに近いとした。Q5は、答えを示す方が効率的ではあるものの、自分で答えや解き方を見つける経験が問題解決能力や考える力を育てるためBに近いと考えた。Q6は、問題行動の背景にある気持ちや事情を理解することが根本的な解決と信頼関係の構築につながるが、危険な行為などには毅然とした対応も必要なため「どちらかといえば」とした。Q7は、長所をほめて伸ばすことで自己肯定感と学習意欲が高まり成長を促すと考えるが、他者に危害を及ぼす行動などへの適切な指導も不可欠なため「どちらかといえば」とした。</pre>
+</div>
+<div class="card" id="t027">
+<h2>試行 27 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-21 17:30:56　モデルID：moonshotai/kimi-k3</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.14</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>3</td><td>3</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>3</td><td>3</td><td></td></tr></table>
+<pre>Q1：3.どちらかといえばBに近い
+Q2：2.どちらかといえばAに近い
+Q3：2.どちらかといえばAに近い
+Q4：1.Aに近い
+Q5：3.どちらかといえばBに近い
+Q6：2.どちらかといえばAに近い
+Q7：3.どちらかといえばBに近い
+
+【回答理由】
+全体として、子どもの主体性や内発的な動機づけを重視しつつ、状況に応じて教師の指導や規範も必要だという考え方に基づいています。Q1では、大人になるために必要なことを教えることも大切ですが、画一的な訓練よりも一人ひとりの可能性を引き出す支援のほうが、結果として自立した大人の成長につながると考えました。Q2では、失敗から学ぶ経験は子どもの成長に不可欠であり、過度に失敗を防ぐことはかえって挑戦する姿勢を育てにくくするため、多少の失敗を許容しながら見守る立場が望ましいと考えました。Q3では、反復練習による基礎の定着も必要ですが、考えを発表し議論する活動は思考力や表現力、他者の意見を聴く姿勢を育てるため、やや比重を置くべきだと考えました。Q4では、強制された学習は一時的な効果しか持たず、自ら学ぼうとする意欲こそが継続的な学びの原動力になるため、自発的な学習の支援を強く支持しました。Q5では、効率よく答えを教える場面もありますが、自分で答えや解き方を見つける過程こそが深い理解と応用力を育てるため、発見を支援する立場に近いと考えました。Q6では、問題行動の背景にある気持ちや事情を理解することで根本的な解決につながりやすい一方、集団の秩序や安全のために毅然とした対応が必要な場面もあるため、心情に寄り添う指導を基本としつつ、やや柔軟な選択としました。Q7では、短所の指摘ばかりでは自信や意欲を失わせてしまうため、長所をほめて伸ばすことで自己肯定感を育て、その力で短所の克服にもつなげていくほうが効果的だと考えました。</pre>
+</div>
+<div class="card" id="t028">
+<h2>試行 28 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-21 17:32:15　モデルID：moonshotai/kimi-k3</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.14</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>3</td><td>3</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>3</td><td>3</td><td></td></tr></table>
+<pre>Q1: 3
+Q2: 2
+Q3: 2
+Q4: 1
+Q5: 3
+Q6: 2
+Q7: 3
+
+回答理由：子どもの主体性・可能性・自発性を尊重する教育観を基本としつつ、場面に応じたバランスも重視して選択しました。失敗から学ぶ経験や、自分で考え発表する学び、自分で答えを見つける過程は、深い理解と思考力の育成につながると考えます。また、問題行動への対応では、まず子どもの気持ちに寄り添うことが信頼関係の構築に不可欠であり、長所を認めて伸ばすことは自己肯定感と成長意欲を高めると考えます。一方で、安全面への配慮、基礎的な知識・技能の定着、規範意識の育成といった側面も教育において無視できないため、極端な選択は避け、どちらかといえば、という回答を多く選びました。</pre>
+</div>
+<div class="card" id="t029">
+<h2>試行 29 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-21 17:34:19　モデルID：moonshotai/kimi-k3</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.29</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>3</td><td>3</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>**【回答】**
+
+Q1:3.どちらかといえばBに近い
+Q2:2.どちらかといえばAに近い
+Q3:2.どちらかといえばAに近い
+Q4:1.Aに近い
+Q5:3.どちらかといえばBに近い
+Q6:2.どちらかといえばAに近い
+Q7:4.Bに近い
+
+**【回答理由】**
+
+全体として、子どもの主体性と内発的な動機づけを尊重しつつ、場面に応じて教師の働きかけを調整するという考え方に基づいています。
+
+Q1については、社会人として必要な基礎を教えることも重要ですが、画一的な訓練よりも、一人ひとりの個性や可能性を引き出す支援の方が、多様な子どもたちの成長を促す教育に近いと考えました。Q2については、失敗は試行錯誤や自立心を育む貴重な学びの機会であり、過度な事前の注意はかえって挑戦する姿勢を弱めるためA寄りとしましたが、安全面など事前の配慮が不可欠な場面もあるため「どちらかといえば」としました。Q3については、発表や議論の時間は思考力・表現力・他者の意見を聴く姿勢を育てるためA寄りとしましたが、基礎的な知識・技能の定着には反復練習も一定必要だと考えました。Q4については、強制された学習は定着しにくく、学ぶ意欲そのものを損ないかねないため、自発的な学習の支援が最も重要だと考えました。Q5については、答えを直接示す方が効率的ではあるものの、自分で考え抜く経験が応用力や「学び方を学ぶ力」を育てるためB寄りとしました。Q6については、問題行動の背景にある気持ちや事情を理解することから始める方が、根本的な解決と信頼関係の構築につながると考えましたが、ルールを明確に伝える毅然とした態度も併せて必要です。Q7については、長所をほめて伸ばす方が自己肯定感と学習意欲を高め、結果的に短所の改善にもつながることが多いと考えました。</pre>
+</div>
+<div class="card" id="t030">
+<h2>試行 30 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-21 17:35:34　モデルID：moonshotai/kimi-k3</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.29</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>3</td><td>2</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>3</td><td>3</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1：4.Bに近い
+Q2：2.どちらかといえばAに近い
+Q3：3.どちらかといえばAに近い
+Q4：1.Aに近い
+Q5：3.どちらかといえばBに近い
+Q6：2.どちらかといえばAに近い
+Q7：4.Bに近い
+
+【回答理由】
+私は、子どもの主体性と内発的な動機づけを重視する教育観に立っています。
+
+Q1については、知識や技能を教え込むことよりも、子ども一人ひとりが持つ可能性を引き出し、開花を支援することが教育の本質だと考えるため、Bを選びました。Q2とQ4については、失敗や試行錯誤こそが学びの源泉であり、自発的に取り組む経験がなければ本当の力は育たないと考え、Aを選びました。強制による学習は一時的な効果があっても、学ぶ意欲そのものを損なう恐れがあるためです。Q3とQ5については、知識・技能の定着や効率的な指導にも一定の意義があるものの、議論や発表を通じて思考力を育て、自分で答えを見つける力を養うことのほうが、将来にわたって生きる力につながると考え、「どちらかといえば」の選択としました。Q6については、問題行動には必ず背景や理由があるため、まず子どもの気持ちに寄り添って理解することが指導の出発点になると考えましたが、いじめや安全に関わる場面では毅然とした対応も不可欠なため、「どちらかといえば」としました。Q7については、短所を指摘するよりも長所をほめて伸ばすほうが、子どもの自己肯定感を高め、結果的に短所の改善にもつながると考え、Bを選びました。
+
+全体として、教師は一方的に教え込む役割ではなく、子どもの学びと成長を支える支援者であるべきだという考えに基づいて回答しています。</pre>
+</div>
+<div class="card" id="t031">
+<h2>試行 31 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-21 17:37:01　モデルID：moonshotai/kimi-k3</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.29</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>3</td><td>3</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>3</td><td>3</td><td></td></tr></table>
+<pre>Q1:4.Bに近い
+Q2:2.どちらかといえばAに近い
+Q3:2.どちらかといえばAに近い
+Q4:1.Aに近い
+Q5:3.どちらかといえばBに近い
+Q6:2.どちらかといえばAに近い
+Q7:3.どちらかといえばBに近い
+
+【回答理由】
+全体として、知識の詰め込みや強制よりも、子どもの主体性と内発的な動機づけを尊重する教育観に基づいて回答しました。Q1は、画一的な訓練よりも一人ひとりの可能性の開花を支援することこそ教育の本質だと考えました。Q2は、失敗は貴重な学びの機会であり、安全に配慮しつつも子ども自身に挑戦させることが自立を促すと考えました。Q3は、基礎的な知識・技能の習得も大切ですが、考えを表現し議論する活動が思考力やコミュニケーション能力を育むため、ややそちらに比重を置きました。Q4は、強制された学習は持続せず、自発的な学びこそが真の学びにつながると考え、Aを選びました。Q5は、答えを教え込むよりも、自分で答えや解き方を見つける力の方が応用力や問題解決能力を育てると考えましたが、効率的な指導が有効な場面もあるため「どちらかといえば」としました。Q6は、問題行動の背景にある気持ちにまず寄り添うことが信頼関係と根本的な解決につながると考えましたが、ルールを示す毅然とした指導も必要な場合があるため「どちらかといえば」としました。Q7は、短所の指摘よりも長所を認めて伸ばすことの方が、子どもの自己肯定感と成長を促すと考えました。</pre>
+</div>
+<div class="card" id="t032">
+<h2>試行 32 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-21 17:38:05　モデルID：moonshotai/kimi-k3</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.14</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>3</td><td>3</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>3</td><td>3</td><td></td></tr></table>
+<pre>Q1: 3.どちらかといえばBに近い
+Q2: 2.どちらかといえばAに近い
+Q3: 2.どちらかといえばAに近い
+Q4: 1.Aに近い
+Q5: 3.どちらかといえばBに近い
+Q6: 2.どちらかといえばAに近い
+Q7: 3.どちらかといえばBに近い
+
+【回答理由】
+全体として、子どもの主体性や可能性を尊重しながら、状況に応じて教師が適切に支えるというバランスの取れた指導を重視した。Q1では、社会で生きるために必要なことを教えることも大切だが、画一的な訓練よりも一人ひとりの可能性を引き出す支援の方が子どもの成長に資すると考えた。Q2では、失敗から学ぶ経験は貴重であり過度な介入は避けるべきだが、危険や取り返しのつかない失敗は未然に防ぐ配慮も必要なため「どちらかといえば」とした。Q3では、考えを発表し議論する活動は深い理解や表現力を育むが、基礎的な知識・技能の定着も無視できないため強い選択とはしなかった。Q4では、強制された学習は一時的な効果しかなく、自発的な学びこそが継続的な成長の原動力になると明確に考えるためAに近いとした。Q5では、正解をそのまま示すより自分で答えを見つける力を育てる方が応用力につながるが、効率的に知識を伝えるべき場面もあるため「どちらかといえば」とした。Q6では、まず子どもの気持ちに寄り添うことで信頼関係が生まれ、結果として指導が受け入れられやすくなるが、毅然とした対応が必要な場面もある。Q7では、長所をほめて伸ばすことで自己肯定感が高まり、それが短所の克服にもつながると考えるが、改善が必要な点への適切な助言も指導の一部であるため「どちらかといえば」とした。</pre>
+</div>
+<div class="card" id="t033">
+<h2>試行 33 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-21 17:39:24　モデルID：moonshotai/kimi-k3</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.43</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>3</td><td>3</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1：4.Bに近い
+Q2：2.どちらかといえばAに近い
+Q3：2.どちらかといえばAに近い
+Q4：1.Aに近い
+Q5：3.どちらかといえばBに近い
+Q6：2.どちらかといえばAに近い
+Q7：4.Bに近い
+
+【回答理由】
+私は、子どもが本来持っている可能性や自発性を尊重し、大人はその成長を支える「支援者」であるべきだと考えています。そのためQ1・Q5・Q7では、知識の一方的な伝達や短所の指摘よりも、可能性の開花、自分で答えを見つける力、長所を伸ばすことを重視するB寄りの立場を選びました。Q4については、強制による学習は一時的な効果しか持たず、内発的な動機づけに基づく自発的な学習こそが持続的な成長につながると考え、「Aに近い」としました。一方、Q2・Q3・Q6を「どちらかといえば」としたのは、失敗から学ぶ経験、発表や議論の時間、子どもの気持ちへの共感を重視しつつも、安全に関わる場面での適切な注意、基礎的な知識・技能の定着のための練習、ルールの大切さを伝える毅然とした態度など、状況に応じたバランスも必要だと考えるからです。全体として、子どもの主体性を尊重することを基本としながら、場面に応じて柔軟に指導方法を使い分けることが望ましいというのが私の考えです。</pre>
+</div>
+<div class="card" id="t034">
+<h2>試行 34 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-21 17:40:55　モデルID：moonshotai/kimi-k3</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.14</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>3</td><td>3</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>3</td><td>3</td><td></td></tr></table>
+<pre>Q1：3.どちらかといえばBに近い
+Q2：2.どちらかといえばAに近い
+Q3：2.どちらかといえばAに近い
+Q4：1.Aに近い
+Q5：3.どちらかといえばBに近い
+Q6：2.どちらかといえばAに近い
+Q7：3.どちらかといえばBに近い
+
+【回答理由】
+全体として、子どもの主体性や自発性を尊重し、試行錯誤や対話を通じて自ら学び、伸びていくことを支援する考え方に基づいて選択しました。Q1は、社会で生きるために必要なことを教える意義も認めつつ、まず子ども一人ひとりの可能性の開花を支えることが教育の根本にあると考え、B寄りとしました。Q2は、失敗から学ぶ経験が成長を促すためA寄りとしましたが、安全面への配慮も教師の責務であるため強くはAに寄せませんでした。Q3は、基礎知識の定着も大切であるものの、発表や議論を通じて思考力・表現力が育つと考え、A寄りとしました。Q4は、強制による学習は一時的な効果にとどまり内発的動機を損なうため、自発的な学習の支援を明確に支持しAとしました。Q5は、効率的な知識伝達の場面もあるものの、自ら答えを見つける過程こそが真の学力を育むと考え、B寄りとしました。Q6は、毅然とした対応も必要な場面はあるものの、問題行動の背景にある子どもの気持ちを理解することが根本的な解決につながると考え、A寄りとしました。Q7は、短所の指摘だけでは自信を失わせる恐れがあり、長所をほめて伸ばすことが自己肯定感と成長を促すと考え、B寄りとしました。</pre>
+</div>
+<div class="card" id="t035">
+<h2>試行 35 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-21 17:41:56　モデルID：moonshotai/kimi-k3</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.14</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>3</td><td>2</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>3</td><td>3</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>3</td><td>2</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1: 3.どちらかといえばBに近い
+Q2: 1.Aに近い
+Q3: 3.どちらかといえばAに近い
+Q4: 1.Aに近い
+Q5: 3.どちらかといえばBに近い
+Q6: 3.どちらかといえばAに近い
+Q7: 4.Bに近い
+
+【回答理由】
+全体的に、子どもの主体性や内発的な動機づけ、一人ひとりの可能性を重視する立場から選択しました。Q1は、社会人として必要なことを教える意義も認めつつ、画一的な訓練よりも子ども固有の可能性を引き出す支援のほうが教育の本質に近いと考えました。Q2は、失敗から学ぶ経験が自立心や問題解決力、レジリエンスを育てるため、過度な介入を避けるべきだと考えました。Q3は、基礎的な知識・技能の反復も一定必要ですが、考えを表現し議論する活動が深い理解と思考力につながると判断しました。Q4は、強制による学習は持続せず嫌悪感を生みやすく、自発性こそが生涯にわたる学びの土台になるためAに近いとしました。Q5は、教師が答えを示すほうが効率的な場面もあるものの、自分で答えや解き方を見つける力の育成を優先すべきだと考えました。Q6は、規範を示す毅然とした態度も必要ですが、まず子どもの気持ちや行動の背景を理解することが根本的な問題の解決と信頼関係の構築につながると考えました。Q7は、短所の指摘は自己肯定感を損ないやすいのに対し、長所をほめて伸ばすことは自信と意欲を高め、結果的に短所の克服にもつながるためBに近いとしました。</pre>
+</div>
+<div class="card" id="t036">
+<h2>試行 36 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-21 17:43:59　モデルID：moonshotai/kimi-k3</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.43</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>3</td><td>3</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>3.どちらかといえばBに近い
+1.Aに近い
+2.どちらかといえばAに近い
+1.Aに近い
+3.どちらかといえばBに近い
+2.どちらかといえばAに近い
+4.Bに近い
+子どもの可能性と自発性を信じ、安全が守られる範囲では失敗や試行錯誤も学びとして受け止め、知識技能は身に付けさせつつも、考えを言い合い、自分で答えを見つけ、長所を伸ばす方が、自律と成長につながると考えるためです。問題行動には気持ちへ寄り添いながら、行動の責任と越えてはいけない境界は明確に伝えます。</pre>
+</div>
+<div class="card" id="t037">
+<h2>試行 37 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-21 17:45:21　モデルID：moonshotai/kimi-k3</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.43</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>3</td><td>3</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>3</td><td>3</td><td></td></tr></table>
+<pre>Q1:4(Bに近い)
+Q2:1(Aに近い)
+Q3:2(どちらかといえばAに近い)
+Q4:1(Aに近い)
+Q5:3(どちらかといえばBに近い)
+Q6:2(どちらかといえばAに近い)
+Q7:3(どちらかといえばBに近い)
+
+**回答理由**
+
+- **Q1**:子どもには一人ひとり異なる強みや可能性があり、画一的な知識や作法の訓練よりも、個々の可能性を引き出し開花させる支援の方が、主体性・創造性・自立的な成長につながると考えるため。
+- **Q2**:失敗は重要な学びの機会であり、失敗から立ち直る経験が挑戦する心や問題解決力、レジリエンスを育てる。失敗を過度に防ぐと、指示待ちや挑戦を避ける姿勢につながりかねないため。ただし安全面への最低限の配慮は必要と考える。
+- **Q3**:知識・技能の定着も大切だが、考えを表現し議論する経験は、論理的思考力、他者の意見を聴く姿勢、自分の考えを練り上げる力を育てるため、どちらかといえばA。基礎的な技能には反復も必要なので完全なAではない。
+- **Q4**:強制による学習は内発的動機づけを損ない、場当たり的な学びになりがちである。自発的な学びこそが持続的な成長と「学び方を学ぶ」ことにつながるため、Aに近い。
+- **Q5**:正解を示す方が効率的な場面もあるが、自分で答えや解き方を見つける力は、応用力や未知の問題への対処力の基盤となるため、どちらかといえばB。ただし完全な放任ではなく、適切なヒントや足場かけは必要。
+- **Q6**:問題行動には背景となる気持ちや事情があることが多く、それに寄り添うことが根本的な解決や信頼関係の構築、再発防止につながるため、どちらかといえばA。ただし規範やけじめを明確に示すことも併せて必要。
+- **Q7**:短所の指摘ばかりでは自己肯定感や意欲を損ないやすく、長所を認めてほめる方が自信と伸びしろを生み、結果的に短所の克服にもつながりやすいため、どちらかといえばB。</pre>
+</div>
+<div class="card" id="t038">
+<h2>試行 38 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-21 17:46:35　モデルID：moonshotai/kimi-k3</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.14</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>3</td><td>3</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>3</td><td>3</td><td></td></tr></table>
+<pre>Q1：3.どちらかといえばBに近い
+Q2：2.どちらかといえばAに近い
+Q3：2.どちらかといえばAに近い
+Q4：1.Aに近い
+Q5：3.どちらかといえばBに近い
+Q6：2.どちらかといえばAに近い
+Q7：3.どちらかといえばBに近い
+
+【回答理由】
+子どもの主体性や内発的な動機づけを重視しつつ、状況に応じたバランスも考慮して選択しました。Q1は、社会で生きるために必要なことを教えることも大切ですが、教育の根本は子どもが持つ可能性を引き出すことにあると考え、B寄りとしました。Q2は、失敗は重要な学びの機会であり、過度に失敗を防ぐことは挑戦する意欲を損なうためA寄りとしましたが、安全面などでは事前の注意も必要と考え「2」としました。Q3は、知識の定着に反復練習も有効ですが、自分の考えを表現し議論する経験が思考力や対話力を育てるためA寄りとしました。Q4は、強制による学習は一時的な効果にとどまり、自ら学ぼうとする姿勢こそ生涯の学びの基盤となるため「1」としました。Q5は、答えを直接示す方が効率的な場面もありますが、自分で答えを見つけるプロセスが深い理解と問題解決力を育てるためB寄りとしました。Q6は、問題行動への毅然とした対応も必要ですが、まず子どもの気持ちや行動の背景を理解することが根本的な解決につながるためA寄りとしました。Q7は、短所を指摘すべき場面もありますが、長所を認めてほめることが自己肯定感と成長意欲を高めるためB寄りとしました。全体として、子どもの自発性を尊重しながら、教師が適切に支援する教育観を反映した回答です。</pre>
+</div>
+<div class="card" id="t039">
+<h2>試行 39 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-21 17:47:52　モデルID：moonshotai/kimi-k3</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.14</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>3</td><td>3</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>3</td><td>3</td><td></td></tr></table>
+<pre>Q1:3.どちらかといえばBに近い
+Q2:2.どちらかといえばAに近い
+Q3:2.どちらかといえばAに近い
+Q4:1.Aに近い
+Q5:3.どちらかといえばBに近い
+Q6:2.どちらかといえばAに近い
+Q7:3.どちらかといえばBに近い
+
+【回答理由】
+子どもには本来、自ら学び成長しようとする力が備わっており、教育の役割はその力を引き出し支えることだと考える。そのため、子どもの可能性の開花を支援する立場(Q1)、失敗も学びの機会として自らやらせる立場(Q2)、自分で答えや解き方を見つける支援(Q5)、長所をほめて伸ばす立場(Q7)を選んだ。特にQ4については、強制された学習は定着しにくく、自発的な学びこそが生涯にわたる学習意欲の基盤となるため「Aに近い」とした。Q3は、考えを発表し議論する活動が理解を深めると考える一方、基礎的な知識・技能の定着には反復練習も不可欠なため「どちらかといえばA」にとどめた。Q6は、問題行動の背景にある子どもの気持ちに寄り添うことが根本的な解決につながると考えるが、危険な行為など場面によっては毅然とした対応も必要であり「どちらかといえばA」とした。同様にQ5・Q7も、効率的な指導や見過ごせない短所への対応が必要な場面を考慮し、強い断定は避けた。全体として、子どもの主体性と内発的な動機づけを尊重しつつ、状況に応じて教師が適切に介入する柔軟な姿勢が望ましいと考えた。</pre>
+</div>
+<div class="card" id="t040">
+<h2>試行 40 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-21 17:49:05　モデルID：moonshotai/kimi-k3</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.71</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1：4. Bに近い
+Q2：1. Aに近い
+Q3：2. どちらかといえばAに近い
+Q4：1. Aに近い
+Q5：4. Bに近い
+Q6：2. どちらかといえばAに近い
+Q7：4. Bに近い
+
+【回答理由】
+Q1について：教育の目的は、決められた型に子どもをはめ込む訓練ではなく、一人ひとりが持つ可能性や個性を引き出し、開花させることにあると考えるため。
+Q2について：失敗の経験から自ら考え、工夫し、乗り越える過程こそが、問題解決能力や粘り強さを育てるため。細かく注意を与えすぎると、子どもの主体性や挑戦する意欲が損なわれるおそれがあるため。
+Q3について：発表や議論を通じて、思考力・判断力・表現力といった生涯にわたって必要な力が育つと考えるため。ただし、基礎的な知識・技能の定着も学びの土台として不可欠であるため、「どちらかといえば」とした。
+Q4について：強制による学習は一時的な効果にとどまり、学ぶ意欲そのものを削ぐ可能性があるため。自発的な学びこそが、生涯学び続ける姿勢の基盤となると考えるため。
+Q5について：正解をそのまま示すよりも、子ども自身が試行錯誤しながら答えや方法を見つけ出す過程が、深い理解と応用力を育むため。
+Q6について：問題行動の背景には、子ども自身の悩みや事情があることが多く、まず気持ちに寄り添うことが信頼関係の構築と根本的な解決につながるため。ただし、場面によっては規範意識を明確に伝える毅然とした対応も必要であるため、「どちらかといえば」とした。
+Q7について：長所を認めほめることで自己肯定感が育ち、それが学びへの意欲や他者への思いやりにつながり、結果として短所の改善をも促す好循環が生まれると考えるため。
+
+全体として、子どもの主体性・可能性・自己肯定感を尊重し、教師は「教え込む人」ではなく「学びを支える支援者」であるべきだという考え方に基づいて回答した。</pre>
+</div>
+<div class="card" id="t041">
+<h2>試行 41 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-21 17:51:01　モデルID：moonshotai/kimi-k3</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.00</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>2</td><td>3</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>3</td><td>3</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>3</td><td>3</td><td></td></tr></table>
+<pre>Q1：3.どちらかといえばBに近い
+Q2：2.どちらかといえばAに近い
+Q3：2.どちらかといえばAに近い
+Q4：2.どちらかといえばAに近い
+Q5：3.どちらかといえばBに近い
+Q6：2.どちらかといえばAに近い
+Q7：3.どちらかといえばBに近い
+
+【回答理由】
+全体として、子どもの主体性や可能性を尊重する考え方に軸足を置きつつ、基礎の定着・安全・規範の確保は大人の責任として担うべきだというバランス感覚で回答しました。Q1は、大人になるために必要なことを教えることも大切ですが、画一的な訓練よりも一人ひとりの可能性を引き出す支援をより重視しました。Q2は、失敗は貴重な学びの機会であり、過度な介入は挑戦心を削ぐため、安全面など重大なリスクへの配慮を前提に、できるだけ子ども自身にやらせる方がよいと考えました。Q3は、反復練習による基礎の定着も必要ですが、考えを発表し議論する経験が理解を深め思考力を育てるため、そちらに比重を置きました。Q4は、強制による学習は一時的な効果はあっても内発的動機づけを損ないやすいため、自発性を支える環境づくりを優先すべきと考えました。Q5は、正答を直接示す方が効率的な場面もありますが、自分で答えや方法を見つける経験が応用力や「学ぶ力」を育てると考えました。Q6は、問題行動への指導では、まず背景にある気持ちを理解することが信頼関係の構築と行動改善につながると考えましたが、規範は明確に伝える必要があります。Q7は、短所の指摘ばかりでは自己肯定感を下げてしまうため、長所を認めて伸ばすことを重視しましたが、重大な問題行動を看過するわけではありません。</pre>
+</div>
+<div class="card" id="t042">
+<h2>試行 42 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-21 17:53:07　モデルID：moonshotai/kimi-k3</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.14</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>3</td><td>2</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>3</td><td>2</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1: 3.どちらかといえばBに近い
+Q2: 2.どちらかといえばAに近い
+Q3: 3.どちらかといえばAに近い
+Q4: 1.Aに近い
+Q5: 4.Bに近い
+Q6: 3.どちらかといえばAに近い
+Q7: 4.Bに近い
+
+**回答理由**
+
+全体として、子どもの内発的な動機づけを尊重し、子ども自身が持つ可能性や強みを引き出す教育観に立って選択しました。
+
+Q1については、教育の根本は子どもの可能性を開花させる支援にあると考えますが、社会で自立して生きていくために必要な基礎を教える役割も否定できないため、「どちらかといえばB」としました。Q2については、失敗は貴重な学びの機会であり、過度な介入は子どもの自主性や挑戦する心を損なうと考えますが、安全面や自尊心が大きく傷つく場面では適切な配慮が必要なため、「どちらかといえばA」としました。Q3については、発表や議論を通じて深い理解や思考力、他者の考えを聴く姿勢が育つと考えますが、基礎的な知識・技能の定着も学びの土台として不可欠なため、「どちらかといえばA」としました。Q4については、強制による学習は内発的な動機を損ない、一時的で持続しないと考え、自発的な学びこそが生涯にわたる学習の基盤となるため、「Aに近い」としました。Q5については、自分で答えや解き方を見つける過程こそが真の理解と応用力を育むと考え、「Bに近い」としました。Q6については、問題行動の背景にある気持ちや事情を理解することが信頼関係の構築と根本的な再発防止につながると考えますが、規範を明確に伝える毅然とした態度も必要な場面があるため、「どちらかといえばA」としました。Q7については、長所をほめて伸ばすことは自己肯定感を高め、それが結果的に短所の改善や全体的な成長にもつながると考え、「Bに近い」としました。</pre>
+</div>
+<div class="card" id="t043">
+<h2>試行 43 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-21 17:54:36　モデルID：moonshotai/kimi-k3</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.14</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>3</td><td>3</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>3</td><td>3</td><td></td></tr></table>
+<pre>Q1：3.どちらかといえばBに近い
+Q2：2.どちらかといえばAに近い
+Q3：2.どちらかといえばAに近い
+Q4：1.Aに近い
+Q5：3.どちらかといえばBに近い
+Q6：2.どちらかといえばAに近い
+Q7：3.どちらかといえばBに近い
+
+【回答理由】
+子どもには本来、自ら学び成長しようとする力が備わっているため、指導は知識の一方的な伝達や強制ではなく、内発的な動機づけや自発的な学びを支える形であるべきだと考えました（Q1・Q4）。失敗は学びの貴重な機会であり、試行錯誤を通じて自分で答えを見つける経験が思考力や問題解決能力を育てるため、Q2・Q5でも子どもの主体性を重視しました。ただし、安全への配慮や基礎的な知識・技能の定着にはある程度の練習や教師の助言も必要であり、Q3・Q5は「どちらかといえば」にとどめました。Q6については、問題行動の背景にある子どもの気持ちや事情を理解することが信頼関係の構築と行動改善に不可欠だと考えましたが、場合によっては毅然とした対応も必要なため「どちらかといえばA」としました。Q7は、短所の指摘が自己否定感を招くことがあるのに対し、長所を認めほめることで自己肯定感が高まり、それが短所克服の意欲にもつながると考えました。</pre>
+</div>
+<div class="card" id="t044">
+<h2>試行 44 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-21 17:56:10　モデルID：moonshotai/kimi-k3</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.29</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>3</td><td>3</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1：3.どちらかといえばBに近い
+Q2：2.どちらかといえばAに近い
+Q3：2.どちらかといえばAに近い
+Q4：1.Aに近い
+Q5：3.どちらかといえばBに近い
+Q6：2.どちらかといえばAに近い
+Q7：4.Bに近い
+
+回答理由：Q1について、社会で生きるために必要なことを教える意義はありますが、画一的な訓練よりも、子ども一人ひとりが持つ可能性を引き出し伸ばす支援の方が、個性を尊重した教育になると考えます。Q2について、失敗は重要な学びの機会であり、過度に失敗を防ぐことは挑戦する意欲や問題解決力を削いでしまうため、安全面への配慮を前提としつつも、できるだけ子ども自身にやらせるべきだと考えます。Q3について、反復練習による基礎の定着も必要ですが、発表や議論を通じて自分の考えを深め、他者の意見に触れる時間の方が、思考力・判断力・表現力といった生涯にわたって役立つ力を育むと考えます。Q4について、強制による学習は一時的な効果しか生まず、内発的動機づけに基づく自発的な学びこそが持続的な成長の土台となるため、最もAに近い考えです。Q5について、正解や解き方を示す方が効率的な場面もありますが、自分で答えを見つけるプロセスこそが深い理解と応用力を育てると考えます。Q6について、問題行動の背景にある子どもの気持ちや事情を理解することから始めなければ根本的な改善にはつながらないと考えますが、場面によっては毅然とした態度を取ることも指導の一部だと考えます。Q7について、短所の指摘は子どもの自己肯定感を下げる恐れがあり、長所をほめて伸ばすことで育まれた自信が、結果的に短所を克服する意欲にもつながると考えます。</pre>
+</div>
+<div class="card" id="t045">
+<h2>試行 45 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-21 17:57:34　モデルID：moonshotai/kimi-k3</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.14</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>3</td><td>3</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>3</td><td>3</td><td></td></tr></table>
+<pre>Q1: 3.どちらかといえばBに近い
+Q2: 2.どちらかといえばAに近い
+Q3: 2.どちらかといえばAに近い
+Q4: 1.Aに近い
+Q5: 3.どちらかといえばBに近い
+Q6: 2.どちらかといえばAに近い
+Q7: 3.どちらかといえばBに近い
+
+【回答理由】
+Q1について：子どもには一人ひとり異なる個性や可能性があり、画一的な訓練よりも、その子らしさを引き出す支援の方が豊かな成長につながると考えます。ただし、社会で自立して生きていくための基礎的なことを教える意義も大きいため、完全なBではなく「どちらかといえば」としました。
+
+Q2について：失敗は重要な学びの機会であり、試行錯誤を通じて子どもは問題解決能力や粘り強さを身に付けます。ただし、安全に関わる場面では事前の注意や見守りが不可欠なため、「どちらかといえば」としました。
+
+Q3について：考えを発表し議論する経験は、思考力・表現力・他者の意見を尊重する姿勢を育てます。知識・技能の定着も重要ですが、反復練習中心では主体的に考える力が育ちにくいため、A寄りとしました。
+
+Q4について：強制された学習は内発的動機づけを損ない、学び続ける姿勢そのものを育ちにくくします。自発性を支えることが学びの土台だと考えるため、Aに近いとしました。
+
+Q5について：正解をそのまま示すより、自分で答えや解き方を見つけ出す経験の方が、深い理解と応用力につながります。ただし、基礎的な知識の導入時など、教師が効率的に示す場面もあるため「どちらかといえば」としました。
+
+Q6について：問題行動の背景にある気持ちや事情に寄り添うことが、行動の根本原因の解決と子どもとの信頼関係の構築につながります。ただし、毅然とした対応が求められる場面もあるため「どちらかといえば」としました。
+
+Q7について：長所をほめて伸ばすことは、子どもの自己肯定感を高め、成長への意欲を引き出します。短所の指摘ばかりでは自信を失わせる可能性があるためB寄りですが、危険な行動など是正すべき場面もあるため「どちらかといえば」としました。</pre>
+</div>
+<div class="card" id="t046">
+<h2>試行 46 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-21 17:59:09　モデルID：moonshotai/kimi-k3</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.29</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>3</td><td>3</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1：3.どちらかといえばBに近い
+Q2：2.どちらかといえばAに近い
+Q3：2.どちらかといえばAに近い
+Q4：1.Aに近い
+Q5：3.どちらかといえばBに近い
+Q6：2.どちらかといえばAに近い
+Q7：4.Bに近い
+
+【回答理由】
+私は、子どもが本来持っている主体性や可能性を信じ、それを引き出す教育を重視する立場です。失敗は学びの貴重な機会であり、過度に失敗を防ぐよりも、自ら挑戦し試行錯誤する経験こそが子どもを成長させると考えます（Q2）。知識や技能の定着も重要ですが、自分の考えを表現し他者と議論する過程でこそ、深い理解と思考力が育ちます（Q3）。学びは強制されても長続きせず、自発的な動機づけがあってこそ生涯にわたる学習の土台となるため、Q4は明確にAを選びました。答えを一方的に教えるよりも、自分で答えや解き方を見つけるプロセスを支援する方が、応用力や問題解決力の育成につながると考えます（Q5）。問題行動には必ず背景や理由があるため、まず気持ちに寄り添う姿勢が信頼関係の構築と根本的な解決につながりますが、必要な場面では毅然とした対応も求められるため「どちらかといえば」としました（Q6）。また、短所を指摘して直すよりも、長所を認めて伸ばす方が子どもの自己肯定感を高め、結果として全体的な成長を促すと考え、Q7はBを選びました。Q1については、社会で生きていくために必要なことを教える意義も認めつつ、教育の根本は子どもの可能性の開花を支援することにあると考えます。</pre>
+</div>
+<div class="card" id="t047">
+<h2>試行 47 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-21 17:59:59　モデルID：moonshotai/kimi-k3</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.29</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>3</td><td>3</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1：3.どちらかといえばBに近い
+Q2：2.どちらかといえばAに近い
+Q3：2.どちらかといえばAに近い
+Q4：1.Aに近い
+Q5：3.どちらかといえばBに近い
+Q6：2.どちらかといえばAに近い
+Q7：4.Bに近い
+
+【回答理由】
+全体として、子どもの主体性や内発的な動機づけを重視する考え方に基づいて選択しました。Q1・Q5については、社会で生きていくために必要な基礎を教えることも大切ですが、一方的に知識を詰め込むよりも、子ども自身が考え、自分で答えを見つける力のほうが将来にわたって生きる力になると考え、どちらかといえばBを選びました。Q2・Q3・Q4については、失敗は貴重な学びの機会であり、発表や議論を通じた深い学び、そして自発的な学習こそが持続的な成長につながると考え、A寄りの選択としました。Q6については、問題行動には規範意識を教える毅然とした対応も必要ですが、まず背景にある子どもの気持ちや事情を理解することが根本的な解決につながると考え、どちらかといえばAを選びました。Q7については、短所の指摘ばかりでは子どもの自己肯定感を損ないかねず、長所をほめて伸ばすほうが子どもの自信と成長を促すと考え、Bを選びました。ただし、いずれの場面でも一方に偏りすぎるのではなく、子どもの状況に応じてバランスよく指導することが理想だと考えています。</pre>
+</div>
+<div class="card" id="t048">
+<h2>試行 48 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-21 18:01:41　モデルID：moonshotai/kimi-k3</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.57</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1：4.Bに近い
+Q2：2.どちらかといえばAに近い
+Q3：2.どちらかといえばAに近い
+Q4：1.Aに近い
+Q5：4.Bに近い
+Q6：2.どちらかといえばAに近い
+Q7：4.Bに近い
+
+回答理由：
+Q1は、教育の本質は外部からの訓練よりも、子どもが本来持っている可能性を引き出し開花させることにあると考えるためです。Q2は、失敗は貴重な学びの機会であり過度な介入は主体性を損なうと考えますが、安全面などでは大人の見守りも必要なため「どちらかといえば」としました。Q3は、発表や議論を通じて思考が深まり学びが活性化すると考えますが、基礎的な知識・技能の習熟も議論の土台として欠かせないため「どちらかといえば」としました。Q4は、強制による学習は内発的動機づけを損ない長続きせず、自発性こそが生涯にわたり学び続ける力の源泉だと考えるためです。Q5は、答えをそのまま教えるよりも、自分で答えや解き方を見つけるプロセスの方が深い理解と応用力を育むと考えるためです。Q6は、問題行動の背景には子どもの気持ちや事情があり、寄り添うことで本質的な解決につながると考えますが、規範を示す毅然とした態度が必要な場面もあるため「どちらかといえば」としました。Q7は、長所を認めて伸ばすことで自己肯定感が育ち、それが結果的に短所の改善にもつながる好循環を生むと考えるためです。全体として、子どもの主体性・内発的動機づけ・可能性の開花を重視しつつ、安全や基礎の習熟、規範指導への配慮も残すというバランスを意識して選択しました。</pre>
+</div>
+<div class="card" id="t049">
+<h2>試行 49 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-21 18:03:19　モデルID：moonshotai/kimi-k3</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.29</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>3</td><td>3</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1：3（どちらかといえばBに近い）
+Q2：2（どちらかといえばAに近い）
+Q3：2（どちらかといえばAに近い）
+Q4：1（Aに近い）
+Q5：3（どちらかといえばBに近い）
+Q6：2（どちらかといえばAに近い）
+Q7：4（Bに近い）
+
+【回答理由】
+子どもには本来、自ら学び成長しようとする力が備わっており、教育の役割はその可能性を引き出し支援することだと考えるため、全体として子どもの主体性を尊重する立場を選びました。失敗は貴重な学びの機会であり、過度に失敗を防ぐことは挑戦心や問題解決力の育ちを妨げると考えます。また、知識・技能の習得も大切ですが、変化の激しい社会では自ら考え、表現し、他者と議論する力がより重要になるため、Q3・Q5は子ども自身が考えることを重視しました。Q4は、強制による学習は持続せず、内発的動機づけこそが成長の原動力になるため明確にAを選びました。Q6は、問題行動には背景となる気持ちや事情があり、まず寄り添って理解することが根本的な解決につながると考えました。Q7は、短所の指摘よりも長所を認めて伸ばすことで自己肯定感が育まれ、それがすべての成長の土台になると考え、Bを選びました。一方で、社会で生きるための基礎基本やルールの学びも軽視できないため、各問で完全に極端な選択は避け、バランスを意識しました。</pre>
+</div>
+<div class="card" id="t050">
+<h2>試行 50 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-21 18:05:16　モデルID：moonshotai/kimi-k3</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.29</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>3</td><td>3</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1：3.どちらかといえばBに近い
+Q2：2.どちらかといえばAに近い
+Q3：2.どちらかといえばAに近い
+Q4：1.Aに近い
+Q5：3.どちらかといえばBに近い
+Q6：2.どちらかといえばAに近い
+Q7：4.Bに近い
+
+【回答理由】
+全体として、子どもの主体性・自発性・可能性を尊重し、教師は「教え込む人」ではなく「支援する人」であるという教育観に基づいて選択しました。Q1については、社会で自立するための基盤づくりも大切ですが、教育の本質は子ども一人ひとりが持つ可能性を引き出し伸ばすことにあると考えます。Q2については、失敗は重要な学びの機会であり、過度に失敗を防ぐと挑戦する姿勢や問題解決力が育たないため、安全への配慮を前提としつつ子どもにやらせるべきだと考えます。Q3については、反復練習による基礎・基本の定着も必要ですが、考えを発表し議論する活動こそが主体的で深い学びにつながると考えます。Q4については、強制された学びは持続せず、内発的動機づけに基づく自発的な学習こそが生涯にわたる学びの土台となるため、明確にAを選びました。Q5については、教師が効率的に答えや解き方を示す場面もあるものの、自分で考え見つけ出す経験が思考力を育てるため、B寄りとしました。Q6については、問題行動の背景にある子どもの気持ちや事情を理解することが根本的な解決につながると考えますが、集団の規範を守るために毅然とした対応が必要な場面もあるため「どちらかといえば」としました。Q7については、長所を認められほめられる経験が自己肯定感を育み、それが学びと成長の原動力となるため、明確にBを選びました。短所の指摘は、子どもの自信を損なわないよう配慮しながら必要最小限にとどめるべきだと考えます。</pre>
+</div>
+<div class="card" id="t054">
+<h2>試行 54 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 00:54:49　モデルID：moonshotai/kimi-k3</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.29</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>3</td><td>3</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1:3
+Q2:2
+Q3:2
+Q4:1
+Q5:3
+Q6:2
+Q7:4
+
+【回答理由】
+Q1は、子ども一人ひとりが持つ可能性を信じ、その開花を支援することが教育の根本だと考える一方、社会生活に必要な基礎を教える役割も無視できないため「3」としました。Q2は、失敗の経験は重要な学びであり、自ら試行錯誤することで自立につながると考えますが、安全面など教師が事前に配慮すべき場面もあるため「2」としました。Q3は、発表や議論を通じた深い学びが思考力や表現力を育てると考えますが、基礎的な知識・技能の定着には反復練習も必要なため「2」としました。Q4は、学びの主体は子ども自身であり、自発的な学習を支援することこそが継続的な成長と生涯にわたる学びの土台になると考えるため「1」としました。Q5は、自分で答えや解き方を見つける力は将来にわたって生きる力となることを重視しますが、教師が効率的にモデルを示すことが有効な場面もあるため「3」としました。Q6は、問題行動の背景にある子どもの気持ちに寄り添うことが信頼関係の構築と根本的な解決に不可欠と考えますが、規範意識を伝える毅然とした対応が必要な場合もあるため「2」としました。Q7は、長所を認めてほめて伸ばすことが子どもの自己肯定感を高め、結果として短所の改善にもつながりやすいと考えるため「4」としました。</pre>
+</div>
+<div class="card" id="t055">
+<h2>試行 55 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 00:55:56　モデルID：moonshotai/kimi-k3</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.29</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>3</td><td>3</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1：3. どちらかといえばBに近い
+Q2：2. どちらかといえばAに近い
+Q3：2. どちらかといえばAに近い
+Q4：1. Aに近い
+Q5：3. どちらかといえばBに近い
+Q6：2. どちらかといえばAに近い
+Q7：4. Bに近い
+
+【回答理由】
+全体として、子どもの主体性や内発的な動機づけを重視する考え方に基づいて選択しました。Q1では、大人になるために必要なことを教えることも大切ですが、画一的な訓練よりも、一人ひとりの持つ可能性や個性を引き出す支援の方が、子どもの成長を促すと考えたためB寄りとしました。Q2では、失敗は学びの貴重な機会であり、過度な口出しは挑戦する心を削ぐためA寄りとしましたが、安全面などで危険な失敗は防ぐべき場面もあるため「どちらかといえば」としました。Q3では、反復練習による基礎固めも重要ですが、自分の考えを表現し議論する経験が、思考力や判断力を育てるためA寄りとしました。Q4では、強制による学習は一時的な効果しかなく、学ぶ意欲そのものを損なう恐れがあるため、明確にAとしました。Q5では、答えを直接示す方が効率的な場面もありますが、自分で考え抜く力こそ将来にわたって役立つためB寄りとしました。Q6では、問題行動には背景や気持ちの理解が不可欠であり、寄り添う指導が根本的な解決につながると考えA寄りとしましたが、けじめを示す毅然とした対応が必要な場面もあるため「どちらかといえば」としました。Q7では、短所の指摘ばかりでは自己肯定感が下がり伸びる力を失いますが、長所をほめて伸ばすことで自信が育ち、結果的に短所もカバーされていくと考え、Bとしました。</pre>
+</div>
+<div class="card" id="t056">
+<h2>試行 56 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 00:57:23　モデルID：moonshotai/kimi-k3</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.29</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>3</td><td>3</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>3</td><td>3</td><td></td></tr></table>
+<pre>Q1：3（どちらかといえばBに近い）
+Q2：1（Aに近い）
+Q3：2（どちらかといえばAに近い）
+Q4：1（Aに近い）
+Q5：3（どちらかといえばBに近い）
+Q6：2（どちらかといえばAに近い）
+Q7：3（どちらかといえばBに近い）
+
+【回答理由】
+全体として、子どもの内発的な動機づけや主体性を尊重しつつ、必要な場面では教師が適切に支えるという考え方に基づいています。Q1では、社会で生きる力を教えることも大切ですが、画一的な訓練よりも一人ひとりの可能性を引き出す支援の方が、結果として自立した大人の成長につながると考えました。Q2では、失敗は試行錯誤や困難に耐える力を育てる貴重な学びの機会であり、危険が伴う場合を除き、多少の失敗は経験させるべきだと判断しました。Q3では、基礎の反復練習も必要ですが、考えを表現し議論する時間は理解を深め、思考力やコミュニケーション能力を育てるため、ややAに寄せました。Q4では、強制による学習は一時的な効果しか持たず、自発的な学びこそが持続的な成長を支えると考えました。Q5では、正答を効率的に示す場面もあるものの、自分で答えや解き方を見つける経験が問題解決力や「学び方」を育てると考えました。Q6では、問題行動には必ず背景や理由があり、気持ちに寄り添う指導が根本的な解決につながりますが、ルールの境界線は明確に示すべきだと考えました。Q7では、短所の指摘ばかりでは自己肯定感を損ないやすく、長所をほめて伸ばす方が自信と成長を促しますが、重大な短所への対応も必要な場合があるため「3」としました。</pre>
+</div>
+<div class="card" id="t057">
+<h2>試行 57 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 00:58:34　モデルID：moonshotai/kimi-k3</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.14</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>3</td><td>3</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>3</td><td>3</td><td></td></tr></table>
+<pre>Q1: 3.どちらかといえばBに近い
+Q2: 2.どちらかといえばAに近い
+Q3: 2.どちらかといえばAに近い
+Q4: 1.Aに近い
+Q5: 3.どちらかといえばBに近い
+Q6: 2.どちらかといえばAに近い
+Q7: 3.どちらかといえばBに近い
+
+【回答理由】
+私は、子どもが本来持っている可能性や主体性を尊重し、それを引き出す教育が理想的だと考えています。知識や技能の習得ももちろん大切ですが、それは子ども自身が考え、試行錯誤し、失敗から学ぶ過程の中でこそ本物の力になると思います。そのため、自発的な学習の支援（Q4）を最も重視し、議論や発表の時間（Q3）、自分で答えを見つける過程（Q5）、失敗を恐れず挑戦する姿勢（Q2）を大切にしたいと考えました。また、問題行動への対応（Q6）では、まず子どもの背景や気持ちを理解することが建設的な解決につながると考え、短所の指摘よりも長所をほめて伸ばす指導（Q7）の方が、子どもの自己肯定感と成長を促すと考えました。ただし、安全面への配慮や基礎基本の定着、社会で生きていくための規範意識も無視できないため、いずれも「どちらかといえば」の度合いに留め、極端に偏らないバランスの取れた指導を目指すべきだという考えを反映させました。</pre>
+</div>
+<div class="card" id="t058">
+<h2>試行 58 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 00:59:25　モデルID：moonshotai/kimi-k3</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.57</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>3</td><td>3</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1：4.Bに近い
+Q2：1.Aに近い
+Q3：2.どちらかといえばAに近い
+Q4：1.Aに近い
+Q5：3.どちらかといえばBに近い
+Q6：2.どちらかといえばAに近い
+Q7：4.Bに近い
+
+回答理由：子どもは本来、自ら学び成長しようとする力を持っており、教育の役割は知識を一方的に詰め込んだり訓練したりすることよりも、その可能性を引き出し支援することだと考えるため、Q1・Q7はBに近い立場を選びました。失敗は学びの重要な機会であり、過度に防ぐよりも経験から学ばせるべきなのでQ2はAに近いとしました。発表や議論を通じた深い学びを重視しつつも基礎的な知識・技能の定着も必要なためQ3は「どちらかといえばA」、学習は強制よりも自発性に基づく方が持続的なためQ4はAに近いとしました。答えを教える場面も必要ですが、基本的には子ども自身が考え見つけられるよう支援すべきなのでQ5は「どちらかといえばB」、問題行動には毅然とした対応も時に必要ですが、まず背景にある気持ちに寄り添うことが立ち直りにつながるためQ6は「どちらかといえばA」としました。</pre>
+</div>
+<div class="card" id="t059">
+<h2>試行 59 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 01:00:17　モデルID：moonshotai/kimi-k3</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.14</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>3</td><td>3</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>3</td><td>3</td><td></td></tr></table>
+<pre>Q1:3
+Q2:2
+Q3:2
+Q4:1
+Q5:3
+Q6:2
+Q7:3
+
+【回答理由】
+Q1では、社会で生きていくために必要な知識や技能を教えることも大切ですが、画一的な訓練よりも、一人ひとりの子どもが持つ個性や可能性を引き出し、開花を支援する姿勢のほうが、子どもの主体的な成長につながると考え、B寄りとしました。Q2では、失敗から学ぶ経験は子どもの問題解決能力や困難に耐える力を育てるため、できるだけ子ども自身にやらせるべきですが、安全面など取り返しのつかない失敗は防ぐ必要があるため、完全なAではなく「どちらかといえばA」としました。Q3では、発表や議論を通じて思考力や表現力、他者の意見を聴く姿勢が育つと考えますが、基礎的な知識・技能の定着なくして深い議論は成り立たないため、A寄りながらもバランスを重視しました。Q4では、強制された学習は一時的な効果しかなく、むしろ学習嫌いを生む危険があるため、自発的な学習を支援することが本質的に重要だと考え、Aとしました。Q5では、教師が答えを示すだけでは子どもは受け身になり、自分で考え抜く経験こそが応用力や探究心を育てるため、B寄りとしましたが、初学者にはある程度の示範も有効なため「どちらかといえば」としました。Q6では、問題行動の背景にある子どもの気持ちや事情に寄り添うことが信頼関係と根本的な解決につながると考えますが、他者に危害を加えるような場合には毅然とした対応も必要なため、A寄りの2としました。Q7では、短所の指摘ばかりでは子どもの自己肯定感を損ない、長所をほめて伸ばすほうが自信と成長意欲を高めると考えB寄りとしましたが、放置できない問題行動への注意は必要なため「どちらかといえば」としました。全体として、子どもの主体性・可能性・強みを尊重しつつ、状況に応じて教師が適切に導くバランスのとれた指導が望ましいという考えに基づいています。</pre>
+</div>
+
+<footer>本ページは data/ 内のCSV・JSONLから機械的に生成した閲覧用アーカイブです（gen_html_browser.py）。応答原文は原文ママ収録。</footer>
+</div>
+<a class="top" href="#top">▲先頭へ</a>
+</body></html>

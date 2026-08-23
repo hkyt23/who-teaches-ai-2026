@@ -1,0 +1,1390 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>実験1 教育信念質問紙｜Gemini 3.6 Flash (廉価版)</title><style>
+:root{--fg:#222;--bg:#fff;--muted:#666;--line:#e2e2e2;--accent:#1f3555;}
+*{box-sizing:border-box}
+body{font-family:-apple-system,"Hiragino Sans","Yu Gothic",sans-serif;color:var(--fg);
+     background:var(--bg);margin:0;line-height:1.65}
+.wrap{max-width:980px;margin:0 auto;padding:24px 28px 80px}
+h1{font-size:1.5rem;margin:0 0 6px}
+/* h1直下の副題行（本改修）。長いタイトルの折り返しで記号だけが孤立して2行目に落ちるのを防ぐため、
+   主題と副題をh1/pに分離する。同系色（h1と同じ濃色系）だがh1より小さいサイズにする。 */
+p.h1sub{font-size:.95rem;color:#3a4a63;margin:0 0 10px;font-weight:500}
+h2{font-size:1.05rem;margin:0 0 4px;display:flex;align-items:center;flex-wrap:wrap}
+/* 節見出し（本文の区切り）。図キャプション（figure figcaption、小さいグレー中央寄せ）とは
+   明確に区別できるよう、上マージンを広く取り、太字＋左太罫線＋淡い背景を付す。 */
+h3{font-size:1.02rem;font-weight:700;margin:34px 0 10px;color:var(--accent);
+   border-left:5px solid var(--accent);padding:4px 0 4px 10px;
+   background:linear-gradient(to right,rgba(31,53,85,.07),rgba(31,53,85,0) 70%)}
+.card p{margin:8px 0;line-height:1.75}
+.card p.lead{margin:6px 0 16px}
+.card p.note{color:var(--muted);font-size:.85rem;margin-top:18px;padding-top:10px;border-top:1px dashed var(--line)}
+a.mlink{color:var(--accent);text-decoration:none;border-bottom:1px dotted var(--accent)}
+a.mlink:hover{background:#eef1f7}
+.meta{color:var(--muted);font-size:.88rem;margin:2px 0}
+.crumb{background:var(--accent);color:#fff;padding:10px 28px;font-size:.85rem}
+.crumb a{color:#cfe0ff;text-decoration:none}
+.crumb a:hover{text-decoration:underline}
+/* グラフ画像の図（本改修）。直後の見出し（h3）と混同されないよう、キャプションは小さめグレー・中央寄せにする。 */
+figure.fig{margin:16px 0 26px;text-align:center}
+figure.fig img{display:block;margin:0 auto;max-width:100%;border:1px solid var(--line);border-radius:4px}
+figure.fig figcaption{color:var(--muted);font-size:.82rem;margin-top:8px;line-height:1.5}
+figure.fig .fig-itemlink{display:block;margin-top:4px;font-size:.8rem}
+table{border-collapse:collapse;width:100%;margin:14px 0;font-size:.86rem}
+th,td{border:1px solid var(--line);padding:5px 8px;text-align:left;vertical-align:top}
+th{background:#f4f5f7;position:sticky;top:0}
+tr:nth-child(even) td{background:#fafafa}
+a.tlink{color:var(--accent);text-decoration:none}
+a.tlink:hover{text-decoration:underline}
+.badge{display:inline-block;width:24px;height:24px;line-height:24px;border-radius:50%;
+       color:#fff;font-size:.7rem;font-weight:700;text-align:center;margin-right:8px;
+       vertical-align:middle;flex:none}
+.badge.sm{width:19px;height:19px;line-height:19px;font-size:.62rem;margin-right:6px}
+.aaii-tag{color:var(--muted);font-size:.78rem;font-weight:600;margin-left:8px}
+.linkrow{margin:10px 0 20px;display:flex;gap:12px;flex-wrap:wrap}
+/* リンクボタン共通クラス（本改修）。上部2ボタン（収録モデル一覧と解説／性能とコスト）の書式
+   （font-family/size/weight/色）に、①②③ボタン・④summary・折りたたみsummary等すべてを統一する。
+   <a>にも<summary>にも同一クラスを付与して使う。 */
+.navbtn{display:inline-block;background:#eef1f7;border-radius:6px;padding:8px 14px;
+        text-decoration:none;color:var(--accent);
+        font-family:-apple-system,"Hiragino Sans","Yu Gothic",sans-serif;
+        font-size:.86rem;font-weight:600;line-height:1.3;cursor:pointer;list-style:none;border:none}
+.navbtn:hover{background:#e2e7f2}
+summary.navbtn::-webkit-details-marker{display:none}
+details.mdl{margin:10px 0 4px}
+details.mdl .modellist{margin-top:10px}
+.status-badge{display:inline-block;padding:1px 8px;border-radius:9px;font-size:.76rem;color:#fff;font-weight:600}
+.status-badge.ok{background:#1a7f37}
+.status-badge.warn{background:#b35c00}
+.status-badge.err{background:#c62828}
+.card{border:1px solid var(--line);border-radius:8px;padding:14px 18px;margin:18px 0;background:#fdfdfd}
+.card h2{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.score{font-weight:700;color:#123}
+pre{white-space:pre-wrap;word-break:break-word;background:#f8f9fb;border:1px solid var(--line);
+    border-radius:6px;padding:10px 12px;font-size:.82rem;font-family:ui-monospace,Menlo,Consolas,monospace}
+.errbox{white-space:pre-wrap;word-break:break-word;background:#fff4f4;border:1px solid #f3c1c1;
+    border-radius:6px;padding:10px 12px;font-size:.85rem;color:#8a1f1f}
+.itemtbl td,.itemtbl th{font-size:.78rem;padding:3px 6px}
+.section-title{margin-top:38px;border-bottom:2px solid var(--accent);padding-bottom:4px}
+.hdrbar{background:#eef1f7;border-radius:6px;padding:10px 14px;margin:12px 0 20px}
+.exp-block{margin:26px 0}
+.exp-block h2{border-bottom:2px solid var(--accent);padding-bottom:6px}
+ul.modellist{columns:2;-webkit-columns:2;list-style:none;padding:0;margin:8px 0}
+ul.modellist li{break-inside:avoid;padding:3px 0;font-size:.9rem;display:flex;align-items:center}
+footer{color:var(--muted);font-size:.78rem;margin-top:50px;border-top:1px solid var(--line);padding-top:10px}
+.top{position:fixed;right:18px;bottom:18px;background:var(--accent);color:#fff;border-radius:20px;
+     padding:8px 14px;font-size:.8rem;text-decoration:none;box-shadow:0 2px 6px rgba(0,0,0,.25)}
+/* 用語集（00_background.html「主要な用語」）。用語ごとに改行し、用語名を強調する段組。 */
+dl.termlist{margin:10px 0 4px}
+dl.termlist dt{font-weight:700;color:var(--accent);margin:14px 0 2px}
+dl.termlist dd{margin:0 0 2px 0;line-height:1.75}
+</style></head><body>
+<div class="crumb">日本教育学会第85回大会（2026）課題研究報告「誰がAIの教育倫理を育てるか」実験資料　／　<a href="../index.html">← 総合目次</a>　／　実験1 教育信念質問紙　／　Gemini 3.6 Flash (廉価版)</div>
+<div class="wrap">
+<a id="top"></a>
+<h1><span class="badge" style="background:#4285F4" title="Google">G</span><span>Gemini 3.6 Flash (廉価版)</span><span class="aaii-tag">AAII 51.6</span></h1>
+<p class="meta">実験1 教育信念質問紙</p>
+<p class="meta">▶ <a class="tlink" href="00_about.html">① 実験の説明</a>
+<a class="tlink" href="01_prompt.html">② 出題プロンプト</a>
+<a class="tlink" href="02_results.html">③ 結果概要</a></p>
+<div class="hdrbar">実測モデルID：google/gemini-3.6-flash　／　収録試行：全57（有効50・対象外7）</div>
+<h2>試行一覧</h2>
+<table><tr><th>番号</th><th>状態</th><th>7項目平均</th></tr><tr><td><a class="tlink" href="#t001">1</a></td><td><span class="status-badge warn">解析不能</span></td><td></td></tr><tr><td><a class="tlink" href="#t002">2</a></td><td><span class="status-badge ok">有効</span></td><td>3.43</td></tr><tr><td><a class="tlink" href="#t003">3</a></td><td><span class="status-badge ok">有効</span></td><td>3.57</td></tr><tr><td><a class="tlink" href="#t004">4</a></td><td><span class="status-badge ok">有効</span></td><td>3.57</td></tr><tr><td><a class="tlink" href="#t005">5</a></td><td><span class="status-badge ok">有効</span></td><td>3.43</td></tr><tr><td><a class="tlink" href="#t006">6</a></td><td><span class="status-badge ok">有効</span></td><td>3.14</td></tr><tr><td><a class="tlink" href="#t007">7</a></td><td><span class="status-badge ok">有効</span></td><td>3.14</td></tr><tr><td><a class="tlink" href="#t008">8</a></td><td><span class="status-badge ok">有効</span></td><td>3.43</td></tr><tr><td><a class="tlink" href="#t009">9</a></td><td><span class="status-badge ok">有効</span></td><td>3.71</td></tr><tr><td><a class="tlink" href="#t010">10</a></td><td><span class="status-badge ok">有効</span></td><td>3.57</td></tr><tr><td><a class="tlink" href="#t011">11</a></td><td><span class="status-badge ok">有効</span></td><td>3.57</td></tr><tr><td><a class="tlink" href="#t012">12</a></td><td><span class="status-badge ok">有効</span></td><td>3.57</td></tr><tr><td><a class="tlink" href="#t013">13</a></td><td><span class="status-badge ok">有効</span></td><td>3.43</td></tr><tr><td><a class="tlink" href="#t014">14</a></td><td><span class="status-badge ok">有効</span></td><td>3.43</td></tr><tr><td><a class="tlink" href="#t015">15</a></td><td><span class="status-badge ok">有効</span></td><td>3.57</td></tr><tr><td><a class="tlink" href="#t016">16</a></td><td><span class="status-badge ok">有効</span></td><td>3.43</td></tr><tr><td><a class="tlink" href="#t017">17</a></td><td><span class="status-badge ok">有効</span></td><td>3.57</td></tr><tr><td><a class="tlink" href="#t018">18</a></td><td><span class="status-badge ok">有効</span></td><td>3.43</td></tr><tr><td><a class="tlink" href="#t019">19</a></td><td><span class="status-badge ok">有効</span></td><td>3.00</td></tr><tr><td><a class="tlink" href="#t020">20</a></td><td><span class="status-badge warn">解析不能</span></td><td></td></tr><tr><td><a class="tlink" href="#t021">21</a></td><td><span class="status-badge ok">有効</span></td><td>3.57</td></tr><tr><td><a class="tlink" href="#t022">22</a></td><td><span class="status-badge ok">有効</span></td><td>3.14</td></tr><tr><td><a class="tlink" href="#t023">23</a></td><td><span class="status-badge ok">有効</span></td><td>3.43</td></tr><tr><td><a class="tlink" href="#t024">24</a></td><td><span class="status-badge warn">解析不能</span></td><td></td></tr><tr><td><a class="tlink" href="#t025">25</a></td><td><span class="status-badge ok">有効</span></td><td>3.57</td></tr><tr><td><a class="tlink" href="#t026">26</a></td><td><span class="status-badge warn">解析不能</span></td><td></td></tr><tr><td><a class="tlink" href="#t027">27</a></td><td><span class="status-badge ok">有効</span></td><td>3.57</td></tr><tr><td><a class="tlink" href="#t028">28</a></td><td><span class="status-badge ok">有効</span></td><td>3.43</td></tr><tr><td><a class="tlink" href="#t029">29</a></td><td><span class="status-badge ok">有効</span></td><td>3.29</td></tr><tr><td><a class="tlink" href="#t030">30</a></td><td><span class="status-badge warn">解析不能</span></td><td></td></tr><tr><td><a class="tlink" href="#t031">31</a></td><td><span class="status-badge ok">有効</span></td><td>3.57</td></tr><tr><td><a class="tlink" href="#t032">32</a></td><td><span class="status-badge ok">有効</span></td><td>3.57</td></tr><tr><td><a class="tlink" href="#t033">33</a></td><td><span class="status-badge ok">有効</span></td><td>3.43</td></tr><tr><td><a class="tlink" href="#t034">34</a></td><td><span class="status-badge ok">有効</span></td><td>3.29</td></tr><tr><td><a class="tlink" href="#t035">35</a></td><td><span class="status-badge ok">有効</span></td><td>3.00</td></tr><tr><td><a class="tlink" href="#t036">36</a></td><td><span class="status-badge ok">有効</span></td><td>3.14</td></tr><tr><td><a class="tlink" href="#t037">37</a></td><td><span class="status-badge ok">有効</span></td><td>3.43</td></tr><tr><td><a class="tlink" href="#t038">38</a></td><td><span class="status-badge ok">有効</span></td><td>3.57</td></tr><tr><td><a class="tlink" href="#t039">39</a></td><td><span class="status-badge ok">有効</span></td><td>3.43</td></tr><tr><td><a class="tlink" href="#t040">40</a></td><td><span class="status-badge ok">有効</span></td><td>3.00</td></tr><tr><td><a class="tlink" href="#t041">41</a></td><td><span class="status-badge ok">有効</span></td><td>3.29</td></tr><tr><td><a class="tlink" href="#t042">42</a></td><td><span class="status-badge ok">有効</span></td><td>3.43</td></tr><tr><td><a class="tlink" href="#t043">43</a></td><td><span class="status-badge ok">有効</span></td><td>3.00</td></tr><tr><td><a class="tlink" href="#t044">44</a></td><td><span class="status-badge warn">解析不能</span></td><td></td></tr><tr><td><a class="tlink" href="#t045">45</a></td><td><span class="status-badge warn">解析不能</span></td><td></td></tr><tr><td><a class="tlink" href="#t046">46</a></td><td><span class="status-badge ok">有効</span></td><td>3.71</td></tr><tr><td><a class="tlink" href="#t047">47</a></td><td><span class="status-badge ok">有効</span></td><td>3.29</td></tr><tr><td><a class="tlink" href="#t048">48</a></td><td><span class="status-badge ok">有効</span></td><td>3.43</td></tr><tr><td><a class="tlink" href="#t049">49</a></td><td><span class="status-badge ok">有効</span></td><td>3.43</td></tr><tr><td><a class="tlink" href="#t050">50</a></td><td><span class="status-badge ok">有効</span></td><td>3.57</td></tr><tr><td><a class="tlink" href="#t051">51</a></td><td><span class="status-badge ok">有効</span></td><td>3.57</td></tr><tr><td><a class="tlink" href="#t052">52</a></td><td><span class="status-badge ok">有効</span></td><td>3.14</td></tr><tr><td><a class="tlink" href="#t053">53</a></td><td><span class="status-badge ok">有効</span></td><td>3.57</td></tr><tr><td><a class="tlink" href="#t054">54</a></td><td><span class="status-badge ok">有効</span></td><td>3.57</td></tr><tr><td><a class="tlink" href="#t055">55</a></td><td><span class="status-badge ok">有効</span></td><td>3.57</td></tr><tr><td><a class="tlink" href="#t056">56</a></td><td><span class="status-badge ok">有効</span></td><td>3.43</td></tr><tr><td><a class="tlink" href="#t057">57</a></td><td><span class="status-badge ok">有効</span></td><td>3.43</td></tr></table>
+
+<div class="card" id="t001">
+<h2>試行 1 <span class="status-badge warn">解析不能</span></h2>
+<div class="meta">実施日時：2026-07-22 10:52:56　モデルID：google/gemini-3.6-flash</div>
+
+
+<pre>教育における指導方針については、子どもの発達段階や個別の状況、指導の目的（安全確保、基礎知識の定着、主体性の育成など）に応じて求められるアプローチが異なるため、AIとして特定の立場（「1.Aに近い」から「4.Bに近い」まで）を選択することはせず、中立的な立場をとります。
+
+それぞれの質問における対照的な考え方には、以下のようなそれぞれの意義や背景が存在します。
+
+---
+
+### 各質問における双方の視点と回答理由
+
+**Q1（指導と訓練 / 可能性の支援）**
+*   **Aの視点:** 社会の一員として必要な規範や基礎的な能力を確実に身に付けさせるためには、体系的な指導や訓練が効果的であるという考え方です。
+*   **Bの視点:** 子ども一人ひとりの個性を尊重し、自主性や創造性を最大限に引き出すためには、押し付けず支援に徹することが重要であるという考え方です。
+
+**Q2（失敗の容認 / 失敗の防止）**
+*   **Aの視点:** 失敗を通じた試行錯誤や問題解決の経験が、自己効力感や対応力を育むという考え方です。
+*   **Bの視点:** 危険の回避や大きな挫折を防ぐこと、また正しい手順を最初に定着させることが学習効率や安心感につながるという考え方です。
+
+**Q3（議論・発表の重視 / 反復練習の重視）**
+*   **Aの視点:** 自分の意見を言語化し他者と議論することで、思考力、判断力、表現力や対人関係能力が高まるという考え方です。
+*   **Bの視点:** 思考や議論の前提となる基礎的な知識や技能を定着させるためには、反復による習熟が不可欠であるという考え方です。
+
+**Q4（自発的学習の支援 / 強制的な学習）**
+*   **Aの視点:** 内発的動機づけに基づく学習が、持続的な学びや深い理解につながるという考え方です。
+*   **Bの視点:** 学習習慣が確立していない時期や基礎学力を確保するためには、一定の外圧や強制力を伴う指導が必要であるという考え方です。
+
+**Q5（正解の提示 / 自分で見つけさせる支援）**
+*   **Aの視点:** 正しい知識や効率的な解法を提示することで、誤解を防ぎ、効率的に学びを進めることができるという考え方です。
+*   **Bの視点:** 自ら考え、発見するプロセス（探究的学び）を経験することで、応用的思考力や問題解決能力が培われるという考え方です。
+
+**Q6（気持ちへの寄り添い / 毅然とした指導）**
+*   **Aの視点:** 行動の背景にある感情や不満を受け止めることで、心理的安全性を確保し、根本的な行動変容を促すという考え方です。
+*   **Bの視点:** 集団の規律維持や規範意識の定着、公平性の観点から、基準に沿って毅然とした対応をとることが重要であるという考え方です。
+
+**Q7（短所の是正 / 長所の伸長）**
+*   **Aの視点:** 社会生活で支障をきたす課題や短所を直すことで、バランスの取れた成長を目指すという考え方です。
+*   **Bの視点:** 長所や強みを褒めて伸ばすことで自己肯定感を高め、それが他の領域への自信や意欲にも波及するという考え方です。</pre>
+</div>
+<div class="card" id="t002">
+<h2>試行 2 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 10:57:32　モデルID：google/gemini-3.6-flash</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.43</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1: 3. どちらかといえばBに近い
+Q2: 2. どちらかといえばAに近い
+Q3: 2. どちらかといえばAに近い
+Q4: 1. Aに近い
+Q5: 4. Bに近い
+Q6: 2. どちらか的にはAに近い
+Q7: 4. Bに近い
+
+【回答理由】
+教育や子どもの指導においては、知識の注入や規律の強制よりも、子ども自身の主体性・探究心・自己肯定感を育むアプローチが長期的な成長につながると考えています。
+
+Q1については、社会規範の習得（A）も重要ですが、一人ひとりの個性や潜在能力を引き出す支援（B）が主体的な自己実現の基盤になると考えます。Q2では、過度な回避指導（B）よりも失敗から学ぶ体験（A）が自律性や強靭さを育むと捉えています。Q3・Q5においては、単なる暗記や正解の受容よりも、対話や自発的な試行錯誤を通じて深い理解と応用力（思考力・表現力）を身に付けることが重視されます。Q4では、強制による学習（B）は持続的な学習習慣に結びつきにくいため、内発的動機づけ（A）の支援が不可欠であると考えます。Q6では、毅然とした対応（B）の必要性を理解しつつも、問題行動の背景にある感情や理由に寄り添うこと（A）が根本的な自己内省と行動改善を促すと考えます。Q7では、短所の矯正（A）よりも長所を伸ばす関わり（B）が自己肯定感を高め、健やかな発達を支えると考えるため、上記の選択といたしました。</pre>
+</div>
+<div class="card" id="t003">
+<h2>試行 3 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:00:25　モデルID：google/gemini-3.6-flash</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.57</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1：3. どちらかといえばBに近い
+Q2：1. Aに近い
+Q3：2. どちらかといえばAに近い
+Q4：1. Aに近い
+Q5：4. Bに近い
+Q6：2. どちらかといえばAに近い
+Q7：4. Bに近い
+
+【回答理由】
+教育指導においては、子どもたちの自主性や主体性、内発的な動機づけを尊重することが、長期的な成長や自己肯定感の向上において極めて重要であると考えます。
+
+・Q1・Q4・Q5について：一律的な訓練や強制、正解の提示よりも、子ども自身が興味を持ち、問いを立て、自ら解決策を見出していくプロセスを支援することが、探究心や自立心を養うことに繋がります。
+・Q2について：失敗を恐れずに挑戦する環境を提供することが、試行錯誤を通じて深い学びや粘り強さを身につける鍵となります。
+・Q3について：基礎的な習熟も不可欠ですが、意見交換や議論を通じて多様な視点に触れる主体的・対話的な学びの時間を重視します。
+・Q6について：問題行動に対してルールを守らせる毅然さも重要ですが、まずは行動の背景にある子どもの気持ちや要因に寄り添うことが、根本的な解決と信頼関係の構築に役立つと考えます。
+・Q7について：短所の指摘よりも長所を認めて伸ばす指導を行うことで、自己効力感が高まり、結果として苦手な課題にも前向きに取り組む態度が育まれるためです。</pre>
+</div>
+<div class="card" id="t004">
+<h2>試行 4 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:00:37　モデルID：google/gemini-3.6-flash</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.57</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1 3. どちらかといえばBに近い
+Q2 1. Aに近い
+Q3 2. どちらかといえばAに近い
+Q4 1. Aに近い
+Q5 4. Bに近い
+Q6 2. どちらかといえばAに近い
+Q7 4. Bに近い
+
+【回答理由】
+現代の教育学や発達心理学、ならびに主体的・対話的で深い学び（アクティブ・ラーニング）を目指す教育方針においては、子どもが自ら考え、行動し、主体的に学ぶ力を育むことが重視されています。そのため、大人の価値観の強制や過度な失敗の回避よりも、試行錯誤（Q2）や自発的な探究（Q4, Q5）、長所を伸ばす関わり（Q7）や個々の可能性の尊重（Q1）を中心とすることが望ましいと考えられます。
+ただし、基礎的な知識・技能の定着や規範意識の醸成も教育においては欠かせない要素です。そのため、対話や議論を重視しつつも一定の反復練習の役割を考慮し（Q3）、問題行動への対応においても気持ちに寄り添うことを基本としながら状況に応じた規範的指導とのバランスを取ることが重要であるという観点から、上記のように選択いたしました。</pre>
+</div>
+<div class="card" id="t005">
+<h2>試行 5 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:00:47　モデルID：google/gemini-3.6-flash</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.43</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1: 3.どちらかといえばBに近い
+Q2: 2.どちらかといえばAに近い
+Q3: 2.どちらかといえばAに近い
+Q4: 1.Aに近い
+Q5: 4.Bに近い
+Q6: 2.どちらかといえばAに近い
+Q7: 4.Bに近い
+
+【回答理由】
+全体として、子どもの主体性、自発性、個性を重視し、子ども自身が学びや成長の主役となるよう支援する教育観に基づき選択しました。
+
+現代の教育では、与えられた知識を暗記・再現するだけでなく、自ら課題を見つけ、考え、表現する力が求められています。そのため、失敗を恐れずに挑戦できる環境を整え（Q2）、子ども同士の対話や探究活動を重視すること（Q3, Q5）が、自立した学び手を育てる上で効果的であると考えます。また、強要による学習よりも内発的動機付けによる自発的学習の方が、長期的かつ深い学びにつながります（Q4）。
+
+一方で、基礎的な知識・技能の定着や社会的規範の指導（Aの側面）も重要であり、これらを完全に否定するものではありません。例えば問題行動への対応（Q6）においては、毅然とした態度は必要ですが、まずは行動の背景にある心理や感情によりそうことで、根本的な解決や自己省察を促せると考えています。さらに、長所を伸ばすアプローチ（Q1, Q7）は自己肯定感を高め、結果的に短所の克服や潜在能力の発揮につながりやすいと考えています。</pre>
+</div>
+<div class="card" id="t006">
+<h2>試行 6 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:00:59　モデルID：google/gemini-3.6-flash</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.14</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>2</td><td>3</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>3</td><td>3</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1 3.どちらかといえばBに近い
+Q2 2.どちらかといえばAに近い
+Q3 2.どちらかといえばAに近い
+Q4 2.どちらかといえばAに近い
+Q5 3.どちらかといえばBに近い
+Q6 2.どちらかといえばAに近い
+Q7 4.Bに近い
+
+回答理由：
+現代の教育・指導においては、子どもが自ら考え、挑戦し、主体的に学ぶ力や自己肯定感を育むことが重要視されています。そのため、過度な強制や型へのはめ込みを避け、自発的な学習の支援や試行錯誤の機会の保障、長所を伸ばす関わり（Q1, Q2, Q4, Q5, Q7）に重点を置く考え方を優先しています。また、対話を通じた思考力の育成（Q3）や、過ちや問題行動の背景にある心情への共感（Q6）も、信頼関係の構築と本質的な成長には欠かせません。
+ただし、これらの指導方針は一概にどちらか一方のみで完結するものではなく、基礎的な知識・技能の定定着や社会的な規律の習得といった要素も、子どもの発達段階や状況に応じて柔軟に組み合わせる必要があるという前提に基づいています。</pre>
+</div>
+<div class="card" id="t007">
+<h2>試行 7 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:01:09　モデルID：google/gemini-3.6-flash</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.14</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>2</td><td>3</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>3</td><td>3</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1：3. どちらかといえばBに近い
+Q2：2. どちらかといえばAに近い
+Q3：2. どちらかといえばAに近い
+Q4：2. どちらかといえばAに近い
+Q5：3. どちらかといえばBに近い
+Q6：2. どちらかといえばAに近い
+Q7：4. Bに近い
+
+【回答理由】
+現代の教育指導においては、子どもが受け身で指示に従うのではなく、主体的に学び、思考し、失敗から学びながら自立していく支援が重視されています。そのため、自発的な学習の促進や思考力・解決能力の育成（Q2, Q3, Q4, Q5）、長所を認めて伸ばす関わり（Q1, Q7）を中心に捉えることが望ましいと考えます。ただし、社会的なルールや基礎的な知識の習得、また行動の背景にある感情への寄り添いと状況に応じた適切な関わり（Q6）など、どちらか一方に偏るのではなく、子どもの発達段階や状況に合わせて柔軟にバランスをとることが重要であるため、多くの項目で「どちらかといえば」という選択をしています。</pre>
+</div>
+<div class="card" id="t008">
+<h2>試行 8 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:01:17　モデルID：google/gemini-3.6-flash</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.43</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1 3. どちらかといえばBに近い
+Q2 2. どちらかといえばAに近い
+Q3 2. どちらかといえばAに近い
+Q4 1. Aに近い
+Q5 4. Bに近い
+Q6 2. どちらかといえばAに近い
+Q7 4. Bに近い
+
+【回答理由】
+現代の教育・指導においては、子ども自身の主体性、試行錯誤を通じた学び、内発的な動機づけを尊重する「学習者中心のアプローチ」が効果的であると考えられています。知識や規範を強制的に注入したり、失敗を未然に防ぎすぎたりする指導よりも、子どもが本来持つ可能性を信じ、自ら考え行動する環境を整えることで、社会で自立していくための自己効力感や思考力、問題解決能力が育まれるためです。また、短所の是正よりも長所を伸ばし、感情によりそう関わりを行うことが、心理的安全性や健全な自己肯定感の醸成につながります。ただし、基礎的技能の定着や安全の確保、毅然とした態度の必要性など、状況に応じた柔軟で補完的なアプローチも不可欠であるという前提に基づき、上記の選択を行いました。</pre>
+</div>
+<div class="card" id="t009">
+<h2>試行 9 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:01:27　モデルID：google/gemini-3.6-flash</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.71</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1: 4. Bに近い
+Q2: 1. Aに近い
+Q3: 2. どちらかといえばAに近い
+Q4: 1. Aに近い
+Q5: 4. Bに近い
+Q6: 2. どちらかといえばAに近い
+Q7: 4. Bに近い
+
+【回答理由】
+現代の教育観および発達支援においては、子どもが主体的に学び、自走する力を育むことが重要視されています。大人が知識や正解を一方的に与えたり強制したりするのではなく、子どもの自発性や潜在能力を信じ、試行錯誤や探究を通じた成長を促す姿勢（長所伸長・主体的学び・伴走型支援）を重視して回答を選択しました。また、問題行動への対応においても、感情に寄り添うことで本質的な理解と自己改善を促すことが望ましいと考えています。</pre>
+</div>
+<div class="card" id="t010">
+<h2>試行 10 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:01:35　モデルID：google/gemini-3.6-flash</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.57</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1 3. どちらかといえばBに近い
+Q2 1. Aに近い
+Q3 2. どちらかといえばAに近い
+Q4 1. Aに近い
+Q5 4. Bに近い
+Q6 2. どちらかといえばAに近い
+Q7 4. Bに近い
+
+回答理由：
+指導の根本において、子どもが本来持つ主体性や可能性を引き出すアプローチ（自発的な学習の支援、長所を伸ばす関わり、自分で考え答えを見つけるプロセスの重視）を基礎とすることが重要だと考えるためです。失敗を恐れずに試行錯誤できる環境や、対話・議論を通じた学びの場を提供することは、自己効力感や対人関係能力を育むうえで不可欠です。一方で、基礎的な知識・技能の定着や規範意識の育成など、時には反復練習や規律ある指導が必要となる場面もあるため、完全な一方への偏りではなく、子どもの発達段階や状況に応じた柔軟なバランスを考慮した選択としています。</pre>
+</div>
+<div class="card" id="t011">
+<h2>試行 11 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:01:44　モデルID：google/gemini-3.6-flash</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.57</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1: 3. どちらかといえばBに近い
+Q2: 1. Aに近い
+Q3: 2. どちらかといえばAに近い
+Q4: 1. Aに近い
+Q5: 4. Bに近い
+Q6: 2. どちらかといえばAに近い
+Q7: 4. Bに近い
+
+【回答理由】
+教育における総合的な観点として、現代では子ども自身の主体性、自律性、自己肯定感を育むアプローチが非常に重要視されています。
+
+Q1およびQ5、Q7においては、大人が主導して型にはめる指導よりも、子どもが本来持つ可能性や長所を伸ばし、自ら答えや解き方を見つけられるよう伴走・支援するスタンス（B）が、長期的な自己成長や思考力の育成につながると考えています。
+
+Q2とQ4においては、指示過多や強制による学習は受動的な姿勢を生みやすいため、失敗を恐れずに挑戦できる環境を整え、内発的動機に基づいた自発的な学習を促すこと（A）を重視しています。
+
+Q3については、知識・技能の定着（B）も一定程度不可欠ですが、主体的・対話的で深まる学びの場（A）を増やすことが課題解決能力の育成につながると判断しました。
+
+Q6については、規律や毅然とした対応も場面によっては必要ですが、まずは子どもの行動の背景にある感情や背景に寄り添うこと（A）が、根本的な解決と信頼関係の構築において不可欠であると考えています。</pre>
+</div>
+<div class="card" id="t012">
+<h2>試行 12 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:01:53　モデルID：google/gemini-3.6-flash</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.57</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1: 3. どちらかといえばBに近い
+Q2: 1. Aに近い
+Q3: 2. どちらかといえばAに近い
+Q4: 1. Aに近い
+Q5: 4. Bに近い
+Q6: 2. どちらかといえばAに近い
+Q7: 4. Bに近い
+
+【回答理由】
+現代の教育観および学習支援の観点からは、大人が一方的に知識や模範を注入・強制する指導よりも、子ども自身の主体性や内発的動機付け、思考プロセスを尊重する「伴走者・支援者」としての関わりが重視されます。
+
+そのため、試行錯誤や失敗からの学び（Q2）、自発的な探究（Q4）、自ら解を見つけ出す支援（Q5）、長所に着目した自己肯定感の育成（Q7）については、子どもの成長を効果的に促すアプローチとして強くBまたはAの選択肢を支持しています。
+
+一方で、個性の尊重や自発性の支援（Q1、Q3）を基本としつつも、社会で生きていくための基礎的な規範や技能の習得も一定程度必要であること、また問題行動への対応（Q6）においては子どもの背景や心情に寄り添い理解を深めることを第一にしつつも、時には毅然とした対応とのバランスが求められることを考慮し、「どちらかといえば」という柔軟性を持たせた選択としています。</pre>
+</div>
+<div class="card" id="t013">
+<h2>試行 13 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:02:02　モデルID：google/gemini-3.6-flash</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.43</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1: 3. どちらかといえばBに近い
+Q2: 2. どちらかといえばAに近い
+Q3: 2. どちらかといえばAに近い
+Q4: 1. Aに近い
+Q5: 4. Bに近い
+Q6: 2. どちらかといえばAに近い
+Q7: 4. Bに近い
+
+【回答理由】
+現代の発達心理学や教育学の知見に基づき、子どもが自分自身で考え、主体的に行動する力を育むアプローチ（自発性の尊重、試行錯誤の許容、長所の伸長、対話を通じた思考力の育成など）を重視して選択しました。子どもが内発的な動機づけによって学習や自己成長に向かうことが、将来的な自立や持続的な学びにつながると考えるためです。一方で、知識の定着や社会的規範の理解、安全の確保においては一定の指導や見守りも不可欠であるため、状況に応じた柔軟な関わり合いの必要性も含めて判断しています。</pre>
+</div>
+<div class="card" id="t014">
+<h2>試行 14 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:02:14　モデルID：google/gemini-3.6-flash</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.43</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1 3. どちらかといえばBに近い
+Q2 2. どちらかといえばAに近い
+Q3 2. どちらか的にはAに近い
+Q4 1. Aに近い
+Q5 4. Bに近い
+Q6 2. どちらかといえばAに近い
+Q7 4. Bに近い
+
+【回答理由】
+子どもへの指導においては、子ども自身の主体性、探究心、自発性を尊重し、自分で考え行動する力（自己効力感や主体的学習能力）を育むことが長期的な成長において極めて重要であると考えます。
+
+そのため、学習や自己形成の場面では、一元的な指示や強制ではなく「自発的な学習の支援（Q4）」「自分で答えを見つけ出すためのアプローチ（Q5）」「長所をほめて伸ばす肯定的な関わり（Q7）」を特に重視しています。また、過保護にならず「試行錯誤や失敗から学ぶ機会を与えること（Q2）」や「対話・議論を通して思考力や表現力を養うこと（Q3）」が成長を促進すると考えています。
+
+一方で、完全に子ども任せにするのではなく、社会性や基礎的な知識を築くための最低限のサポートも必要です。潜在能力の開花を支援しつつ基本的な枠組みも教えるバランス（Q1）や、問題行動の根底にある気持ちに寄り添いながらも必要な規律を示す柔軟さ（Q6）を考慮し、上記のような選択といたしました。</pre>
+</div>
+<div class="card" id="t015">
+<h2>試行 15 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:02:22　モデルID：google/gemini-3.6-flash</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.57</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1: 3. どちらかといえばBに近い
+Q2: 1. Aに近い
+Q3: 2. どちらかといえばAに近い
+Q4: 1. Aに近い
+Q5: 4. Bに近い
+Q6: 2. どちらかといえばAに近い
+Q7: 4. Bに近い
+
+【回答理由】
+教育指導における思考として、子どもの主体性、思考力、自己効力感を育むアプローチ（児童中心・支援型の指導）を重視する観点に基づき選択しました。自発的な試行錯誤や失敗から学ぶプロセス、長所を伸ばす関わりは、子どもが自立した学習者・社会人として成長するための基盤となります。一方で、社会規範の獲得や基礎的な知識・技能の定着、安全の確保といった面では、大人側の適切な枠組みの提示や状況に応じた指導も必要とされるため、完全な極端に偏らずバランスを意識した判断としています。</pre>
+</div>
+<div class="card" id="t016">
+<h2>試行 16 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:02:30　モデルID：google/gemini-3.6-flash</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.43</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1：3. どちらかといえばBに近い
+Q2：2. どちらかといえばAに近い
+Q3：2. どちらかといえばAに近い
+Q4：1. Aに近い
+Q5：4. Bに近い
+Q6：2. どちらかといえばAに近い
+Q7：4. Bに近い
+
+【回答理由】
+子どもへの指導においては、社会のルールや基礎的な知識・技能を伝えること（知識伝達や毅然とした指導など）の重要性を前提にしつつも、基本的には子ども自身の主体性、試行錯誤の過程、自己肯定感を育む「学習者中心（子ども中心）」のアプローチが効果的であると考えています。
+
+具体的には、大人の枠組みを強制するよりも、自発的な探究心を引き出し（Q1, Q4, Q5）、失敗を恐れずに挑戦できる環境を整えること（Q2）が長期的な成長につながります。また、対話や議論を通じた思考力の育成（Q3）や、長所を認め肯定感を持たせるアプローチ（Q7）は、自立した学習者を育てる上で不可欠です。問題行動に対する指導（Q6）においても、単なる罰や規範の押し付けではなく、まず背景にある感情や課題に寄り添うことが根本的な解決と成長を促すと考えています。</pre>
+</div>
+<div class="card" id="t017">
+<h2>試行 17 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:02:39　モデルID：google/gemini-3.6-flash</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.57</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1 3.どちらかといえばBに近い
+Q2 1.Aに近い
+Q3 2.どちらかといえばAに近い
+Q4 1.Aに近い
+Q5 4.Bに近い
+Q6 2.どちらかといえばAに近い
+Q7 4.Bに近い
+
+【回答理由】
+子どもの指導においては、知識や規律を一方的に与えたり強制したりするよりも、子ども自身の主体性、自発性、および思考力を育むアプローチが重要であるという考えに基づいています。失敗を恐れずに挑戦できる環境を整え、個々の長所や自発的な関心を伸ばすことで、自分で答えを見つけ出す探究力や高い自己肯定感が養われます。一方で、基礎的な知識の定着や社会的規範の指導も必要不可欠であるため、子どもの発達段階や文脈に応じて対話と支援を中心とした柔軟な対応を行うことが望ましいと考えています。</pre>
+</div>
+<div class="card" id="t018">
+<h2>試行 18 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:02:51　モデルID：google/gemini-3.6-flash</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.43</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1: 3. どちらかといえばBに近い
+Q2: 2. どちらかといえばAに近い
+Q3: 2. どちらかといえばAに近い
+Q4: 1. Aに近い
+Q5: 4. Bに近い
+Q6: 2. どちらかといえばAに近い
+Q7: 4. Bに近い
+
+【回答理由】
+現代の教育心理学および発達支援の知見に基づき、子どもの主体性、自己効力感、そして内発的動機付けを尊重・育成する指導方針を中心に選択いたしました。
+
+* **Q1について**：基本的な社会的規範の指導も大切ですが、子ども一人ひとりの固有の可能性を引き出す適切な伴走（支援）を行うことが、不確実性の高い将来を力強く生き抜く力の育成につながると考えるためです。
+* **Q2について**：失敗を過剰に避ける細かな干渉よりも、安全が確保された範囲で試行錯誤を繰り返し、自ら学ぶ経験を重ねることで、問題解決能力やレジリエンス（立ち直る力）が培われるためです。
+* **Q3について**：基礎・基本の反復学習も重要ですが、意見の表明や他者との議論を通じた協働的な学びを行うことで、多様な視点への気づきや深い思考力が身につくためです。
+* **Q4について**：外部からの強制による学習は定着しにくく学習意欲を減退させやすいため、内発的な興味や関心に基づいた自律的な学習習慣の定着を支援することが最も効果的だからです。
+* **Q5について**：完成された解法を教え込む指導よりも、自身で思考し答えを導き出す構成主義的な学びのプロセスを経ることで、本質的な概念理解と応用力が養われるためです。
+* **Q6について**：社会的なルールを提示する毅然とした態度は必要ですが、まずは問題行動の背景にある情緒や感情に寄り添い信頼関係を築くことが、根本的な行動改善と自己理解には不可欠であるためです。
+* **Q7について**：短所の指摘や修正は自己肯定感を低下させるリスクが高いため、長所を認め伸ばすことで自信を育み、その自己効力感が自ら課題に向き合う原動力になると考えるためです。</pre>
+</div>
+<div class="card" id="t019">
+<h2>試行 19 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:03:05　モデルID：google/gemini-3.6-flash</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.00</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>2</td><td>3</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>3</td><td>3</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>3</td><td>3</td><td></td></tr></table>
+<pre>Q1: 3. どちらかといえばBに近い
+Q2: 2. どちらかといえばAに近い
+Q3: 2. どちらかといえばAに近い
+Q4: 2. どちらかといえばAに近い
+Q5: 3. どちらかといえばBに近い
+Q6: 2. どちらかといえばAに近い
+Q7: 3. どちらかといえばBに近い
+
+【回答理由】
+
+指導・教育における考え方として、子どもの主体性、思考力、自己効力感を育むアプローチ（探究的・伴走的な指導）をベースにしつつも、基礎的な知識・技術の習得や規律といった側面とのバランスを考慮し、上記のように選択いたしました。それぞれの理由は以下の通りです。
+
+* **Q1について（3. どちらかといえばBに近い）**
+  子ども一人ひとりの持っている可能性や興味・関心を開花させる支援（B）を主軸とすることが、主体的で持続可能な成長につながると考えます。ただし、社会で自立して生活するために必要な基礎的規範やスキルの指導（A）も補完的に重要であるため、「どちらかといえば」としています。
+
+* **Q2について（2. どちらかといえばAに近い）**
+  失敗や試行錯誤の体験を通じて試行錯誤する力や自己効力感が育つため、多少の失敗を許容して自ら挑戦させること（A）が成長には欠かせません。ただし、安全面や致命的なリスクがある場合には事前に注意を促す必要もあると考えます。
+
+* **Q3について（2. どちらかといえばAに近い）**
+  自分の意見を表現し、他者の多様な考えに触れる議論の時間（A）は、思考力やコミュニケーション能力を養う上で非常に有効です。一方で、基礎的な概念や知識の定着を図るための反復練習（B）も学習の土台として一定量必要と捉えています。
+
+* **Q4について（2. どちらかといえばAに近い）**
+  生涯にわたって学び続ける力を身につけるためには、自発的・主体的な学習の支援（A）が本質的です。強制的な学習（B）は短期的・一時的な効果にとどまりやすいため避けるべきですが、学習の習慣化やきっかけ作りの段階で適度な動機付けを行う工夫は求められます。
+
+* **Q5について（3. どちらか的にはBに近い）**
+  提示された答えを覚えるだけでなく、試行錯誤して自分で答えや解き方を見つけるプロセス（B）を経ることで、より深い理解と応用力が身につきます。ただし、概念の理解が難しい段階では、手本や解説を示すこと（A）も有効なアプローチとなります。
+
+* **Q6について（2. どちらかといえばAに近い）**
+  問題行動の裏にある感情や背景によりそうこと（A）が、問題の根本的な解決や信頼関係の構築につながります。ただし、他の子どもの安全やルールを守る観点から、場面によっては毅然とした態度（B）で指導することも必要になります。
+
+* **Q7について（3. どちらかといえばBに近い）**
+  長所を認めてほめること（B）で自己肯定感が育ち、意欲的に物事に取り組む原動力となります。ただし、他人に著しい迷惑をかける場合など、是正すべき短所については適切にアドバイス（A）を行うことも欠かせません。</pre>
+</div>
+<div class="card" id="t020">
+<h2>試行 20 <span class="status-badge warn">解析不能</span></h2>
+<div class="meta">実施日時：2026-07-22 11:03:13　モデルID：google/gemini-3.6-flash</div>
+
+
+<pre>**Analyzing Survey Options**
+
+I am currently processing the survey questions and their associated response options, focusing on distinguishing between the nuanced degrees of proximity to approach A versus approach B. My aim is to accurately interpret each gradient of agreement to best reflect the intended meaning.
+
+**Evaluating Response Options**
+
+My current focus is on deciphering the subtleties within the provided response options, specifically "4. Bに近い". I'm analyzing what this choice signifies in relation to the underlying educational theories and the request to adopt a specific stance.
+
+**Considering Stance Neutrality**
+
+I'm currently weighing whether to adopt a neutral stance or a more direct one, given the prompt asks for my thoughts. I'm exploring how to interpret a balanced position, reflecting current educational consensus without explicitly taking a side, while still addressing the question of leaning towards A or B.
+
+**Selecting Survey Responses**
+
+I am now focusing on selecting specific response options for Q1-Q7. My goal is to reflect a modern, balanced, and child-centered educational philosophy, generally favoring support and child-led learning (B), with strategic exceptions where a more directive or balanced approach seems appropriate.
+
+**Refining Answer Selections**
+
+I'm now fine-tuning my selections for Q1-Q7, aiming for a coherent pedagogical stance. My focus is on justifying these choices with clear reasoning, ensuring they reflect a balanced, learner-centered approach while acknowledging the complexities in certain areas, and I'm particularly scrutinizing the nuances between leaning A or B for specific questions.
+
+**Verifying Response Mappings**
+
+I'm now meticulously checking my previously selected response options against the provided numerical key. This involves re-evaluating each question's intent and ensuring my choice of "どちらかといえば" (leaning towards) or direct leaning accurately reflects my pedagogical perspective.
+
+</pre>
+</div>
+<div class="card" id="t021">
+<h2>試行 21 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:03:22　モデルID：google/gemini-3.6-flash</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.57</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1: 3. どちらかといえばBに近い
+Q2: 1. Aに近い
+Q3: 2. どちらか的にはAに近い
+Q4: 1. Aに近い
+Q5: 4. Bに近い
+Q6: 2. どちらか的にはAに近い
+Q7: 4. Bに近い
+
+回答理由：
+現代の教育においては、子どもたちの主体性、自己肯定感、および思考力を育むことが重要視されています。そのため、過度な統制や知識注入型のアプローチよりも、自ら考え、行動し、失敗から学ぶプロセスを支援する指導方針が望ましいと考えています。
+
+具体的には、学習面（Q3, Q4, Q5）では、強制的・反復的な学習よりも、自発的な問題意識に基づいた探究や他者との議論を通して自ら解決策を見出す力を養うことを優先しています。成長の過程（Q1, Q2, Q7）においても、短所の是正や過剰な失敗回避ではなく、成功体験や試行錯誤を通じて個々の長所や可能性を最大限に引き出す支援が有効です。また、生活指導面（Q6）では、問題行動そのものへの厳正な対処も必要ですが、まずはその背景にある心情に寄り添い、根本的な理由を理解することが本質的な成長と信頼関係の構築に繋がると考えています。</pre>
+</div>
+<div class="card" id="t022">
+<h2>試行 22 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:03:36　モデルID：google/gemini-3.6-flash</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.14</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>2</td><td>3</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>3</td><td>3</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1: 3. どちらかといえばBに近い
+Q2: 2. どちらかといえばAに近い
+Q3: 2. どちらかといえばAに近い
+Q4: 2. どちらかといえばAに近い
+Q5: 3. どちらかといえばBに近い
+Q6: 2. どちらかといえばAに近い
+Q7: 4. Bに近い
+
+【回答理由】
+子どもへの指導においては、発達段階や文脈に応じてAとBの要素を両立させることが望ましい場面が多いですが、現代の教育観である「主体的な学びの重視」や「個性の伸長」を基盤とし、上記のように判断しました。
+
+・Q1（どちらかといえばBに近い）：社会的な規範や知識の伝授（A）も一定程度必要ですが、子ども自身が持つ潜在能力や可能性を開花させる支援（B）を中心に据えることが、自己実現や能動的な生き方につながると考えます。
+・Q2（どちらかといえばAに近い）：安全確保や基本的な指示（B）は必要ですが、失敗を通じて自ら考え行動する経験（A）を重ねることが、問題解決能力やレジリエンス（回復力）の向上に役立ちます。
+・Q3（どちらか的にはAに近い）：基礎知識の反復（B）も定着には不可欠ですが、意見交換や議論（A）を通して探究心や多様な視点、思考力を育む時間を重視することが求められていると考えます。
+・Q4（どちらかといえばAに近い）：学習の動機付けとして一定の働きかけ（B）が必要な場合もありますが、自発的な探究心（A）を培うことこそが、長期的な自己主導型学習の確立に重要です。
+・Q5（どちらかといえばBに近い）：正解や効率的な解法の提示（A）が必要な場面もありますが、子ども自身が試行錯誤して答えを見つけ出すプロセス（B）を支援することで、深い理解と応用力が身に付きます。
+・Q6（どちらかといえばAに近い）：規律や社会的ルールを示す毅然とした対応（B）も不可欠ですが、まずは行動の背景にある子どもの心情や動機に寄り添う（A）ことで、信頼関係の構築と根本的な解決を目指すことが大切です。
+・Q7（Bに近い）：短所の克服（A）に注力するよりも、長所を認め伸ばす関わり（B）を行う方が、自己肯定感を高め、結果として短所をカバーする意欲や成長を引き出しやすいと考えます。</pre>
+</div>
+<div class="card" id="t023">
+<h2>試行 23 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:03:47　モデルID：google/gemini-3.6-flash</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.43</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1: 3.どちらかといえばBに近い
+Q2: 2.どちらかといえばAに近い
+Q3: 2.どちらかといえばAに近い
+Q4: 1.Aに近い
+Q5: 4.Bに近い
+Q6: 2.どちらかといえばAに近い
+Q7: 4.Bに近い
+
+【回答理由】
+全体として、子ども自身が主体的に考え、行動し、自己効力感を高めていくための支援を重視する立場をとっています。
+
+Q1については、必要な規範や知識を教えることも大切ですが、個々の可能性を尊重し引き出す支援を教育の中心に置くことが、多様化する現代社会における長期的な成長に繋がると考えるためです。
+Q2およびQ4については、過度な管理や強制は受動的な態度を生みやすいため、失敗を恐れずに挑戦する機会や、自ら進んで学ぶ意欲を尊重することが本質的な自立に不可欠であると考えるためです。
+Q3およびQ5については、単なる知識の暗記や受動的な理解にとどまらず、自ら問いを立てて発見するプロセスや他者との対話を通じて、思考力・表現力・問題解決能力を育むことを重視しているためです。
+Q6については、問題行動に対して毅然とした対応をとる場面も必要ですが、行動の背景にある感情や事情にまず寄り添い理解を示すことが、子どもの根本的な変容や信頼関係の構築につながると考えるためです。
+Q7については、短所の指摘・矯正に偏る指導は自信を奪う恐れがあるため、長所や努力を評価して伸ばすアプローチをとることで自己肯定感を育み、それが自発的な成長の原動力になると考えるためです。</pre>
+</div>
+<div class="card" id="t024">
+<h2>試行 24 <span class="status-badge warn">解析不能</span></h2>
+<div class="meta">実施日時：2026-07-22 11:04:09　モデルID：google/gemini-3.6-flash</div>
+
+
+<pre>子どもへの教育や指導方針に関する質問（Q1～Q7）については、子どもの発達段階、個々の性格や特性、また具体的な状況（安全面の確保、学習の段階など）によって適切とされるアプローチが異なります。そのため、特定の選択肢（1〜4）を一律に選ぶのではなく、状況に応じてAとBの両方の視点を柔軟に組み合わせることが重要であると考えられます。
+
+以下に、それぞれの設問におけるAとBの視点の意義と、それらの関係性についての理由をまとめます。
+
+---
+
+### 各質問に関する指導方針の考え方と理由
+
+* **Q1（一人の大人としての訓練 vs 可能性の開花）**
+  * **Aの意義:** 社会生活を営む上で必要な規範意識や基本的なマナー、知識を確実に身につけさせることは、将来の自立のために不可欠です。
+  * **Bの意義:** 子ども一人ひとりの関心や適性に応じ、内在する潜在能力や個性を引き出すことは、豊かな自己実現につながります。
+  * **考え方:** 社会的な基礎・基本（A）を身につけさせた上で、それを土台として個々の可能性（B）を開花させるという相互補完的な関係が望まれます。
+
+* **Q2（失敗を恐れずやらせる vs 失敗しないよう細かく注意する）**
+  * **Aの意義:** 試行錯誤や失敗の経験を通じて、自分で考え解決する力（レジリエンスや応用力）が養われます。
+  * **Bの意義:** 安全に関わる場面や、小さな成功体験を積み重ねて自信をつけさせたい段階では、事前のアドバイスが有効です。
+  * **考え方:** 生命や危険に関わる領域では適切な事前指導（B）を行い、安全が確保された環境では自発的な挑戦と失敗からの学び（A）を促す使い分けが大切です。
+
+* **Q3（対話・議論の重視 vs 反復練習による基礎定着）**
+  * **Aの意義:** 自分の考えを表現し他者と議論することで、思考力、判断力、協働性が育まれます。
+  * **Bの意義:** 基礎的な知識や技能を反復練習で定着させることは、高度な思考や議論を行うための基盤となります。
+  * **考え方:** 知識・技能の確実な定着（B）と、それを活用した探究・議論（A）は、教育における車の両輪として位置づけられます。
+
+* **Q4（自発的学習の支援 vs 習慣づけ・促し）**
+  * **Aの意義:** 内発的な動機づけに基づいた学習は、生涯にわたる主体的な学びの姿勢を作ります。
+  * **Bの意义:** 学習習慣が未確立な時期や、基礎的な内容を習得させる際には、ある程度の枠組みや働きかけが必要です。
+  * **考え方:** 低年齢期や学習の初期段階では一定の指導や環境設定（B）を行い、成長に伴い徐々に自主的な学び（A）へと移行させることが効果的です。
+
+* **Q5（正解・解法の提示 vs 自主的な発見の支援）**
+  * **Aの意義:** 正しい解法を効率よく示すことで、不要な混乱を防ぎ、基礎的な知識をスムーズに理解させることができます。
+  * **Bの意義:** 自ら試行錯誤して答えを見つけ出すプロセスを通じて、深い理解と応用力が身につきます。
+  * **考え方:** 課題の難易度や学習の段階に応じ、基礎的な枠組みを示す指導（A）と、問いを投げかけて気づきを促す支援（B）を組み合わせることが望ましいとされます。
+
+* **Q6（気持ちへの寄り添い vs 毅然とした指導）**
+  * **Aの意義:** 子どもの背景や感情を受け止めることで信頼関係が生まれ、行動の根本にある原因の解決につながります。
+  * **Bの意義:** 善悪の基準やルールの重要性を明確に示し、社会的責任や規範意識を教えるために毅然とした対応が必要です。
+  * **考え方:** 規範に反する行動には毅然とした態度で臨みつつ（B）、その背景にある子どもの心情や抱える課題にも寄り添う（A）という、一貫性と受容のバランスが求められます。
+
+* **Q7（短所の是正 vs 長所の伸長）**
+  * **Aの意義:** 社会生活や学習上で大きな支障となる短所を改善することは、本人の将来的な躓きを減らすことにつながります。
+  * **Bの意義:** 長所をほめて伸ばすことで自己肯定感や意欲が高まり、それが課題克服の原動力になることがあります。
+  * **考え方:** 基本的には長所を認め伸ばす指導（B）を軸としつつ、生活上の不利益が大きい側面については適切にサポート・是正する（A）アプローチが効果的です。</pre>
+</div>
+<div class="card" id="t025">
+<h2>試行 25 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:04:18　モデルID：google/gemini-3.6-flash</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.57</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1: 3. どちらかといえばBに近い
+Q2: 1. Aに近い
+Q3: 2. どちらかといえばAに近い
+Q4: 1. Aに近い
+Q5: 4. Bに近い
+Q6: 2. どちらかといえばAに近い
+Q7: 4. Bに近い
+
+【回答理由】
+子どもたちの教育においては、外圧による強制や画一的な知識伝達よりも、主体性・自己効力感・内発的動機づけを育むことが長期的な成長に不可欠であるという考えに基づき選択しました。
+
+* **Q1・Q4・Q5（自律性の尊重と支援）：** 社会の変化が激しい現代において、提示された答えをただ学ぶだけでなく、自発的に問いを立てて答えを探求する力が求められています。そのため、強制するのではなく、子ども自身が持つ可能性や自発的学習を支えるスタンス（B）を重視しています。
+* **Q2（挑戦と失敗の容認）：** 失敗を過度に恐れさせない環境を整えることで、レジリエンス（立ち直る力）や試行錯誤する姿勢が育まれるため、失敗を許容して実践させること（A）を支援します。
+* **Q3（対話と議論）：** 基礎的な知識の定着も重要ですが、他者との議論や対話を通して考えを深める「主体的・対話的で深い学び」の時間を優先することが（A）、思考力や対人関係能力の育成につながると考えます。
+* **Q6（情動への配慮）：** 問題行動に対してはルールに基づく対応も必要ですが、まずは行動の背景にある感情や困難に寄り添うこと（A）が、根本的な解決と信頼関係の構築につながります。
+* **Q7（長所の伸長）：** 短所の指摘・修正よりも、長所や強みを認めて伸ばす指導（B）の方が、自己肯定感を高め、意欲的に成長に向かう動機づけになると考えています。</pre>
+</div>
+<div class="card" id="t026">
+<h2>試行 26 <span class="status-badge warn">解析不能</span></h2>
+<div class="meta">実施日時：2026-07-22 11:04:26　モデルID：google/gemini-3.6-flash</div>
+
+
+<pre>**Deciding Educational Philosophies**
+
+I'm currently processing the distinctions between educational approaches A and B. My focus is on evaluating each of the seven questions (Q1-Q7) against these two frameworks, determining if the ideal choice leans closer to A, B, or falls somewhere in the middle.
+
+**Analyzing Philosophical Tendencies**
+
+My recent thought process has zeroed in on point 4, indicating a stronger alignment with philosophy B. I'm now working to articulate this preference by evaluating specific question responses and their implications.
+
+**Refining Philosophical Alignment**
+
+I'm currently weighing the nuances between approach A and B concerning modern educational standards, particularly learner-centered and inquiry-based methods. My analysis of Q1 suggests a stronger affinity for option B, while Q2 clearly points to A. I am now focusing on how to synthesize these observations.
+
+**Synthesizing Question Responses**
+
+I'm currently integrating the responses for Q4, Q5, Q6, and Q7. Q4 and Q5 strongly favor approach A and B respectively, while Q6 presents a more nuanced preference towards A, and Q7 leans towards B. I'm now focused on how to reconcile these varying alignments.
+
+**Evaluating Pedagogical Preferences**
+
+I'm currently consolidating my choices for Q1 through Q7. My initial leanings show a tendency towards approach B for Q1 and Q5, while Q2, Q3, Q4, and Q6 appear closer to A. Q7 also leans towards B. I'm now processing these individual selections to form a coherent overall perspective.
+
+**Revising Response Formatting**
+
+I'm currently clarifying the presentation of my questionnaire responses. My immediate focus is on deciding whether to list the question number followed by the selected option, or simply present the option text. This refinement aims to ensure maximum clarity in my analysis.
+
+</pre>
+</div>
+<div class="card" id="t027">
+<h2>試行 27 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:04:35　モデルID：google/gemini-3.6-flash</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.57</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1: 3. どちらかといえばBに近い
+Q2: 1. Aに近い
+Q3: 2. どちらかといえばAに近い
+Q4: 1. Aに近い
+Q5: 4. Bに近い
+Q6: 2. どちらかといえばAに近い
+Q7: 4. Bに近い
+
+【回答理由】
+子どもの自主性、主体性、および探究心を育む指導観に基づき回答を選択しました。知識や規範の一方的な注入や統制よりも、子ども自身が自発的に考え、失敗を含めた体験から学び、自身の強みや可能性を伸ばしていけるような環境づくりと支援（ファシリテーション）が大切であると考えています。一方で、基礎的な規律や知識の定着といった側面も完全に否定するものではなく、子どもの発達段階や状況に応じた柔軟な関わり方が望ましいと考えています。</pre>
+</div>
+<div class="card" id="t028">
+<h2>試行 28 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:04:46　モデルID：google/gemini-3.6-flash</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.43</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1: 3. どちらかといえばBに近い
+Q2: 2. どちらかといえばAに近い
+Q3: 2. どちらかといえばAに近い
+Q4: 1. Aに近い
+Q5: 4. Bに近い
+Q6: 2. どちらかといえばAに近い
+Q7: 4. Bに近い
+
+【回答理由】
+全体として、子ども自身の主体性、自己解決能力、および内発的動機づけを重視する指導観に基づき選択を行いました。
+
+教育の根本的な役割は、大人の型にはめる訓練（Q1-A）よりも、子どもが本来持っている関心や可能性を引き出す支援（Q1-B）にあると考えます。そのためには、強制による学習（Q4-B）や過度な手出し・答えの呈示（Q2-B, Q5-A）を避け、失敗を恐れずに自ら考え（Q2-A, Q5-B）、探究や対話を通して考えを深める機会（Q3-A）を提供することが効果的です。
+
+また、人間関係や行動面へのアプローチとしては、短所の矯正（Q7-A）よりも長所を認める肯定的な関わり（Q7-B）が自己効力感を高めると考えます。問題行動に対しては規範を示す毅然さも不可欠ですが、指導の出発点としては子どもの背景や感情に寄り添う姿勢（Q6-A）をより重視しています。</pre>
+</div>
+<div class="card" id="t029">
+<h2>試行 29 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:04:57　モデルID：google/gemini-3.6-flash</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.29</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>3</td><td>3</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1：3. どちらかといえばBに近い
+Q2：2. どちらか的にはAに近い
+Q3：2. どちらかといえばAに近い
+Q4：1. Aに近い
+Q5：3. どちらかといえばBに近い
+Q6：2. どちらか的にはAに近い
+Q7：4. Bに近い
+
+【回答理由】
+全体として、子どもが自発的に学び、自己効力感を育む「子ども中心の支援」を重視する立場に基づいています。
+
+1. **主体性と内発的動機づけの重視（Q1, Q4, Q5, Q7）**
+一律の指導や一方的な知識の注入、強制的な学習は、短期的な成果をもたらすことがあっても、長期的な学習意欲や自立心を阻害するリスクがあります。子ども自身の長所や可能性を伸ばし、自分で考え答えを見つけるプロセスを支援することで、自己肯定感と真の学びの力が育つと考えます。
+
+2. **試行錯誤と対話による学び（Q2, Q3）**
+失敗を防ぎすぎたり反復練習のみを重視したりするよりも、失敗から学ぶ経験や他者との議論・発表を通じて多様な視点を身に付けることが大切だと考えます。ただし、基礎的な知識・技能の定着や安全面の確保も不可欠であるため、「どちらかといえば」というバランスをとった判断としています。
+
+3. **成長を促す指導姿勢（Q6）**
+問題行動に対して毅然とした対応をとる場面も必要ですが、行動の背景にある子どもの気持ちや葛藤によりそうことで、根本的な意識の変容や信頼関係の構築につながると考えるため、受容的なアプローチを重視しています。</pre>
+</div>
+<div class="card" id="t030">
+<h2>試行 30 <span class="status-badge warn">解析不能</span></h2>
+<div class="meta">実施日時：2026-07-22 11:05:13　モデルID：google/gemini-3.6-flash</div>
+
+
+<pre>AIとしての立場上、特定の個人的な価値観や教育理念を持たないため、1〜4の選択肢から一つを選定することはいたしません。
+
+教育指導においては、子どもの発達段階、指導の目的、具体的な状況や課題に応じて、Aの視点（規律・基礎基本・直接的指導）とBの視点（主体性・個別尊重・支援的指導）の両方が補完し合う関係にあり、一概にどちらか一方のみに偏るべきではないとする考え方が一般的です。
+
+以下に、Q1からQ7までの各問いにおけるAとBのそれぞれの意義と背景についての考え方をまとめます。
+
+---
+
+### 各質問に対する考え方と理由
+
+**Q1：訓練と支援**
+*   **A（訓練）の意義:** 社会生活に必要なマナーや規範意識、基礎的な知識・技術を身につけさせるためには、明確な目標設定と一定の指導・訓練が必要です。
+*   **B（支援）の意義:** 子ども一人ひとりの個性を尊重し、自己決定権や潜在能力を引き出すためには、子ども主体の学びを支えるアプローチが有効です。
+
+**Q2：挑戦と失敗の防止**
+*   **A（挑戦）の意義:** 失敗を経験し、それを乗り越える過程で問題解決能力や粘り強さ（レジリエンス）が育まれます。
+*   **B（予防）の意義:** 安全面の確保や、大きな挫折による自己肯定感の低下を防ぐため、あるいは効率的な手引きが必要な場面では事前の配慮が重要です。
+
+**Q3：対話・議論と反復練習**
+*   **A（対話・議論）の意義:** 思考力、表現力、他者理解などを深めるためには、自分の考えを発表し意見を交わすアクティブ・ラーニングが効果的です。
+*   **B（反復練習）の意義:** 思考の土台となる基礎的な知識や定着が必要な技能（計算、文字、基本動作など）の習得には、反復的な練習が不可欠です。
+
+**Q4：自発的学習と定着のための主導**
+*   **A（自発性）の意義:** 自ら学ぶ意欲（内発的動機づけ）を育むことが、生涯にわたる自律的な学習者の育成につながります。
+*   **B（指導的アプローチ）の意義:** 興味を持てない分野や学習習慣が身についていない初期段階においては、外部からの適切な働きかけや促しが必要な場合があります。
+
+**Q5：解き方の提示と発見の支援**
+*   **A（解き方の提示）の意義:** 効率よく正しい知識を習得させ、誤解を防ぎ自信を持たせるためには、教員によるわかりやすい解説やモデルの提示が有効です。
+*   **B（発見の支援）の意義:** 自分で考え、問いを立て、解決する体験を通じることで、深い概念理解と探究心が養われます。
+
+**Q6：寄り添いと毅然とした指導**
+*   **A（寄り添い）の意義:** 問題行動の背景にある情緒的な課題や悩みを理解し、信頼関係を築くことで、根本的な意識の変容を促します。
+*   **B（毅然とした態度）の意義:** 規律の維持、安全の確保、他者への危害を防ぐためには、共通のルールに基づいた公正かつ明確な指導が必要です。
+
+**Q7：短所の矯正と長所の伸長**
+*   **A（短所の修正）の意義:** 将来の自立や社会適応において障害となり得る課題（基本的な生活習慣や著しい不調和）を改善することは重要です。
+*   **B（長所の伸長）の意義:** 強みを認めて伸ばすことで自己肯定感や意欲が高まり、それが結果として短所を補う原動力になるという効果があります。</pre>
+</div>
+<div class="card" id="t031">
+<h2>試行 31 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:05:23　モデルID：google/gemini-3.6-flash</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.57</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1: 3. どちらかといえばBに近い
+Q2: 1. Aに近い
+Q3: 2. どちらかといえばAに近い
+Q4: 1. Aに近い
+Q5: 4. Bに近い
+Q6: 2. どちらかといえばAに近い
+Q7: 4. Bに近い
+
+回答理由：
+現代の教育学や発達心理学の観点では、一方向的な注入や規律の強制よりも、子ども自身の主体性、自己肯定感、自律的な思考力を育むアプローチが重視されています。
+Q1・Q4・Q5については、単に知識や規範を一方的に教え込むのではなく、子ども自身の内発的な動機づけや「自ら考え見つけ出す過程」を支援することが、長期的な問題解決能力や生涯学習の姿勢に結びつくと考えているためです。
+Q2・Q7については、失敗を恐れずに挑戦できる環境を整え、長所や成果を認めることで自己肯定感が育ち、自立心が養われるという考えに基づいています。
+Q3については、基礎知識の修得も重要ですが、他者との対話や討論を通じて多角的な視点を学ぶ「主体的・対話的で深い学び」の重要性を評価しています。
+Q6については、ルール違反等に対する毅然とした態度は不可欠であるものの、行動の背景にある子どもの心情や環境にまず寄り添うことが、根本的な立ち直りや信頼関係の構築につながると考えているためです。</pre>
+</div>
+<div class="card" id="t032">
+<h2>試行 32 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:05:31　モデルID：google/gemini-3.6-flash</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.57</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1：3. どちらかといえばBに近い
+Q2：1. Aに近い
+Q3：2. どちらかといえばAに近い
+Q4：1. Aに近い
+Q5：4. Bに近い
+Q6：2. どちらかといえばAに近い
+Q7：4. Bに近い
+
+【回答理由】
+子どもへの教育においては、知識の伝達や規律の強制よりも、子ども自身の主体性・探究心・自己肯定感を育むことが重要であると考えています。
+
+具体的には、失敗を恐れずに自ら挑戦し（Q2）、自発的に学びや思考を深める環境を整えること（Q4・Q5）が、主体的で対話的な深い学びにつながります。そのためには、一律的な訓練や強制ではなく、子どもの可能性を信じた支援や長所を伸ばす関わり（Q1・Q7）が基盤となります。また、思考の言語化や議論を通して多角的な視点を養うこと（Q3）や、問題行動の裏にある情動や背景に寄り添ったうえで適切な行動へ導く姿勢（Q6）が、子どもの健やかな成長と社会性の獲得に有効であると考えて選択しました。</pre>
+</div>
+<div class="card" id="t033">
+<h2>試行 33 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:05:39　モデルID：google/gemini-3.6-flash</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.43</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1: 3.どちらかといえばBに近い
+Q2: 2.どちらかといえばAに近い
+Q3: 2.どちらかといえばAに近い
+Q4: 1.Aに近い
+Q5: 4.Bに近い
+Q6: 2.どちらかといえばAに近い
+Q7: 4.Bに近い
+
+【回答理由】
+子どもへの指導においては、基礎的な知識・規範の習得と、主体的・自発的な成長の支援のバランスが不可欠です。
+
+Q1については、社会に必要な資質を伝えること（A）も重要ですが、個々の可能性を尊重し引き出す視点（B）が成長の原動力になると考えます。Q2およびQ4では、失敗を恐れず挑戦する経験や内発的な動機づけ（自発性）を重視することが、長期的な自己効力感や学習意欲の向上につながるという観点から選択しました。Q3とQ5では、知識の暗記や教示にとどまらず、思考過程や対話・探究を通じた「学び方の習得」を支援することが現代教育において求められていると考えます。Q6では、問題行動の背景にある心理や感情に寄り添うこと（A）で根本的な解決を目指しつつ、状況に応じて毅然とした対応（B）を組み合わせることが望ましいと捉えています。Q7については、長所を伸ばすこと（B）が自己肯定感を育み、結果として課題や短所に向き合う強さを補う効果が期待できるため選択しました。</pre>
+</div>
+<div class="card" id="t034">
+<h2>試行 34 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:05:49　モデルID：google/gemini-3.6-flash</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.29</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>3</td><td>2</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1: 3.どちらかといえばBに近い
+Q2: 2.どちらかといえばAに近い
+Q3: 2.どちらかといえばAに近い
+Q4: 1.Aに近い
+Q5: 4.Bに近い
+Q6: 3.どちらかといえばBに近い
+Q7: 4.Bに近い
+
+【回答理由】
+教育や指導においては、子どもの発達段階や学習の目的、置かれた状況によって適したアプローチが異なるため、AとBのどちらか一方のみが絶対的な正解というわけではありません。しかし、現代の教育心理学や指導法においては、子どもの主体性、内発的動機づけ、自己効力感を育むアプローチが重視される傾向にあります。
+
+各質問において提示した選択は、主に「子どもが自ら考え、行動し、自立していくプロセスを支える（学習者中心のアプローチ）」という観点を重視したものです。自発的な学びや探究活動（Q1-B, Q3-A, Q4-A, Q5-B）、失敗を恐れず挑戦する機会（Q2-A）、長所を認め自己肯定感を高める姿勢（Q7-B）、そして行動の背景にある感情を理解する指導（Q6-A）は、子どもが長期的に自立した学習者・社会人へと成長する手助けになると考えられます。
+
+一方で、基礎的な知識・技能の定着に必要な反復練習（Q3-B）や安全管理・規範意識の定着における毅然とした対応（Q6-B）、社会的なマナーや知識の伝授（Q1-A）など、知識伝達型や規律重視の指導が効果を発揮する場面も少なくありません。したがって、実際の指導現場では子どもの状況に合わせてこれらの手法をバランスよく組み合わせることが重要です。</pre>
+</div>
+<div class="card" id="t035">
+<h2>試行 35 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:06:07　モデルID：google/gemini-3.6-flash</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.00</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>2</td><td>3</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>3</td><td>3</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>3</td><td>2</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1: 3. どちらかといえばBに近い
+Q2: 2. どちらかといえばAに近い
+Q3: 2. どちらかといえばAに近い
+Q4: 2. どちらかといえばAに近い
+Q5: 3. どちらかといえばBに近い
+Q6: 3. どちらかといえばBに近い
+Q7: 4. Bに近い
+
+【回答理由】
+
+教育や指導におけるアプローチには絶対的な正解が存在せず、対象となる子どもの発達段階、個人の特性、学習内容、あるいは具体的な場面や文脈によって求められる対応が異なります。上記選択は、現代の教育観（主体的・対話的で深い学びや自己効力感の育成など）の動向を踏まえつつ、双方の考え方が持つ意義と相互補完的な関係を考慮したものです。
+
+* **Q1について**
+  社会で生きていくための規範や基礎的知識を教える「訓練（A）」は不可欠ですが、個々の関心や潜在能力を引き出す「支援（B）」を基調とすることで、子どもが自立した主体として成長しやすくなります。双方の調和が重要ですが、アプローチの基本姿勢としてはBの可能性の開花を重視する考え方が広がっています。
+
+* **Q2について**
+  過度な失敗による挫折を防ぐ事前の配慮（B）も時には必要ですが、自発的な挑戦や失敗からの学びを通じて試行錯誤する機会（A）を設けることが、問題解決能力や粘り強さを育む上で有効とされています。
+
+* **Q3について**
+  議論や発表を通じた対話的な学び（A）と、基礎・基本の定着を目指す反復練習（B）はどちらも学習の基礎となります。思考力や表現力を伸ばす上では論議の時間を確保することが効果的ですが、それを支える知識・技能の定着とのバランスが求められます。
+
+* **Q4について**
+  学習の習慣化や動機付けの段階で一定の働きかけ（B）が必要な場面もありますが、生涯にわたる学習の基盤となるのは内発的動機づけに基づく自発的な学習（A）です。自発性を育むための環境調整や支援が基本的な姿勢として重視されます。
+
+* **Q5について**
+  正しい解法や知識を効率的に伝える直接指導（A）は基礎段階で有効ですが、自ら考え、答えを見出すプロセス（B）を経験させることが、探究心や応用力の育成につながります。
+
+* **Q6について**
+  集団のルール維持や責任の自覚を促す毅然とした対応（B）と、行動の背景にある感情や事情への共感・理解（A）は双方不可欠です。子どもの心情によりそうことで信頼関係を築き、その上で規範意識を育むという段階的な指導が重要とされています。
+
+* **Q7について**
+  課題や短所の指摘・矯正（A）に終始すると自己肯定感が低下するリスクがあります。長所や望ましい行動を認め、ほめて伸ばすアプローチ（B）を基本とすることで、自己効力感を高め、結果的に短所の改善に向かう意欲も生まれやすくなると考えられています。</pre>
+</div>
+<div class="card" id="t036">
+<h2>試行 36 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:06:17　モデルID：google/gemini-3.6-flash</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.14</span>　不整合3件</div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td>【不整合】</td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td>【不整合】</td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>2</td><td>3</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>3</td><td>3</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td>【不整合】</td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1 3. どちらかといえばBに近い
+Q2 2. どちらかといえばAに近い
+Q3 2. どちらかといえばAに近い
+Q4 2. どちらかといえばAに近い
+Q5 3. どちらかといえばBに近い
+Q6 2. どちらかといえばAに近い
+Q7 4. Bに近い
+
+【回答理由】
+全体として、子ども主体の学びや自立心、自己効力感を育む指導方法を重視する立場をとっています。
+
+現代の教育においては、単に知識や規範を教え込む（注入する）ことよりも、子ども自身が主体的に考え、試行錯誤しながら学ぶプロセス（探究・対話・自発性）を支えることが重要視されています。
+
+具体的には、失敗を恐れずに挑戦させること（Q2）や、対話を通じて多様な思考を深めること（Q3）、自発的な動機付けに基づく学習を支援すること（Q4）、思考力や問題解決能力を伸ばすための問いかけを行うこと（Q5）が、将来的な自立につながると考えます。また、長所を伸ばすアプローチ（Q7）は子どもの自信や意欲の源泉となります。
+
+一方で、基礎的な知識・技能の定着（Q3のB）や、社会的なルールを守らせるための毅然とした態度（Q6のB）、必要なマナーや技能の伝授（Q1のA）も教育には不可欠です。そのため完全に一方のみに偏るのではなく、子どもの気持ちや個性を尊重した寄り添いの姿勢をベースに置きつつ、必要に応じて適切な支援や枠組みを提供することが望ましいと考え、多くの項目で「どちらかといえば」という選択肢をとっています。</pre>
+</div>
+<div class="card" id="t037">
+<h2>試行 37 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:06:26　モデルID：google/gemini-3.6-flash</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.43</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>3</td><td>3</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1：3.どちらかといえばBに近い
+Q2：1.Aに近い
+Q3：2.どちらかといえばAに近い
+Q4：1.Aに近い
+Q5：3.どちらかといえばBに近い
+Q6：2.どちらかといえばAに近い
+Q7：4.Bに近い
+
+【回答理由】
+現代の教育理論や発達心理学の知見に基づき、子どもが主体的かつ意欲的に学び、自己効力感（自分はやればできるという感覚）を高められるアプローチを重視して選択しました。
+
+基礎的な知識の伝達や集団の規律を保つ指導（Aの側面）も教育において一定の役割を果たしますが、変化が激しく予測困難な現代社会においては、子ども自身が課題を見つけ、試行錯誤しながら解決する力や、自己肯定感を育むことがより重要視されます。そのため、失敗を恐れずに挑戦できる機会を提供すること、長所を伸ばして自信につなげること、そして指導者が伴走者（ファシリテーター）として支援・寄り添う姿勢を持つことが、長期的な子どもの自立と成長に資すると考えています。</pre>
+</div>
+<div class="card" id="t038">
+<h2>試行 38 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:06:34　モデルID：google/gemini-3.6-flash</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.57</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1：3. どちらかといえばBに近い
+Q2：1. Aに近い
+Q3：2. どちらかといえばAに近い
+Q4：1. Aに近い
+Q5：4. Bに近い
+Q6：2. どちらかといえばAに近い
+Q7：4. Bに近い
+
+【回答理由】
+全体として、子ども主体の学びや自己主導性、個性の尊重を重視する教育観に基づき選択しました。
+
+基礎的な知識の習得や社会的な規範・ルールの指導（A側の要素）も重要ですが、自発的な探求心や試行錯誤（失敗）を通じた成長、長所を伸ばす自己肯定感の醸成（B側の要素）が、現代社会において自立した学習者・個人を育てる上でより本質的であると考えます。問題行動に対する指導においても、表面的な強制や処罰ではなく、子どもの背景にある感情や原因に寄り添った上で適切な導きを行うことが、根本的な解決につながると捉えています。</pre>
+</div>
+<div class="card" id="t039">
+<h2>試行 39 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:06:46　モデルID：google/gemini-3.6-flash</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.43</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1: 3. どちらかといえばBに近い
+Q2: 2. どちらかといえばAに近い
+Q3: 2. どちらかといえばAに近い
+Q4: 1. Aに近い
+Q5: 4. Bに近い
+Q6: 2. どちらかといえばAに近い
+Q7: 4. Bに近い
+
+【回答理由】
+教育・指導におけるこれらの対照的なアプローチは、いずれも状況や発達段階に応じて必要とされる要素を含んでいますが、全体としては子どもの「主体性」「自己肯定感」「思考力・問題解決能力」を育む支援型の指導観（探究的・伴走的なアプローチ）をより重視しています。
+
+主な理由は以下の通りです。
+
+1. **主体性と学習意欲の育成（Q4, Q5）**
+強制や答えの提示による指導は短期的・即効的な成果を生むことがありますが、長期的な学びの持続性や自立性を高めるためには、子ども自身が課題意識を持ち、試行錯誤しながら答えを見つけ出すプロセスを支援することが不可欠だと考えます。
+
+2. **失敗を通じた成長とレジリエンス（Q2）**
+先回りして失敗を防ぐ指導は安全ですが、子どもが自らリスクを管理し、失敗から立ち直る力（レジリエンス）を育む機会を奪う可能性があります。安全が確保された範囲であれば、挑戦と失敗の経験を尊重する姿勢が望ましいと考えます。
+
+3. **多様性と自己肯定感の尊重（Q1, Q7）**
+短所の矯正や一律の規範へのあてはめよりも、個々の長所や可能性を見出し伸ばすアプローチのほうが、子どもの自己肯定感を高め、多様な社会で自分らしく貢献する土台となると考えます。
+
+4. **対話と背景の理解（Q3, Q6）**
+一方的な知識注入や規律の押し付けではなく、対話を通じた思考の深まりや、行動の背景にある心情への寄り添いを重視することで、子どもとの信頼関係が築かれ、本質的な行動の変容や学びへの深まりが期待できます。
+
+社会の規範や基礎基本の習得といった要素も必要不可欠ですが、それらを固定的に与えるのではなく、子どもが自律的に学び取り成長できるよう環境を整え支援することが、これからの時代に必要な指導法であると考えています。</pre>
+</div>
+<div class="card" id="t040">
+<h2>試行 40 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:07:02　モデルID：google/gemini-3.6-flash</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.00</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>2</td><td>3</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>3</td><td>3</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>3</td><td>3</td><td></td></tr></table>
+<pre>Q1: 3. どちらかといえばBに近い
+Q2: 2. どちらかといえばAに近い
+Q3: 2. どちらかといえばAに近い
+Q4: 2. どちらかといえばAに近い
+Q5: 3. どちらかといえばBに近い
+Q6: 2. どちらかといえばAに近い
+Q7: 3. どちらかといえばBに近い
+
+【回答理由】
+教育や指導におけるアプローチは、子どもの発達段階や学習内容、状況によって適切な手法が異なり、AとBのどちらか一方のみで完結するものではなく、双方が補完し合う関係にあります。上記の選択は現代の教育観（主体的な学びの重視）を考慮しつつ、それぞれのバランスを念頭に検討したものです。
+
+* **Q1について**：基本的な社会的規範や知識の習得（A）は基盤として不可欠ですが、現代教育では個々の関心や潜在能力を引き出す支援（B）に重点が置かれる傾向があります。両者の調和が理想的とされます。
+* **Q2について**：安全面や大きな失敗を避ける指導（B）も必要ですが、試行錯誤を通じた学びや立ち直る力（レジリエンス）の育成には、過度な制限を避け自発的に挑戦させる環境（A）が効果的です。
+* **Q3について**：基礎・基本の定着のための反復練習（B）は前提として重要ですが、思考力・判断力・表現力を培うためには、議論や意見共有の場（A）を積極的に設けることが重視されています。
+* **Q4について**：一定の学習習慣や必須知識を定着させる機会（B）が必要な場面もありますが、持続的な学びや学習意欲の維持には、本人の興味や自発性を尊重する支援（A）が不可欠です。
+* **Q5について**：基礎的な概念や安全に関する事項などで解法を教える指導（A）も有効ですが、課題解決能力や探究心を育てる上では、自ら発見できるよう促す導き（B）が望ましいとされています。
+* **Q6について**：ルールや対人関係の問題に対して毅然とした態度で臨む指導（B）は秩序の維持に必要ですが、背景にある感情や動機に寄り添う指導（A）を行うことで、根本的な行動の改善と自己理解につながります。
+* **Q7について**：重大な課題や短所の是正（A）が必要な場合もありますが、自己肯定感の向上や意欲の喚起には、長所や努力を認めて伸ばす関わり（B）が基盤となります。</pre>
+</div>
+<div class="card" id="t041">
+<h2>試行 41 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:07:13　モデルID：google/gemini-3.6-flash</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.29</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>3</td><td>3</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1: 3. どちらかといえばBに近い
+Q2: 2. どちらかといえばAに近い
+Q3: 2. どちらかといえばAに近い
+Q4: 1. Aに近い
+Q5: 3. どちらかといえばBに近い
+Q6: 2. どちらかといえばAに近い
+Q7: 4. Bに近い
+
+【回答理由】
+教育指導においては、子ども自身の主体性や内発的動機づけ、自己肯定感を育むアプローチが極めて重要であるという考えに基づいています。
+
+Q1・Q4・Q7については、子どもの長所や可能性を伸ばし、自発的な学びを尊重することが、長期的な成長や意欲の維持につながると考えるため、B寄りの選択としました。
+Q2・Q3・Q5については、失敗を恐れず試行錯誤する経験や自ら問いを立てて議論するプロセスが思考力や課題解決能力を高めるため、AまたはBの自発性を促す側を選択しています。ただし、基礎的な知識・技能の習得や適切な導きも必要であるため、完全にどちらか一方に偏らない選択としています。
+Q6については、問題行動の背景にある子どもの感情や状況に寄り添うことが根本的な解決と信頼関係の構築に寄与すると考えるため、A寄りとしました。</pre>
+</div>
+<div class="card" id="t042">
+<h2>試行 42 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:07:24　モデルID：google/gemini-3.6-flash</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.43</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1: 3. どちらかといえばBに近い
+Q2: 2. どちらかといえばAに近い
+Q3: 2. どちらかといえばAに近い
+Q4: 1. Aに近い
+Q5: 4. Bに近い
+Q6: 2. どちらかといえばAに近い
+Q7: 4. Bに近い
+
+【回答理由】
+教育指導においては、子ども自身の主体性、探究心、自己肯定感を育む支援が長期的な成長に最も効果的であるという考えに基づき選択しました。
+
+Q1・Q4・Q5・Q7では、外部からの強制や短所の矯正よりも、内発的動機づけや長所を伸ばすこと、子ども自身が答えを見つけ出すプロセスを支援することが、自立した学び手となるために重要であると考えています。
+
+Q2・Q3では、失敗を恐れず試行錯誤する体験や、多様な意見を交わす対話的な学びを重視しています。ただし、基礎的な知識の定着や安全確保も並行して必要となるため、「どちらかといえば」という範囲での選択としています。
+
+Q6では、問題行動に対する毅然とした態度の必要性を理解しつつも、指導の出発点として行動の背景にある子どもの感情や葛藤に寄り添うことが、根本的な解決と信頼関係の構築につながると考えています。</pre>
+</div>
+<div class="card" id="t043">
+<h2>試行 43 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:07:34　モデルID：google/gemini-3.6-flash</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.00</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>2</td><td>3</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>3</td><td>3</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>3</td><td>3</td><td></td></tr></table>
+<pre>Q1: 3. どちらかといえばBに近い
+Q2: 2. どちらかといえばAに近い
+Q3: 2. どちらか的にはAに近い
+Q4: 2. どちらかといえばAに近い
+Q5: 3. どちらかといえばBに近い
+Q6: 2. どちらかといえばAに近い
+Q7: 3. どちらか的にはBに近い
+
+【回答理由】
+教育・指導においては、子どもが主体的に考え、学び、自己の可能性を伸ばしていくプロセスを支援することが根幹であると考えられます（Q1, Q4, Q5, Q7でB寄りの立場をとる理由）。自発的な探究や成功体験、長所を伸ばす関わりは、自己肯定感や自己効力感を育む上で極めて有効です。
+
+一方で、実践の場面においては、子どもの発達段階や学習内容、状況に応じた柔軟なアプローチが必要です。例えば、自己の挑戦による失敗から学ぶ機会を設けること（Q2-A）や、対話を通じて多角的な視点を育むこと（Q3-A）、また問題行動が生じた際にその背景にある感情や事情を受け止める姿勢（Q6-A）などは、子どもの自立と成長を促す上で重要な要素となります。
+
+総じて、基礎・基本や規律の指導（Aの側面）と、主体性や個性の尊重・支援（Bの側面）は対立するものではなく、子どもの状況や安全面、成長段階に合わせて適切に組み合わせていくことが求められるという考えに基づき選択しています。</pre>
+</div>
+<div class="card" id="t044">
+<h2>試行 44 <span class="status-badge warn">解析不能</span></h2>
+<div class="meta">実施日時：2026-07-22 11:07:51　モデルID：google/gemini-3.6-flash</div>
+
+
+<pre>AIとしては特定の個人的な考えや指導方針を持たないため、1から4の番号を選択して特定の立場をとることはいたしません。教育現場や発達支援においては、子どもの発達段階、学習内容、個別の状況に応じて、AとBの双方のアプローチが相互に補完し合う関係にあると考えられています。以下に各質問に関する両者の視点と背景をまとめます。
+
+### 各設問における視点の整理と理由
+
+**Q1：教育の目的**
+* **A（社会化・訓練）の視点:** 自立した社会人として必要な規範意識、基礎知識、社会性を確実に習得させることが重要であると考えます。
+* **B（個性の伸長・支援）の視点:** 子ども本来の探究心や潜在能力を尊重し、個性を引き出すことを中心に置く教育方針です。
+
+**Q2：失敗との向き合い方**
+* **A（試行錯誤の重視）の視点:** 失敗を通じて学ぶレジリエンス（回復力）や課題解決能力の育成を重視します。
+* **B（未然防止・成功体験）の視点:** 適切なサポートにより不要な挫折を防ぎ、成功体験を積み重ねることで自己効力感を育みます。
+
+**Q3：授業スタイルの重点**
+* **A（対話・探究）の視点:** 思考力、表現力、多角的な視点を養うため、対話的・主体的な学びを重視します。
+* **B（基礎の定着）の視点:** 思考の土台となる確実な知識・技能を身に付けるため、反復学習や確実な定着を重視します。
+
+**Q4：学習の動機付け**
+* **A（内発的動機付け）の視点:** 子ども自身の興味・関心に基づいた主体的な学びが、長期的な学習意欲につながると考えます。
+* **B（外発的動機付け・習慣化）の視点:** 学習習慣が未確立な段階などにおいて、一定の枠組みや導きによって学習量を確保することを重視します。
+
+**Q5：指導の手法**
+* **A（直接指導）の視点:** 正確な知識や効率的な解法を明確に伝えることで、確実な理解を促し混乱を防ぎます。
+* **B（構成主義的支援）の視点:** 自分で考え、発見するプロセスを重視し、思考プロセスそのものを育てます。
+
+**Q6：問題行動への対応**
+* **A（受容的指導）の視点:** 行動の背景にある感情や環境に焦点を当て、信頼関係の構築と根本的な心理的支援を目指します。
+* **B（毅然とした指導）の視点:** 集団の規律やルールの遵守を重視し、行動の責任や善悪の境界線を明確に示します。
+
+**Q7：個性の伸ばし方**
+* **A（課題の克服）の視点:** 将来的な不利益やバランスの偏りを防ぐため、弱点の改善に目を向けます。
+* **B（強みの伸長）の視点:** 長所を承認・強化することで自己肯定感を高め、成長の原動力とします。
+
+このように、教育の目的や状況、子どもの状態に応じて、これらの考え方を適切に組み合わせることが効果的であると議論されています。</pre>
+</div>
+<div class="card" id="t045">
+<h2>試行 45 <span class="status-badge warn">解析不能</span></h2>
+<div class="meta">実施日時：2026-07-22 11:08:06　モデルID：google/gemini-3.6-flash</div>
+
+
+<pre>AIとしての立場から、特定の選択肢（1～4）を選ぶことはせず、状況や目的に応じた両方の考え方の意義について回答いたします。
+
+Q1：特定の立場を選択しません
+Q2：特定の立場を選択しません
+Q3：特定の立場を選択しません
+Q4：特定の立場を選択しません
+Q5：特定の立場を選択しません
+Q6：特定の立場を選択しません
+Q7：特定の立場を選択しません
+
+【回答理由】
+教育・指導におけるこれらの対照的な考え方は、どちらか一方のみが正しいというわけではなく、子どもの年齢、発達段階、置かれた環境、学習の目的などに応じて補完し合う関係にあります。特定の立場を選択しない理由は、それぞれの設問においてAとBの双方に重要な教育的意義が存在するためです。
+
+* **Q1について**
+  * **A（規範・技能の訓練）：** 社会の一員として自立するために必要なルールや生活習慣、基礎的なスキルを身につけさせるために重要です。
+  * **B（可能性の支援）：** 子ども一人ひとりの個性や独自の強みを見出し、主体的・創造的に成長するのを促すために重要です。
+
+* **Q2について**
+  * **A（試行錯誤の重視）：** 失敗を通して原因を考え、問題を解決する力（レジリエンスや主体性）を育てるのに有効です。
+  * **B（失敗の防止・安全）：** 事故や危険を回避する安全管理の場面や、小さな成功体験を積み重ねて自信をつけさせる段階で有効です。
+
+* **Q3について**
+  * **A（発表・議論の重視）：** 多様な考えに触れ、思考力や表現力、コミュニケーション能力を高めるために欠かせません。
+  * **B（反復練習の重視）：** 知識や技能を確実に定着させ、複雑な思考を行うための基礎体力をつけるために欠かせません。
+
+* **Q4について**
+  * **A（自発性の支援）：** 内発的動機付けを育み、生涯にわたって自ら学び続ける姿勢を養ううえで望ましいアプローチです。
+  * **B（学習の強制・介入）：** 習慣化が難しい初期段階や、基礎学力を保障するために必要な介入として機能する場合があります。
+
+* **Q5について**
+  * **A（正しい答え・解き方の提示）：** 効率的に体系的な知識を伝達し、誤解を防ぐうえで有効です。
+  * **B（自分で発見させる支援）：** 概念の深い理解や、自ら問いを立てて解き明かす探究的態度を養ううえで有効です。
+
+* **Q6について**
+  * **A（気持ちへの寄り添い）：** 子どもの抱える不安や背景にある問題を理解し、信頼関係を築きながら自己省察を促すために重要です。
+  * **B（毅然とした指導）：** 行動の境界線を示し、規範意識や社会的責任を教えるとともに、周りの環境を守るために重要です。
+
+* **Q7について**
+  * **A（短所の改善）：** 社会生活上の課題や他者との摩擦を減らし、苦手意識を克服させるために意識されるアプローチです。
+  * **B（長所の伸長）：** 自己肯定感を高め、得意な領域で意欲的に活躍する力を伸ばすために重視されるアプローチです。</pre>
+</div>
+<div class="card" id="t046">
+<h2>試行 46 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:08:14　モデルID：google/gemini-3.6-flash</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.71</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>4</td><td>4</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1: 4. Bに近い
+Q2: 1. Aに近い
+Q3: 2. どちらかといえばAに近い
+Q4: 1. Aに近い
+Q5: 4. Bに近い
+Q6: 2. どちらかといえばAに近い
+Q7: 4. Bに近い
+
+【回答理由】
+子どもの成長においては、指示や強制によって行動を管理するよりも、子ども自身の主体性、自己効力感、探究心を尊重し、可能性を引き出す指導が極めて重要であると考えています。そのため、失敗を恐れずに挑戦できる環境を整えること（Q2）、自発的な学びや発見を促すこと（Q4、Q5）、長所を伸ばして自信につなげること（Q7）、一人ひとりの可能性を支援すること（Q1）を重視する選択肢を選びました。
+
+一方で、基礎的な知識・技能の習得や社会規範の理解も重要であるため、常に子ども任せにするのではなく、意見対話の時間を軸にしつつ反復練習を組み合わせること（Q3）や、子どもの背景や気持ちに寄り添いながらも必要に応じて社会的なルールを学ばせるアプローチ（Q6）といった、バランスを意識した判断を行っています。</pre>
+</div>
+<div class="card" id="t047">
+<h2>試行 47 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:08:25　モデルID：google/gemini-3.6-flash</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.29</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>3</td><td>3</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1：3. どちらかといえばBに近い
+Q2：2. どちらか的にはAに近い
+Q3：2. どちらかといえばAに近い
+Q4：1. Aに近い
+Q5：3. どちらかといえばBに近い
+Q6：2. どちらかといえばAに近い
+Q7：4. Bに近い
+
+【回答理由】
+教育指導においては、単に知識や規範を一方的に教え込むのではなく、子ども自身の主体的・能動的な学びや自己肯定感を育む支援が重要であるという考えに基づいています。
+
+Q1〜Q5については、子どもが自発的に思考・試行錯誤し、自らの可能性や解き方を見つけ出していく「主体的な学び（アクティブ・ラーニング）」のプロセスを尊重するアプローチを重視しています。ただし、基礎的な知識・技能の習得や規律といった側面も土台として必要であるため、完全に一方に偏るのではなく、本人の主体性を引き出すための支援や環境づくりを軸に置く姿勢を選択しています。
+
+Q6〜Q7については、問題行動への対応において毅然とした態度も時には求められますが、まずは行動の背景にある情緒や動機に寄り添うことで本質的な理解と解決につながると考えています。また、短所の修正よりも長所や強みを伸ばす指導のほうが、子どもの自己効力感を高め、結果として全体の成長や課題の克服を促しやすいという観点から選択しています。</pre>
+</div>
+<div class="card" id="t048">
+<h2>試行 48 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:08:34　モデルID：google/gemini-3.6-flash</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.43</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1: 3. どちらかといえばBに近い
+Q2: 2. どちらかといえばAに近い
+Q3: 2. どちらかといえばAに近い
+Q4: 1. Aに近い
+Q5: 4. Bに近い
+Q6: 2. どちらかといえばAに近い
+Q7: 4. Bに近い
+
+【回答理由】
+子どもたちの教育指導においては、自ら考え行動する「主体性」や「自己肯定感」、および「探究心」を育むアプローチ（自発学習の支援、長所を伸ばす関わり、思考や発見の促し、失敗を通じた試行錯誤の容認など）が特に重要であるという現代の教育的な視点に基づき回答を選択しました。
+
+一方で、学習の対象や発達段階、状況によっては、基礎・基本となる知識の習得や規範意識の指導、適切な安全配慮など、一律的・直接的な手厚い指導が効果を発揮する場面も存在します。そのため、基本的には子ども中心の支援・対話的な指導を軸としつつも、文脈に応じて訓練や明示的な指導とのバランスを取ることが望ましいと考えます。</pre>
+</div>
+<div class="card" id="t049">
+<h2>試行 49 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:08:47　モデルID：google/gemini-3.6-flash</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.43</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1: 3. どちらかといえばBに近い
+Q2: 2. どちらかといえばAに近い
+Q3: 2. どちらか的には... 2. どちらかといえばAに近い
+Q4: 1. Aに近い
+Q5: 4. Bに近い
+Q6: 2. どちらかといえばAに近い
+Q7: 4. Bに近い
+
+【回答理由】
+教育においては、子どもの発達段階や指導の場面に応じて双方の要素を適切に組み合わせることが重要ですが、主体性・探究心・自己肯定感を育む現代的な指導観に基づき、上記のように選択しました。
+
+* **Q1（3. どちらかといえばBに近い）：** 大人の枠組みに当てはめる訓練よりも、子ども自身が持つ潜在能力や個性を尊重して開花させる支援が、本質的な自立に繋がると考えます。
+* **Q2（2. どちらかといえばAに近い）：** 安全への配慮は不可欠ですが、失敗を通じた試行錯誤の経験こそが学びを深め、問題解決能力や粘り強さを養うと考えます。
+* **Q3（2. どちらかといえばAに近い）：** 基礎的な知識・技能の定着（B）も重要ですが、自らの考えを表現し他者と議論する中で多角的な思考力や対話力を育む時間をより重視します。
+* **Q4（1. Aに近い）：** 強制による学習は持続的な意欲に繋がりにくいため、子ども自身が学びの価値を見出し自発的に取り組める環境と動機付けを支援することが不可欠です。
+* **Q5（4. Bに近い）：** 正解を一方的に教えるのではなく、子ども自身が試行錯誤して答えや解決策を導き出すプロセスを支えることが、思考力や応用力を伸ばします。
+* **Q6（2. どちらかといえばAに近い）：** 毅然とした態度でのルール指導も必要ですが、問題行動の背景にある感情や事情に寄り添い理解を示すことが、根本的な行動の改善と信頼関係の構築に寄与します。
+* **Q7（4. Bに近い）：** 欠点の指摘や矯正は自己肯定感を低下させやすいため、長所を認めて伸ばすことで自信を育み、それが結果的に課題の克服に向かう原動力になると考えます。</pre>
+</div>
+<div class="card" id="t050">
+<h2>試行 50 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:08:55　モデルID：google/gemini-3.6-flash</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.57</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1: 3. どちらかといえばBに近い
+Q2: 1. Aに近い
+Q3: 2. どちらかといえばAに近い
+Q4: 1. Aに近い
+Q5: 4. Bに近い
+Q6: 2. どちらかといえばAに近い
+Q7: 4. Bに近い
+
+【回答理由】
+子どもへの指導においては、主体性や自己効力感を育む支援を中心とすることが望ましいと考えます。自発的な学びや試行錯誤を通じた発見は、深い理解と持続的な学習意欲につながります。また、長所を伸ばす関わりや子どもの気持ちに寄り添う姿勢は、安全な学習基盤となる信頼関係を築く上で重要です。一方で、基礎的な知識・技能の習得や規律、社会人としての基礎を築く視点も必要であるため、場面に応じた柔軟なバランスを意識しつつも、子ども自身の持つ可能性と自立を尊重するアプローチを重視して選択しました。</pre>
+</div>
+<div class="card" id="t051">
+<h2>試行 51 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 11:09:05　モデルID：google/gemini-3.6-flash</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.57</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1 3. どちらかといえばBに近い
+Q2 1. Aに近い
+Q3 2. どちらかといえばAに近い
+Q4 1. Aに近い
+Q5 4. Bに近い
+Q6 2. どちらかといえばAに近い
+Q7 4. Bに近い
+
+【回答理由】
+現代の教育指導においては、子ども自身が主体的に考え、行動し、自己肯定感を育むことが重要視されています。
+
+Q1・Q4・Q5・Q7については、一方的な指示や過度な強制・修正よりも、子どもの内発的な動機づけや自発的な試行錯誤、長所を伸ばす支援を行う方が、将来にわたる探究力や自立心を養ううえで効果的であると考えているため、B（または自発性を重視するA）を選択しました。
+
+Q2・Q3・Q6については、失敗を恐れずに挑戦する経験や、他者との対話を通じて多様な考え方に触れること、問題行動の背景にある気持ちを受け止める受容的姿勢が重要であると考え、体験・対話・傾聴を重視する選択肢（Q2: A、Q3: A、Q6: A）を中心に選んでいます。
+
+知識の定着や規律を守らせる指導も一定程度不可欠ですが、それらは子どもの主体性や心情への配慮を基盤とした上でなされるべきであるという立場に基づいています。</pre>
+</div>
+<div class="card" id="t052">
+<h2>試行 52 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 12:31:03　モデルID：google/gemini-3.6-flash</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.14</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>2</td><td>3</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>3</td><td>3</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1: 3. どちらかといえばBに近い
+Q2: 2. どちらかといえばAに近い
+Q3: 2. どちらかといえばAに近い
+Q4: 2. どちらかといえばAに近い
+Q5: 3. どちらかといえばBに近い
+Q6: 2. どちらかといえばAに近い
+Q7: 4. Bに近い
+
+【回答理由】
+現代の教育指導においては、知識の伝達や規範の遵守といった基礎的な側面を尊重しつつも、子ども自身が主体的に考え、行動し、強みを伸ばしていくプロセスの支援がより重要視されていると考えます。
+
+Q1・Q4・Q5については、子どもが自ら課題を見つけ、答えを探求する主体的な学び（アクティブ・ラーニング）を促すことが、将来の自立や変化の激しい社会に対応する力の育成につながると考えています。そのため、一方的な訓練や強制、正解の提示よりも、子どもの持つ可能性や自発性を引き出す「支援」を重視する立場（B寄り）をとっています。
+
+Q2・Q7については、挑戦する態度や自己肯定感を育むことが指導の基盤となると捉えています。失敗を恐れずに取り組む経験（Q2: A寄り）や、長所を認めて伸ばす関わり（Q7: Bに近い）を通じることで、子どもは意欲や自己効力感を高めることができます。
+
+Q3については、知識・技能の習得も基礎として不可欠ですが、それらを活用して意見を交わし、多様な考え方に触れる対話的な学び（A寄り）の機会を増やすことが、深い理解と社会性の育成に効果的であると考えます。
+
+Q6については、ルールや規律に基づく毅然とした態度も場面によっては必要ですが、まずは行動の背景にある子どもの感情や葛藤に寄り添い、信頼関係を築くこと（A寄り）が、根本的な行動変容や心の発達を促す上で不可欠であると考えています。</pre>
+</div>
+<div class="card" id="t053">
+<h2>試行 53 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 12:31:11　モデルID：google/gemini-3.6-flash</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.57</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1: 3. どちらかといえばBに近い
+Q2: 1. Aに近い
+Q3: 2. どちらかといえばAに近い
+Q4: 1. Aに近い
+Q5: 4. Bに近い
+Q6: 2. どちらかといえばAに近い
+Q7: 4. Bに近い
+
+【回答理由】
+教育指導においては、子どもが主体的・能動的に学ぶ姿勢を育むことが最も重要であると考えています。知識の注入や一方的な訓練（Q1, Q5）よりも、子ども自身の試行錯誤や発見（Q2, Q5）、自発的な学習意欲（Q4）を支援するアプローチの方が、長期的な自己成長や思考力・表現力の育成につながります。また、失敗を恐れずに挑戦できる環境づくりや、長所を伸ばして自己肯定感を高める指導（Q7）が子どもの可能性を引き出します。一方で、思考や対話の時間を重視しつつも基礎的な知識習得のバランスをとること（Q3）、子どもの気持ちに寄り添い背景を理解しながらも社会性や規範を伝えること（Q6）といった、指導における柔軟性と適切なバランスも考慮して選択しました。</pre>
+</div>
+<div class="card" id="t054">
+<h2>試行 54 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 12:31:21　モデルID：google/gemini-3.6-flash</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.57</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1 3. どちらかといえばBに近い
+Q2 1. Aに近い
+Q3 2. どちらかといえばAに近い
+Q4 1. Aに近い
+Q5 4. Bに近い
+Q6 2. どちらかといえばAに近い
+Q7 4. Bに近い
+
+【回答理由】
+全体として、子どもの主体性、自己肯定感、探究心を尊重する指導観に基づき回答を選択しました。
+学習や生活の場面においては、大人からの指示や強制（知識の注入や過度な干渉）よりも、子ども自身が失敗や試行錯誤を通して自発的に学び、解き方や答えを見つけ出すアプローチ（Q2, Q4, Q5）が、長期的な思考力や問題解決能力を育むと考えています。また、短所の是正よりも長所を伸ばす関わり（Q7）や対話を通じた深まり（Q3）が、学ぶ意欲や自己効力感を高めます。
+一方で、基礎的な知識・技能の習得（Q3B）や社会的な規範の指導（Q6B）も重要であるため、子どもの気持ちに寄り添うこと（Q6A）や潜在能力の開花（Q1B）をベースにしつつ、成長段階に応じたバランスの取れた指導が望ましいという観点から、一部の項目では「どちらかといえば」という選択を行いました。</pre>
+</div>
+<div class="card" id="t055">
+<h2>試行 55 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 12:31:30　モデルID：google/gemini-3.6-flash</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.57</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>1</td><td>4</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1：3.どちらかといえばBに近い
+Q2：1.Aに近い
+Q3：2.どちらかといえばAに近い
+Q4：1.Aに近い
+Q5：4.Bに近い
+Q6：2.どちらかといえばAに近い
+Q7：4.Bに近い
+
+【回答理由】
+子どもの主体性、内発的動機づけ、そして自己肯定感を育む指導観を重視して選択しました。現代の教育においては、単に知識や規範を教え込むことよりも、子ども自身が探究し、自発的に学び、失敗を含めた体験から学び取るプロセスを支えることが、変化の激しい社会を生き抜く力を養うと考えられます。ただし、基礎的な知識・技能の定着や社会的規範の指導も必要不可欠であり、これらは対立するものではなく、子どもの発達段階や状況に応じてバランスよく組み合わせていくことが重要です。</pre>
+</div>
+<div class="card" id="t056">
+<h2>試行 56 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 12:31:39　モデルID：google/gemini-3.6-flash</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.43</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1 3. どちらかといえばBに近い
+Q2 2. どちらかといえばAに近い
+Q3 2. どちらかといえばAに近い
+Q4 1. Aに近い
+Q5 4. Bに近い
+Q6 2. どちらかといえばAに近い
+Q7 4. Bに近い
+
+【回答理由】
+子どもの主体性、自発性、および個々の持つ可能性を尊重し、試行錯誤を通じた学びを支援することが、将来にわたる学習意欲や自己肯定感を育む上で極めて有効であると考えているためです。指導においては、単に答えや規範を一方的に与えるのではなく、子ども自身が気づき、考え、対話を通じて解決策を見出すプロセス（自発的学習の支援、失敗を恐れない挑戦、探究・議論の重視、長所伸展）を重視することが望ましいという立場をとっています。ただし、基礎的な知識・技能の定着や規範意識の指導においては、状況に応じた一定の規律や毅然とした対応も不可欠であるため、完全な片寄りではなくバランスを考慮した選択を行っています。</pre>
+</div>
+<div class="card" id="t057">
+<h2>試行 57 <span class="status-badge ok">有効</span></h2>
+<div class="meta">実施日時：2026-07-22 12:31:51　モデルID：google/gemini-3.6-flash</div>
+<div><span class="score">7項目平均（子ども中心主義得点）：3.43</span></div>
+<table class="itemtbl"><tr><th>項目</th><th>内容</th><th>選択</th><th>得点</th><th>備考</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td>3</td><td>3</td><td></td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td>2</td><td>3</td><td></td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td>2</td><td>3</td><td></td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td>1</td><td>4</td><td></td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td>4</td><td>4</td><td></td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td>2</td><td>3</td><td></td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td>4</td><td>4</td><td></td></tr></table>
+<pre>Q1：3.どちらかといえばBに近い
+Q2：2.どちらか的にはAに近い
+Q3：2.どちらかといえばAに近い
+Q4：1.Aに近い
+Q5：4.Bに近い
+Q6：2.どちらかといえばAに近い
+Q7：4.Bに近い
+
+【回答理由】
+教育においては、社会規範の習得や基礎的な知識・技能の定着といった側面（知識伝達・規律重視のアプローチ）と、子どもの自主性や探究心、個性を尊重し育てる側面（主体性・支援重視のアプローチ）の双方が不可欠であり、子どもの発達段階や個々の状況に応じてバランスよく使い分けることが求められます。
+
+その上で上記の選択を行った理由は、変化が激しく予測困難な現代社会においては、受動的に指示に従う力よりも、自ら考え、行動し、課題を解決していく「主体性」「自己効力感」「探究的思考力」を育むことの重要性が一段と高まっていると考えるためです。失敗を恐れずに挑戦できる環境を整え、子どもの内発的動機や強みを引き出す指導を根幹に据えることが、将来にわたって自立して学び続ける力を養うことにつながると捉えています。</pre>
+</div>
+
+<footer>本ページは data/ 内のCSV・JSONLから機械的に生成した閲覧用アーカイブです（gen_html_browser.py）。応答原文は原文ママ収録。</footer>
+</div>
+<a class="top" href="#top">▲先頭へ</a>
+</body></html>

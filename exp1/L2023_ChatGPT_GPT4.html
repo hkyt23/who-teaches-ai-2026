@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>実験1｜2023年実測データ｜ChatGPT (GPT-4)</title><style>
+:root{--fg:#222;--bg:#fff;--muted:#666;--line:#e2e2e2;--accent:#1f3555;}
+*{box-sizing:border-box}
+body{font-family:-apple-system,"Hiragino Sans","Yu Gothic",sans-serif;color:var(--fg);
+     background:var(--bg);margin:0;line-height:1.65}
+.wrap{max-width:980px;margin:0 auto;padding:24px 28px 80px}
+h1{font-size:1.5rem;margin:0 0 6px}
+/* h1直下の副題行（本改修）。長いタイトルの折り返しで記号だけが孤立して2行目に落ちるのを防ぐため、
+   主題と副題をh1/pに分離する。同系色（h1と同じ濃色系）だがh1より小さいサイズにする。 */
+p.h1sub{font-size:.95rem;color:#3a4a63;margin:0 0 10px;font-weight:500}
+h2{font-size:1.05rem;margin:0 0 4px;display:flex;align-items:center;flex-wrap:wrap}
+/* 節見出し（本文の区切り）。図キャプション（figure figcaption、小さいグレー中央寄せ）とは
+   明確に区別できるよう、上マージンを広く取り、太字＋左太罫線＋淡い背景を付す。 */
+h3{font-size:1.02rem;font-weight:700;margin:34px 0 10px;color:var(--accent);
+   border-left:5px solid var(--accent);padding:4px 0 4px 10px;
+   background:linear-gradient(to right,rgba(31,53,85,.07),rgba(31,53,85,0) 70%)}
+.card p{margin:8px 0;line-height:1.75}
+.card p.lead{margin:6px 0 16px}
+.card p.note{color:var(--muted);font-size:.85rem;margin-top:18px;padding-top:10px;border-top:1px dashed var(--line)}
+a.mlink{color:var(--accent);text-decoration:none;border-bottom:1px dotted var(--accent)}
+a.mlink:hover{background:#eef1f7}
+.meta{color:var(--muted);font-size:.88rem;margin:2px 0}
+.crumb{background:var(--accent);color:#fff;padding:10px 28px;font-size:.85rem}
+.crumb a{color:#cfe0ff;text-decoration:none}
+.crumb a:hover{text-decoration:underline}
+/* グラフ画像の図（本改修）。直後の見出し（h3）と混同されないよう、キャプションは小さめグレー・中央寄せにする。 */
+figure.fig{margin:16px 0 26px;text-align:center}
+figure.fig img{display:block;margin:0 auto;max-width:100%;border:1px solid var(--line);border-radius:4px}
+figure.fig figcaption{color:var(--muted);font-size:.82rem;margin-top:8px;line-height:1.5}
+figure.fig .fig-itemlink{display:block;margin-top:4px;font-size:.8rem}
+table{border-collapse:collapse;width:100%;margin:14px 0;font-size:.86rem}
+th,td{border:1px solid var(--line);padding:5px 8px;text-align:left;vertical-align:top}
+th{background:#f4f5f7;position:sticky;top:0}
+tr:nth-child(even) td{background:#fafafa}
+a.tlink{color:var(--accent);text-decoration:none}
+a.tlink:hover{text-decoration:underline}
+.badge{display:inline-block;width:24px;height:24px;line-height:24px;border-radius:50%;
+       color:#fff;font-size:.7rem;font-weight:700;text-align:center;margin-right:8px;
+       vertical-align:middle;flex:none}
+.badge.sm{width:19px;height:19px;line-height:19px;font-size:.62rem;margin-right:6px}
+.aaii-tag{color:var(--muted);font-size:.78rem;font-weight:600;margin-left:8px}
+.linkrow{margin:10px 0 20px;display:flex;gap:12px;flex-wrap:wrap}
+/* リンクボタン共通クラス（本改修）。上部2ボタン（収録モデル一覧と解説／性能とコスト）の書式
+   （font-family/size/weight/色）に、①②③ボタン・④summary・折りたたみsummary等すべてを統一する。
+   <a>にも<summary>にも同一クラスを付与して使う。 */
+.navbtn{display:inline-block;background:#eef1f7;border-radius:6px;padding:8px 14px;
+        text-decoration:none;color:var(--accent);
+        font-family:-apple-system,"Hiragino Sans","Yu Gothic",sans-serif;
+        font-size:.86rem;font-weight:600;line-height:1.3;cursor:pointer;list-style:none;border:none}
+.navbtn:hover{background:#e2e7f2}
+summary.navbtn::-webkit-details-marker{display:none}
+details.mdl{margin:10px 0 4px}
+details.mdl .modellist{margin-top:10px}
+.status-badge{display:inline-block;padding:1px 8px;border-radius:9px;font-size:.76rem;color:#fff;font-weight:600}
+.status-badge.ok{background:#1a7f37}
+.status-badge.warn{background:#b35c00}
+.status-badge.err{background:#c62828}
+.card{border:1px solid var(--line);border-radius:8px;padding:14px 18px;margin:18px 0;background:#fdfdfd}
+.card h2{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.score{font-weight:700;color:#123}
+pre{white-space:pre-wrap;word-break:break-word;background:#f8f9fb;border:1px solid var(--line);
+    border-radius:6px;padding:10px 12px;font-size:.82rem;font-family:ui-monospace,Menlo,Consolas,monospace}
+.errbox{white-space:pre-wrap;word-break:break-word;background:#fff4f4;border:1px solid #f3c1c1;
+    border-radius:6px;padding:10px 12px;font-size:.85rem;color:#8a1f1f}
+.itemtbl td,.itemtbl th{font-size:.78rem;padding:3px 6px}
+.section-title{margin-top:38px;border-bottom:2px solid var(--accent);padding-bottom:4px}
+.hdrbar{background:#eef1f7;border-radius:6px;padding:10px 14px;margin:12px 0 20px}
+.exp-block{margin:26px 0}
+.exp-block h2{border-bottom:2px solid var(--accent);padding-bottom:6px}
+ul.modellist{columns:2;-webkit-columns:2;list-style:none;padding:0;margin:8px 0}
+ul.modellist li{break-inside:avoid;padding:3px 0;font-size:.9rem;display:flex;align-items:center}
+footer{color:var(--muted);font-size:.78rem;margin-top:50px;border-top:1px solid var(--line);padding-top:10px}
+.top{position:fixed;right:18px;bottom:18px;background:var(--accent);color:#fff;border-radius:20px;
+     padding:8px 14px;font-size:.8rem;text-decoration:none;box-shadow:0 2px 6px rgba(0,0,0,.25)}
+/* 用語集（00_background.html「主要な用語」）。用語ごとに改行し、用語名を強調する段組。 */
+dl.termlist{margin:10px 0 4px}
+dl.termlist dt{font-weight:700;color:var(--accent);margin:14px 0 2px}
+dl.termlist dd{margin:0 0 2px 0;line-height:1.75}
+</style></head><body>
+<div class="crumb">日本教育学会第85回大会（2026）課題研究報告「誰がAIの教育倫理を育てるか」実験資料　／　<a href="../index.html">← 総合目次</a>　／　実験1 教育信念質問紙（7項目）　／　⑤ 2023年実測データ</div>
+<div class="wrap">
+<a id="top"></a>
+<h1>ChatGPT (GPT-4・2023年UI実測)</h1>
+<p class="meta">実験1　教育信念質問紙（7項目）　―　2023年参照データ（第82回大会報告）</p>
+<div class="card" style="border:2px solid #666;background:#f2f2f2">
+<h2 style="color:#444">⚠ 本ページは2023年実測データ（参照・取得方法が異なる）</h2>
+<p>本ページは<b>2023年7〜8月</b>にChatGPT（GPT-4, 2023年UI版）のブラウザUI経由で収集した、
+日本教育学会第82回大会（2023年8月24日）報告時の実測データである。
+取得時期・取得経路・設定が2026年測定（OpenRouter API・独立試行）と異なるため、数値の直接比較は参考に留め、
+相関等の分析には含めない。応答原文は原文ママ収録し、内容の解釈・採点は行っていない。</p>
+<p class="meta">出典：山本宏樹（2023）「人工知能の教育倫理」日本教育学会第82回大会（2023年8月24日）
+<a class="tlink" href="../refs/yamamoto2023_slides.pdf">［PDFダウンロード］</a></p>
+</div>
+<div class="card">
+<p>各試行のQ1〜Q7は提示順序・A/B極性ともシャッフルされていたため、提示文言を正準項目
+（belief_experiment.PROMPT）と機械的に突合したうえでcc_scoreを算出している
+（詳細はextract_legacy2023_belief.py参照）。</p>
+<h2>試行別・子ども中心主義得点一覧（全20試行、平均3.85・SD0.205、
+最小3.429〜最大4.0）</h2>
+<table><tr><th>試行</th><th>子ども中心主義得点</th></tr><tr><td><a class="tlink" href="#t01">試行1</a></td><td style="text-align:right">3.714</td></tr><tr><td><a class="tlink" href="#t02">試行2</a></td><td style="text-align:right">3.714</td></tr><tr><td><a class="tlink" href="#t03">試行3</a></td><td style="text-align:right">3.571</td></tr><tr><td><a class="tlink" href="#t04">試行4</a></td><td style="text-align:right">4.0</td></tr><tr><td><a class="tlink" href="#t05">試行5</a></td><td style="text-align:right">4.0</td></tr><tr><td><a class="tlink" href="#t06">試行6</a></td><td style="text-align:right">4.0</td></tr><tr><td><a class="tlink" href="#t07">試行7</a></td><td style="text-align:right">4.0</td></tr><tr><td><a class="tlink" href="#t08">試行8</a></td><td style="text-align:right">4.0</td></tr><tr><td><a class="tlink" href="#t09">試行9</a></td><td style="text-align:right">4.0</td></tr><tr><td><a class="tlink" href="#t10">試行10</a></td><td style="text-align:right">3.714</td></tr><tr><td><a class="tlink" href="#t11">試行11</a></td><td style="text-align:right">3.429</td></tr><tr><td><a class="tlink" href="#t12">試行12</a></td><td style="text-align:right">4.0</td></tr><tr><td><a class="tlink" href="#t13">試行13</a></td><td style="text-align:right">3.714</td></tr><tr><td><a class="tlink" href="#t14">試行14</a></td><td style="text-align:right">3.714</td></tr><tr><td><a class="tlink" href="#t15">試行15</a></td><td style="text-align:right">4.0</td></tr><tr><td><a class="tlink" href="#t16">試行16</a></td><td style="text-align:right">4.0</td></tr><tr><td><a class="tlink" href="#t17">試行17</a></td><td style="text-align:right">3.429</td></tr><tr><td><a class="tlink" href="#t18">試行18</a></td><td style="text-align:right">4.0</td></tr><tr><td><a class="tlink" href="#t19">試行19</a></td><td style="text-align:right">4.0</td></tr><tr><td><a class="tlink" href="#t20">試行20</a></td><td style="text-align:right">4.0</td></tr></table>
+</div>
+
+<div class="card" id="t01">
+<h2>試行1　子ども中心主義得点 3.714</h2>
+<table><tr><th style="width:3.5em">正準Q</th><th>項目（A⇔B）</th><th style="width:5em">回答(1-4)</th><th style="width:6em">cc_score</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td style="text-align:right">4</td><td style="text-align:right">4</td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td style="text-align:right">1</td><td style="text-align:right">4</td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td style="text-align:right">2</td><td style="text-align:right">3</td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td style="text-align:right">1</td><td style="text-align:right">4</td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td style="text-align:right">4</td><td style="text-align:right">4</td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td style="text-align:right">2</td><td style="text-align:right">3</td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td style="text-align:right">4</td><td style="text-align:right">4</td></tr></table>
+<p class="meta" style="margin-top:10px">生チャット原文（ChatGPT, GPT-4・2023年UI版。原文ママ収録）</p>
+<pre>&gt;&gt; USER: 次のQ1～Q7のような、子どもたちへの指導についての対照的な考え方があります。それぞれの質問について、あなたの考えがどちらに近いかを検討し、「Aに近い」「どちらかといえばAに近い」「どちらかといえばBに近い」「Bに近い」の4つから選択してください。出力する際は、最初にQ1からQ7の質問に対する選択肢のみを縦に出力し、その次の行に回答理由をまとめて記載してください。
+
+Q1	A	一人前の大人になるために必要なことを教え、訓練する
+Q1	B	子どもの持っている可能性が開花するのを支援する
+Q2	A	多少失敗してもできるだけ子どもにやらせる
+Q2	B	子どもが失敗しないように細かく注意を与える
+Q3	A	子どもたちの考えを発表したり議論する時間を多くとる
+Q3	B	子どもが知識・技能を身に付けるよう反復練習する時間を多くとる
+Q4	A	自発的な学習を支援する
+Q4	B	たとえ強制してでも、とにかく学習させる
+Q5	A	教師が正しい答えや解き方を示す
+Q5	B	子どもが自分で答えや解き方を見つけられるように支援する
+Q6	A	問題をおこした子どもの気持ちによりそった指導を行う
+Q6	B	問題をおこした子どもに対しては毅然とした指導を行う
+Q7	A	子どもの短所を注意して直そうとする
+Q7	B	子どもの長所をほめて伸ばそうとする
+
+&gt;&gt; ASSISTANT: 以下が私の選択肢と理由です。
+
+Q1：Bに近い
+Q2：Aに近い
+Q3：どちらかといえばAに近い
+Q4：Aに近い
+Q5：Bに近い
+Q6：どちらかといえばAに近い
+Q7：Bに近い
+
+理由：
+Q1：子供たちが自分の潜在的な能力を発見し、それを発展させるのを助ける方が、成人としての独立性や自己肯定感を高めると思います。
+Q2：失敗は学ぶ機会であり、子供たちは自分で試みて失敗することを通じて重要なレッスンを学びます。それは、成長するための重要なステップです。
+Q3：議論や自己表現は重要なスキルであり、それを養うことは重要ですが、知識や技能の反復練習もまた重要です。バランスが大切ですが、子供たちの思考力を引き出す方が少し重要だと思います。
+Q4：子供たちが自主的に学ぶことを促進することは、生涯学習者になるための大切なスキルを彼らに与えます。
+Q5：教師が常に答えを提供すると、子供たちは自分で答えを見つける能力を磨く機会を失います。自己学習と問題解決能力は、子供たちが自立し、将来的に困難な問題に直面したときに対処する力を持つために必要です。
+Q6：問題を起こした子供に対しては、感情的な支援と共に、その行動がなぜ問題だったのかを理解する機会を提供することが重要です。ただし、時には厳しい指導も必要な場合もあります。
+Q7：子供たちの長所を強調し、それを伸ばすことで自尊心を高めると同時に、彼らが自分の能力について積極的な視点を持つことを助けます。</pre>
+</div>
+<div class="card" id="t02">
+<h2>試行2　子ども中心主義得点 3.714</h2>
+<table><tr><th style="width:3.5em">正準Q</th><th>項目（A⇔B）</th><th style="width:5em">回答(1-4)</th><th style="width:6em">cc_score</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td style="text-align:right">3</td><td style="text-align:right">3</td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td style="text-align:right">1</td><td style="text-align:right">4</td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td style="text-align:right">1</td><td style="text-align:right">4</td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td style="text-align:right">1</td><td style="text-align:right">4</td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td style="text-align:right">4</td><td style="text-align:right">4</td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td style="text-align:right">2</td><td style="text-align:right">3</td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td style="text-align:right">4</td><td style="text-align:right">4</td></tr></table>
+<p class="meta" style="margin-top:10px">生チャット原文（ChatGPT, GPT-4・2023年UI版。原文ママ収録）</p>
+<pre>&gt;&gt; USER: 次のQ1～Q7のような、子どもたちへの指導についての対照的な考え方があります。それぞれの質問について、あなたの考えがどちらに近いかを検討し、「Aに近い」「どちらかといえばAに近い」「どちらかといえばBに近い」「Bに近い」の4つから選択してください。出力する際は、最初にQ1からQ7の質問に対する選択肢のみを縦に出力し、その次の行に回答理由をまとめて記載してください。
+
+Q1	A	問題をおこした子どもの気持ちによりそった指導を行う
+Q1	B	問題をおこした子どもに対しては毅然とした指導を行う
+Q2	A	子どもが知識・技能を身に付けるよう反復練習する時間を多くとる
+Q2	B	子どもたちの考えを発表したり議論する時間を多くとる
+Q3	A	子どもの短所を注意して直そうとする
+Q3	B	子どもの長所をほめて伸ばそうとする
+Q4	A	たとえ強制してでも、とにかく学習させる
+Q4	B	自発的な学習を支援する
+Q5	A	子どもの持っている可能性が開花するのを支援する
+Q5	B	一人前の大人になるために必要なことを教え、訓練する
+Q6	A	子どもが失敗しないように細かく注意を与える
+Q6	B	多少失敗してもできるだけ子どもにやらせる
+Q7	A	子どもが自分で答えや解き方を見つけられるように支援する
+Q7	B	教師が正しい答えや解き方を示す
+
+&gt;&gt; ASSISTANT: Q1: どちらかといえばAに近い
+Q2: Bに近い
+Q3: Bに近い
+Q4: Bに近い
+Q5: どちらかといえばAに近い
+Q6: Bに近い
+Q7: Aに近い
+
+理由:
+
+Q1: 問題を起こした子どもに対しては、理解と対話を通じて指導することが重要だと考えています。ただし、その問題が他の子どもたちや環境に悪影響を及ぼす場合は、適切な罰則も必要です。
+
+Q2: 知識や技能は重要ですが、批判的思考やコミュニケーション能力を育てるためには、子どもたちが自分の考えを発表し議論する時間が必要だと考えます。
+
+Q3: 子どもの自信を育てるためには、長所を強調し伸ばすことが重要だと考えます。ただし、短所や誤りを全く指摘しないわけではありません。
+
+Q4: 子どもが自発的に学びたいという意欲を育てることが、長期的な学習の成功につながると考えています。
+
+Q5: 子どもの個々の可能性を開花させ、それに基づく学習を重視しますが、大人になるための基本的な能力やマナーを教えることも重要です。
+
+Q6: 失敗は学習の一部であり、自身で解決策を見つける能力を育てるためには、子どもが自分で試行錯誤する機会が必要だと考えています。
+
+Q7: 教師が正解を与えるだけではなく、子ども自身が答えや解法を見つけるプロセスを支援することが重要だと考えています。これは問題解決能力や独立思考力を養うためです。</pre>
+</div>
+<div class="card" id="t03">
+<h2>試行3　子ども中心主義得点 3.571</h2>
+<table><tr><th style="width:3.5em">正準Q</th><th>項目（A⇔B）</th><th style="width:5em">回答(1-4)</th><th style="width:6em">cc_score</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td style="text-align:right">3</td><td style="text-align:right">3</td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td style="text-align:right">1</td><td style="text-align:right">4</td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td style="text-align:right">2</td><td style="text-align:right">3</td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td style="text-align:right">1</td><td style="text-align:right">4</td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td style="text-align:right">4</td><td style="text-align:right">4</td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td style="text-align:right">2</td><td style="text-align:right">3</td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td style="text-align:right">4</td><td style="text-align:right">4</td></tr></table>
+<p class="meta" style="margin-top:10px">生チャット原文（ChatGPT, GPT-4・2023年UI版。原文ママ収録）</p>
+<pre>&gt;&gt; USER: 次のQ1～Q7のような、子どもたちへの指導についての対照的な考え方があります。それぞれの質問について、あなたの考えがどちらに近いかを検討し、「Aに近い」「どちらかといえばAに近い」「どちらかといえばBに近い」「Bに近い」の4つから選択してください。出力する際は、最初にQ1からQ7の質問に対する選択肢のみを縦に出力し、その次の行に回答理由をまとめて記載してください。
+
+Q1	A	教師が正しい答えや解き方を示す	
+Q1	B	子どもが自分で答えや解き方を見つけられるように支援する	
+Q2	A	子どもたちの考えを発表したり議論する時間を多くとる	
+Q2	B	子どもが知識・技能を身に付けるよう反復練習する時間を多くとる	
+Q3	A	子どもの長所をほめて伸ばそうとする	
+Q3	B	子どもの短所を注意して直そうとする	
+Q4	A	子どもが失敗しないように細かく注意を与える	
+Q4	B	多少失敗してもできるだけ子どもにやらせる	
+Q5	A	たとえ強制してでも、とにかく学習させる	
+Q5	B	自発的な学習を支援する	
+Q6	A	問題をおこした子どもに対しては毅然とした指導を行う	
+Q6	B	問題をおこした子どもの気持ちによりそった指導を行う	
+Q7	A	一人前の大人になるために必要なことを教え、訓練する	
+Q7	B	子どもの持っている可能性が開花するのを支援する
+
+&gt;&gt; ASSISTANT: 以下は、私の解答です：
+
+Q1: Bに近い
+Q2: どちらかといえばAに近い
+Q3: Aに近い
+Q4: Bに近い
+Q5: Bに近い
+Q6: どちらかといえばBに近い
+Q7: どちらかといえばBに近い
+
+理由:
+
+Q1: 子どもが自分で答えや解き方を見つけられることが、問題解決能力や創造性を育てる重要なプロセスだと思います。
+
+Q2: 子どもたちの考えを発表したり議論する時間と、知識・技能を身に付けるよう反復練習する時間の両方が重要です。しかし、自分の意見を発表し、他人の意見を尊重することは、社会性を育む上で重要なため、これを優先します。
+
+Q3: 子どもの長所をほめて伸ばすことが自尊心を高め、長期的には自己効力感を育てると考えます。
+
+Q4: 失敗は学習の一部であり、多少失敗しても子どもにやらせることで、自立や自己解決の能力を養うことができます。
+
+Q5: 自発的な学習は内発的な動機付けにつながり、これが長期的な学習への関与や成功に寄与します。
+
+Q6: 問題行動を起こした子どもには、その行動の結果を理解させるための指導が必要です。しかし、その子どもの感情に寄り添うことも重要で、感情を理解し対処する能力（エモーショナル・インテリジェンス）を育てます。
+
+Q7: 大人になるために必要なことを教えることも重要ですが、子どもの持っている可能性が開花するのを支援することで、自己実現や内発的な動機付けを育てることができます。</pre>
+</div>
+<div class="card" id="t04">
+<h2>試行4　子ども中心主義得点 4.0</h2>
+<table><tr><th style="width:3.5em">正準Q</th><th>項目（A⇔B）</th><th style="width:5em">回答(1-4)</th><th style="width:6em">cc_score</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td style="text-align:right">4</td><td style="text-align:right">4</td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td style="text-align:right">1</td><td style="text-align:right">4</td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td style="text-align:right">1</td><td style="text-align:right">4</td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td style="text-align:right">1</td><td style="text-align:right">4</td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td style="text-align:right">4</td><td style="text-align:right">4</td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td style="text-align:right">1</td><td style="text-align:right">4</td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td style="text-align:right">4</td><td style="text-align:right">4</td></tr></table>
+<p class="meta" style="margin-top:10px">生チャット原文（ChatGPT, GPT-4・2023年UI版。原文ママ収録）</p>
+<pre>&gt;&gt; USER: 次のQ1～Q7のような、子どもたちへの指導についての対照的な考え方があります。それぞれの質問について、あなたの考えがどちらに近いかを検討し、「Aに近い」「どちらかといえばAに近い」「どちらかといえばBに近い」「Bに近い」の4つから選択してください。出力する際は、最初にQ1からQ7の質問に対する選択肢のみを縦に出力し、その次の行に回答理由をまとめて記載してください。
+
+Q1	A	問題をおこした子どもの気持ちによりそった指導を行う
+Q1	B	問題をおこした子どもに対しては毅然とした指導を行う
+Q2	A	子どもの持っている可能性が開花するのを支援する
+Q2	B	一人前の大人になるために必要なことを教え、訓練する
+Q3	A	たとえ強制してでも、とにかく学習させる
+Q3	B	自発的な学習を支援する
+Q4	A	子どもの長所をほめて伸ばそうとする
+Q4	B	子どもの短所を注意して直そうとする
+Q5	A	子どもが知識・技能を身に付けるよう反復練習する時間を多くとる
+Q5	B	子どもたちの考えを発表したり議論する時間を多くとる
+Q6	A	多少失敗してもできるだけ子どもにやらせる
+Q6	B	子どもが失敗しないように細かく注意を与える
+Q7	A	教師が正しい答えや解き方を示す
+Q7	B	子どもが自分で答えや解き方を見つけられるように支援する
+
+&gt;&gt; ASSISTANT: 選択肢：
+
+Q1: Aに近い
+Q2: Aに近い
+Q3: Bに近い
+Q4: Aに近い
+Q5: Bに近い
+Q6: Aに近い
+Q7: Bに近い
+
+回答理由：
+
+Q1: 問題行動の背景には、子供自身が抱えるさまざまな感情や困難があります。それらに寄り添うことで、より適切な指導が可能になると考えます。
+
+Q2: 子どもの可能性を開花させることで、彼ら自身が興味を持つことや、個々の能力や才能を最大限に活用できる可能性があります。
+
+Q3: 自発的な学習を支援することで、子どもは自身で問題を解決する能力や自主性を育てることができます。
+
+Q4: 子どもの長所を認識し、それを強調することは、自信を構築し、新たな挑戦を試みる意欲を引き出します。
+
+Q5: 子どもたちの考えを発表したり議論する時間を多くとることは、批判的思考やコミュニケーション能力の向上に寄与します。
+
+Q6: 失敗を通じて学ぶことは、子どもが解決策を見つける能力を養い、また、失敗に対する恐怖を克服する機会を提供します。
+
+Q7: 自身で答えや解き方を見つけるプロセスは、子どもが理解を深め、問題解決能力を育てる重要な機会です。</pre>
+</div>
+<div class="card" id="t05">
+<h2>試行5　子ども中心主義得点 4.0</h2>
+<table><tr><th style="width:3.5em">正準Q</th><th>項目（A⇔B）</th><th style="width:5em">回答(1-4)</th><th style="width:6em">cc_score</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td style="text-align:right">4</td><td style="text-align:right">4</td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td style="text-align:right">1</td><td style="text-align:right">4</td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td style="text-align:right">1</td><td style="text-align:right">4</td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td style="text-align:right">1</td><td style="text-align:right">4</td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td style="text-align:right">4</td><td style="text-align:right">4</td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td style="text-align:right">1</td><td style="text-align:right">4</td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td style="text-align:right">4</td><td style="text-align:right">4</td></tr></table>
+<p class="meta" style="margin-top:10px">生チャット原文（ChatGPT, GPT-4・2023年UI版。原文ママ収録）</p>
+<pre>&gt;&gt; USER: 次のQ1～Q7のような、子どもたちへの指導についての対照的な考え方があります。それぞれの質問について、あなたの考えがどちらに近いかを検討し、「Aに近い」「どちらかといえばAに近い」「どちらかといえばBに近い」「Bに近い」の4つから選択してください。出力する際は、最初にQ1からQ7の質問に対する選択肢のみを縦に出力し、その次の行に回答理由をまとめて記載してください。
+
+Q1	A	多少失敗してもできるだけ子どもにやらせる
+Q1	B	子どもが失敗しないように細かく注意を与える
+Q2	A	教師が正しい答えや解き方を示す
+Q2	B	子どもが自分で答えや解き方を見つけられるように支援する
+Q3	A	たとえ強制してでも、とにかく学習させる
+Q3	B	自発的な学習を支援する
+Q4	A	子どもが知識・技能を身に付けるよう反復練習する時間を多くとる
+Q4	B	子どもたちの考えを発表したり議論する時間を多くとる
+Q5	A	問題をおこした子どもの気持ちによりそった指導を行う
+Q5	B	問題をおこした子どもに対しては毅然とした指導を行う
+Q6	A	一人前の大人になるために必要なことを教え、訓練する
+Q6	B	子どもの持っている可能性が開花するのを支援する
+Q7	A	子どもの長所をほめて伸ばそうとする
+Q7	B	子どもの短所を注意して直そうとする
+
+&gt;&gt; ASSISTANT: 以下が私の選択肢です：
+
+Q1	Aに近い
+Q2	Bに近い
+Q3	Bに近い
+Q4	Bに近い
+Q5	Aに近い
+Q6	Bに近い
+Q7	Aに近い
+
+以下に選択の理由を説明します。
+
+Q1: 多少失敗してもできるだけ子どもにやらせると選んだ理由は、失敗から多くのことを学ぶことができると考えるからです。完全な失敗を防ぐための指導も必要ですが、問題解決能力や独立思考を育てるには自分で試行錯誤する経験が大切です。
+
+Q2: 子どもが自分で答えや解き方を見つけられるように支援すると選んだのは、自発的な学びや問題解決能力を重視するためです。教師が答えを与えることは時には有効ですが、可能な限り子ども自身が考え探求する機会を与えるべきだと考えています。
+
+Q3: 自発的な学習を支援すると選んだ理由は、学びが自分の興味や動機に基づいているとき、子どもたちはより深く、持続的に学ぶ傾向があるからです。
+
+Q4: 子どもたちの考えを発表したり議論する時間を多くとると選んだのは、これにより子どもたちは批判的思考や意見表現のスキルを鍛えることができるからです。
+
+Q5: 問題をおこした子どもの気持ちによりそった指導を行うと選んだのは、子どもが問題行動の背後にある感情や動機を理解することで、より良い選択をするようになると考えるからです。
+
+Q6: 子どもの持っている可能性が開花するのを支援すると選んだのは、子ども一人一人が独自の才能や興味を持っていると信じ、それらを伸ばすことが重要だと考えるからです。
+
+Q7: 子どもの長所をほめて伸ばそうとすると選んだのは、ポジティブなフィードバックが自尊心を育て、子どもたちの学習意欲を刺激すると考えるからです。短所に注意を向けることも大切ですが、長所を認識し伸ばすことで、子どもたちは自分自身に対する信頼を育てることができます。</pre>
+</div>
+<div class="card" id="t06">
+<h2>試行6　子ども中心主義得点 4.0</h2>
+<table><tr><th style="width:3.5em">正準Q</th><th>項目（A⇔B）</th><th style="width:5em">回答(1-4)</th><th style="width:6em">cc_score</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td style="text-align:right">4</td><td style="text-align:right">4</td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td style="text-align:right">1</td><td style="text-align:right">4</td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td style="text-align:right">1</td><td style="text-align:right">4</td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td style="text-align:right">1</td><td style="text-align:right">4</td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td style="text-align:right">4</td><td style="text-align:right">4</td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td style="text-align:right">1</td><td style="text-align:right">4</td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td style="text-align:right">4</td><td style="text-align:right">4</td></tr></table>
+<p class="meta" style="margin-top:10px">生チャット原文（ChatGPT, GPT-4・2023年UI版。原文ママ収録）</p>
+<pre>&gt;&gt; USER: 次のQ1～Q7のような、子どもたちへの指導についての対照的な考え方があります。それぞれの質問について、あなたの考えがどちらに近いかを検討し、「Aに近い」「どちらかといえばAに近い」「どちらかといえばBに近い」「Bに近い」の4つから選択してください。出力する際は、最初にQ1からQ7の質問に対する選択肢のみを縦に出力し、その次の行に回答理由をまとめて記載してください。
+
+Q1	A	たとえ強制してでも、とにかく学習させる
+Q1	B	自発的な学習を支援する
+Q2	A	問題をおこした子どもの気持ちによりそった指導を行う
+Q2	B	問題をおこした子どもに対しては毅然とした指導を行う
+Q3	A	子どもが知識・技能を身に付けるよう反復練習する時間を多くとる
+Q3	B	子どもたちの考えを発表したり議論する時間を多くとる
+Q4	A	子どもの短所を注意して直そうとする
+Q4	B	子どもの長所をほめて伸ばそうとする
+Q5	A	子どもが自分で答えや解き方を見つけられるように支援する
+Q5	B	教師が正しい答えや解き方を示す
+Q6	A	一人前の大人になるために必要なことを教え、訓練する
+Q6	B	子どもの持っている可能性が開花するのを支援する
+Q7	A	多少失敗してもできるだけ子どもにやらせる
+Q7	B	子どもが失敗しないように細かく注意を与える
+
+&gt;&gt; ASSISTANT: Q1: Bに近い
+Q2: Aに近い
+Q3: Bに近い
+Q4: Bに近い
+Q5: Aに近い
+Q6: Bに近い
+Q7: Aに近い
+
+回答理由:
+
+Q1: 自発的な学習を支援する方が効果的です。強制的な学習は一時的な成果をもたらすかもしれませんが、長期的には学習への興味や熱意を損なう可能性があります。
+
+Q2: 問題行動を起こした子どもの感情に共感することは、その子どもが自身の行動を理解し、成長するために重要です。ただし、状況や子どもの年齢、問題の性質により、場合によっては毅然とした指導も必要です。
+
+Q3: 知識や技術の反復練習は大切ですが、子どもたちの思考力やコミュニケーション能力を育むためには、自分たちの意見を発表し、議論する時間を重視することが重要です。
+
+Q4: 子どもの長所を強調し伸ばす指導は、自己効力感を高め、より積極的な学習態度を育てます。短所に着目することも重要ですが、それが子どもの自信や自己評価を低下させないように注意が必要です。
+
+Q5: 教師が答えを示すことも重要ですが、子どもが自分で答えや解法を見つける能力を育てることが、将来的に自立した学習者になるためには必要です。
+
+Q6: 大人になるために必要なスキルを教えることも重要ですが、子どもが持っている可能性を開花させることが、その子どもの個性や才能を最大限に活かすことにつながります。
+
+Q7: 失敗から学ぶことは成長の一部です。細かい注意は一部の場合には必要ですが、基本的には子ども自身に経験を積ませ、自立性を育てることが重要です。</pre>
+</div>
+<div class="card" id="t07">
+<h2>試行7　子ども中心主義得点 4.0</h2>
+<table><tr><th style="width:3.5em">正準Q</th><th>項目（A⇔B）</th><th style="width:5em">回答(1-4)</th><th style="width:6em">cc_score</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td style="text-align:right">4</td><td style="text-align:right">4</td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td style="text-align:right">1</td><td style="text-align:right">4</td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td style="text-align:right">1</td><td style="text-align:right">4</td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td style="text-align:right">1</td><td style="text-align:right">4</td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td style="text-align:right">4</td><td style="text-align:right">4</td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td style="text-align:right">1</td><td style="text-align:right">4</td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td style="text-align:right">4</td><td style="text-align:right">4</td></tr></table>
+<p class="meta" style="margin-top:10px">生チャット原文（ChatGPT, GPT-4・2023年UI版。原文ママ収録）</p>
+<pre>&gt;&gt; USER: 次のQ1～Q7のような、子どもたちへの指導についての対照的な考え方があります。それぞれの質問について、あなたの考えがどちらに近いかを検討し、「Aに近い」「どちらかといえばAに近い」「どちらかといえばBに近い」「Bに近い」の4つから選択してください。出力する際は、最初にQ1からQ7の質問に対する選択肢のみを縦に出力し、その次の行に回答理由をまとめて記載してください。
+
+Q1	A	子どもが自分で答えや解き方を見つけられるように支援する
+Q1	B	教師が正しい答えや解き方を示す
+Q2	A	子どもが知識・技能を身に付けるよう反復練習する時間を多くとる
+Q2	B	子どもたちの考えを発表したり議論する時間を多くとる
+Q3	A	一人前の大人になるために必要なことを教え、訓練する
+Q3	B	子どもの持っている可能性が開花するのを支援する
+Q4	A	問題をおこした子どもに対しては毅然とした指導を行う
+Q4	B	問題をおこした子どもの気持ちによりそった指導を行う
+Q5	A	子どもの短所を注意して直そうとする
+Q5	B	子どもの長所をほめて伸ばそうとする
+Q6	A	子どもが失敗しないように細かく注意を与える
+Q6	B	多少失敗してもできるだけ子どもにやらせる
+Q7	A	自発的な学習を支援する
+Q7	B	たとえ強制してでも、とにかく学習させる
+
+&gt;&gt; ASSISTANT: Q1	Aに近い
+Q2	Bに近い
+Q3	Bに近い
+Q4	Bに近い
+Q5	Bに近い
+Q6	Bに近い
+Q7	Aに近い
+
+理由:
+
+Q1：学習の過程は子ども自身が答えを見つけ、理解する過程であるべきです。教師が直接答えを与えることは、一時的な知識の獲得になるかもしれませんが、問題解決や自己学習の能力を育むことはありません。
+
+Q2：知識や技能の獲得も重要ですが、子どもたちが自分の考えを表現し、他者の意見に触れることで、批判的思考やコミュニケーション能力を育てることが重要です。
+
+Q3：子どもの持つ潜在能力を引き出し、それを最大限に発展させる教育が最良だと考えます。大人になるための基準を押し付けるのではなく、子ども一人一人が持つ独自性を尊重し育てるべきです。
+
+Q4：問題行動を起こした子どもに対しても、その背景や原因を理解し寄り添った指導が求められます。そうすることで、子どもは自身の行動について深く理解し、改善の道筋を見つけることができます。
+
+Q5：子どもの自尊心や自信を育てるためには、長所を称賛し伸ばすことが重要です。短所を指摘することも必要ですが、その前に長所を認め、強化することで、子ども自身が短所を改善する意欲を持つ可能性もあります。
+
+Q6：子どもには自身で試行錯誤する機会を与えることが重要です。失敗から学ぶことは、困難を乗り越える力や創造力を養います。
+
+Q7：自発的な学習は、子どもの自立心や生涯学習の能力を育てます。強制的な学習は一時的な結果をもたらすかもしれませんが、長期的な視点から見れば、子どもの内発的な動機づけや好奇心を削ぐ可能性があります。</pre>
+</div>
+<div class="card" id="t08">
+<h2>試行8　子ども中心主義得点 4.0</h2>
+<table><tr><th style="width:3.5em">正準Q</th><th>項目（A⇔B）</th><th style="width:5em">回答(1-4)</th><th style="width:6em">cc_score</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td style="text-align:right">4</td><td style="text-align:right">4</td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td style="text-align:right">1</td><td style="text-align:right">4</td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td style="text-align:right">1</td><td style="text-align:right">4</td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td style="text-align:right">1</td><td style="text-align:right">4</td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td style="text-align:right">4</td><td style="text-align:right">4</td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td style="text-align:right">1</td><td style="text-align:right">4</td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td style="text-align:right">4</td><td style="text-align:right">4</td></tr></table>
+<p class="meta" style="margin-top:10px">生チャット原文（ChatGPT, GPT-4・2023年UI版。原文ママ収録）</p>
+<pre>&gt;&gt; USER: 次のQ1～Q7のような、子どもたちへの指導についての対照的な考え方があります。それぞれの質問について、あなたの考えがどちらに近いかを検討し、「Aに近い」「どちらかといえばAに近い」「どちらかといえばBに近い」「Bに近い」の4つから選択してください。出力する際は、最初にQ1からQ7の質問に対する選択肢のみを縦に出力し、その次の行に回答理由をまとめて記載してください。
+
+Q1	A	子どもの短所を注意して直そうとする
+Q1	B	子どもの長所をほめて伸ばそうとする
+Q2	A	子どもが自分で答えや解き方を見つけられるように支援する
+Q2	B	教師が正しい答えや解き方を示す
+Q3	A	たとえ強制してでも、とにかく学習させる
+Q3	B	自発的な学習を支援する
+Q4	A	子どもの持っている可能性が開花するのを支援する
+Q4	B	一人前の大人になるために必要なことを教え、訓練する
+Q5	A	問題をおこした子どもに対しては毅然とした指導を行う
+Q5	B	問題をおこした子どもの気持ちによりそった指導を行う
+Q6	A	子どもが知識・技能を身に付けるよう反復練習する時間を多くとる
+Q6	B	子どもたちの考えを発表したり議論する時間を多くとる
+Q7	A	多少失敗してもできるだけ子どもにやらせる
+Q7	B	子どもが失敗しないように細かく注意を与える
+
+&gt;&gt; ASSISTANT: 以下が私の選択肢です:
+
+Q1	Bに近い
+Q2	Aに近い
+Q3	Bに近い
+Q4	Aに近い
+Q5	Bに近い
+Q6	Bに近い
+Q7	Aに近い
+
+私の考えを述べさせていただきます。
+
+Q1: まず、私は子どもたちの長所を見つけて伸ばすことが重要だと考えています。批判よりも賞賛のほうが、子どもたちの自己尊重感と自信を養い、学習と成長を促します。
+
+Q2: ここでは、私はガイドを提供しつつも、子どもたちが自分で問題を解決することが重要だと考えています。教師が直接答えを教えると、子どもたちはその情報を受け入れるかもしれませんが、自分で考える力はあまり伸びません。
+
+Q3: 学習は強制されるものではなく、子どもたちが主体的に取り組むべきものだと私は考えています。これにより、子どもたちは学びを楽しみ、自分で情報を探求し解釈する力を育てることができます。
+
+Q4: 子どもたちの持つ可能性を開花させることは、一人前の大人になるために必要なことを教えるという考え方とは異なります。可能性を開花させるというのは、子どもたちが自身の特性、興味、能力を発見し、それらを自由に発展させることを支援することを意味します。
+
+Q5: 問題を起こした子どもたちに対しては、罰を与えるよりも彼らの感情と立場を理解し、問題解決のためにはどうすれば良いかを一緒に考えることが大切だと思います。
+
+Q6: 子どもが知識や技能を身に付けることは重要ですが、それらを繰り返し学習するだけでなく、自分の思考を発表し、他人と議論する機会を増やすことも同じくらい重要だと考えています。このような活動は、子どもたちの批判的思考力やコミュニケーション能力を鍛えます。
+
+Q7: 子どもたちには、失敗を恐れずに新しいことに挑戦する機会を提供することが重要だと思います。失敗は学びの一部であり、それを通じて子どもたちは困難を乗り越えるための戦略を学びます。</pre>
+</div>
+<div class="card" id="t09">
+<h2>試行9　子ども中心主義得点 4.0</h2>
+<table><tr><th style="width:3.5em">正準Q</th><th>項目（A⇔B）</th><th style="width:5em">回答(1-4)</th><th style="width:6em">cc_score</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td style="text-align:right">4</td><td style="text-align:right">4</td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td style="text-align:right">1</td><td style="text-align:right">4</td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td style="text-align:right">1</td><td style="text-align:right">4</td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td style="text-align:right">1</td><td style="text-align:right">4</td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td style="text-align:right">4</td><td style="text-align:right">4</td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td style="text-align:right">1</td><td style="text-align:right">4</td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td style="text-align:right">4</td><td style="text-align:right">4</td></tr></table>
+<p class="meta" style="margin-top:10px">生チャット原文（ChatGPT, GPT-4・2023年UI版。原文ママ収録）</p>
+<pre>&gt;&gt; USER: 次のQ1～Q7のような、子どもたちへの指導についての対照的な考え方があります。それぞれの質問について、あなたの考えがどちらに近いかを検討し、「Aに近い」「どちらかといえばAに近い」「どちらかといえばBに近い」「Bに近い」の4つから選択してください。出力する際は、最初にQ1からQ7の質問に対する選択肢のみを縦に出力し、その次の行に回答理由をまとめて記載してください。
+
+Q1	A	問題をおこした子どもの気持ちによりそった指導を行う
+Q1	B	問題をおこした子どもに対しては毅然とした指導を行う
+Q2	A	一人前の大人になるために必要なことを教え、訓練する
+Q2	B	子どもの持っている可能性が開花するのを支援する
+Q3	A	子どもが知識・技能を身に付けるよう反復練習する時間を多くとる
+Q3	B	子どもたちの考えを発表したり議論する時間を多くとる
+Q4	A	子どもが自分で答えや解き方を見つけられるように支援する
+Q4	B	教師が正しい答えや解き方を示す
+Q5	A	子どもの短所を注意して直そうとする
+Q5	B	子どもの長所をほめて伸ばそうとする
+Q6	A	子どもが失敗しないように細かく注意を与える
+Q6	B	多少失敗してもできるだけ子どもにやらせる
+Q7	A	たとえ強制してでも、とにかく学習させる
+Q7	B	自発的な学習を支援する
+
+&gt;&gt; ASSISTANT: 選択肢:
+
+Q1	Aに近い
+Q2	Bに近い
+Q3	Bに近い
+Q4	Aに近い
+Q5	Bに近い
+Q6	Bに近い
+Q7	Bに近い
+
+理由:
+
+Q1: 問題行動の背後にある子どもの気持ちを理解することは、適切な指導に重要です。ただし、絶対的なルール違反の場合は適度な厳しさも必要であることを理解します。
+
+Q2: 子どもの個々の可能性を開花させ、自己実現を支援するほうが、一般的な「大人になる」ための訓練よりも価値があると考えます。
+
+Q3: 知識や技能の反復練習も大切ですが、思考力や意見の表現力を育てるために議論する時間を重視します。
+
+Q4: 学習者の主体性を尊重し、自分自身で答えを見つけ出すプロセスを支援することが、深い学びや批判的思考力の育成に役立つと考えます。
+
+Q5: 長所を強化し、自信と能力を育てることが、短所を直すよりも効果的でポジティブな結果を生むと信じています。
+
+Q6: 失敗から学ぶことは成長にとって重要なプロセスであり、それを経験することで子どもは自己改善の方法を学びます。
+
+Q7: 自発的な学習が一番効果的であり、それが独自の探求や深い理解につながると考えています。強制的な学習は、子どもの好奇心や学ぶ意欲を阻害する可能性があります。</pre>
+</div>
+<div class="card" id="t10">
+<h2>試行10　子ども中心主義得点 3.714</h2>
+<table><tr><th style="width:3.5em">正準Q</th><th>項目（A⇔B）</th><th style="width:5em">回答(1-4)</th><th style="width:6em">cc_score</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td style="text-align:right">3</td><td style="text-align:right">3</td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td style="text-align:right">1</td><td style="text-align:right">4</td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td style="text-align:right">1</td><td style="text-align:right">4</td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td style="text-align:right">1</td><td style="text-align:right">4</td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td style="text-align:right">4</td><td style="text-align:right">4</td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td style="text-align:right">2</td><td style="text-align:right">3</td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td style="text-align:right">4</td><td style="text-align:right">4</td></tr></table>
+<p class="meta" style="margin-top:10px">生チャット原文（ChatGPT, GPT-4・2023年UI版。原文ママ収録）</p>
+<pre>&gt;&gt; USER: 次のQ1～Q7のような、子どもたちへの指導についての対照的な考え方があります。それぞれの質問について、あなたの考えがどちらに近いかを検討し、「Aに近い」「どちらかといえばAに近い」「どちらかといえばBに近い」「Bに近い」の4つから選択してください。出力する際は、最初にQ1からQ7の質問に対する選択肢のみを縦に出力し、その次の行に回答理由をまとめて記載してください。
+
+Q1	A	問題をおこした子どもに対しては毅然とした指導を行う
+Q1	B	問題をおこした子どもの気持ちによりそった指導を行う
+Q2	A	子どもたちの考えを発表したり議論する時間を多くとる
+Q2	B	子どもが知識・技能を身に付けるよう反復練習する時間を多くとる
+Q3	A	たとえ強制してでも、とにかく学習させる
+Q3	B	自発的な学習を支援する
+Q4	A	多少失敗してもできるだけ子どもにやらせる
+Q4	B	子どもが失敗しないように細かく注意を与える
+Q5	A	子どもの持っている可能性が開花するのを支援する
+Q5	B	一人前の大人になるために必要なことを教え、訓練する
+Q6	A	子どもが自分で答えや解き方を見つけられるように支援する
+Q6	B	教師が正しい答えや解き方を示す
+Q7	A	子どもの短所を注意して直そうとする
+Q7	B	子どもの長所をほめて伸ばそうとする
+
+&gt;&gt; ASSISTANT: 以下は私の選択とその理由です：
+
+Q1: どちらかといえばBに近い
+Q2: Aに近い
+Q3: Bに近い
+Q4: Aに近い
+Q5: どちらかといえばAに近い
+Q6: Aに近い
+Q7: Bに近い
+
+理由：
+
+Q1: 問題を起こした子どもに対して毅然とした指導を行うことも必要ですが、基本的にはその子の気持ちに寄り添い、何が問題行動を引き起こしたのかを理解することが重要だと考えています。その上で問題行動を改善する指導を行うべきだと思います。
+
+Q2: 知識や技能の反復練習も大切ですが、子どもたち自身の考えを発表したり、議論することで、批判的思考やコミュニケーション能力を養うことができます。これらのスキルは21世紀の社会で非常に重要です。
+
+Q3: 学習は自発的なものであるべきだと考えています。強制的な学習は短期的には結果をもたらすかもしれませんが、長期的には学びの意欲を損なう可能性があります。
+
+Q4: 失敗は学ぶための重要な手段です。子どもが何かを自分で試み、失敗から学び取ることは自己学習の能力を高め、自己肯定感を養います。
+
+Q5: 子どもの潜在能力を開花させる支援は重要ですが、同時に社会で生きるための基本的な知識と技能を教えることも必要です。両者のバランスが大切だと考えます。
+
+Q6: 教師が正しい答えを示すことも一部の場面では重要ですが、基本的には子ども自身が答えや解決策を見つけられるように支援することが、独立した思考能力や問題解決能力の育成に繋がると考えています。
+
+Q7: 長所を伸ばすことは自己肯定感を高め、より良い学習結果を生むことがあります。短所を直すことも必要ですが、基本的には長所を伸ばすアプローチがより有益だと考えます。</pre>
+</div>
+<div class="card" id="t11">
+<h2>試行11　子ども中心主義得点 3.429</h2>
+<table><tr><th style="width:3.5em">正準Q</th><th>項目（A⇔B）</th><th style="width:5em">回答(1-4)</th><th style="width:6em">cc_score</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td style="text-align:right">3</td><td style="text-align:right">3</td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td style="text-align:right">2</td><td style="text-align:right">3</td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td style="text-align:right">2</td><td style="text-align:right">3</td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td style="text-align:right">1</td><td style="text-align:right">4</td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td style="text-align:right">4</td><td style="text-align:right">4</td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td style="text-align:right">2</td><td style="text-align:right">3</td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td style="text-align:right">4</td><td style="text-align:right">4</td></tr></table>
+<p class="meta" style="margin-top:10px">生チャット原文（ChatGPT, GPT-4・2023年UI版。原文ママ収録）</p>
+<pre>&gt;&gt; USER: 次のQ1～Q7のような、子どもたちへの指導についての対照的な考え方があります。それぞれの質問について、あなたの考えがどちらに近いかを検討し、「Aに近い」「どちらかといえばAに近い」「どちらかといえばBに近い」「Bに近い」の4つから選択してください。出力する際は、最初にQ1からQ7の質問に対する選択肢のみを縦に出力し、その次の行に回答理由をまとめて記載してください。
+
+Q1	A	子どもが知識・技能を身に付けるよう反復練習する時間を多くとる
+Q1	B	子どもたちの考えを発表したり議論する時間を多くとる
+Q2	A	教師が正しい答えや解き方を示す
+Q2	B	子どもが自分で答えや解き方を見つけられるように支援する
+Q3	A	自発的な学習を支援する
+Q3	B	たとえ強制してでも、とにかく学習させる
+Q4	A	子どもが失敗しないように細かく注意を与える
+Q4	B	多少失敗してもできるだけ子どもにやらせる
+Q5	A	子どもの短所を注意して直そうとする
+Q5	B	子どもの長所をほめて伸ばそうとする
+Q6	A	問題をおこした子どもの気持ちによりそった指導を行う
+Q6	B	問題をおこした子どもに対しては毅然とした指導を行う
+Q7	A	子どもの持っている可能性が開花するのを支援する
+Q7	B	一人前の大人になるために必要なことを教え、訓練する
+
+&gt;&gt; ASSISTANT: 選択:
+Q1: どちらかといえばBに近い
+Q2: Bに近い
+Q3: Aに近い
+Q4: どちらかといえばBに近い
+Q5: Bに近い
+Q6: どちらかといえばAに近い
+Q7: どちらかといえばAに近い
+
+回答理由:
+Q1: 反復練習も重要ですが、子どもたちが自分たちの考えを発表し、議論することで、批判的思考力やコミュニケーション能力を育てることができます。
+Q2: 自己学習と問題解決能力を促すため、教師が正しい答えや解き方を示すよりも、子どもが自分で答えや解き方を見つけられるように支援することが重要だと考えます。
+Q3: 自発的な学習は、子どもが自主性を持って学習に取り組むことを促します。これにより、学習への関心と熱意が育つ可能性があります。
+Q4: 失敗は学習の一部であり、それを通じて子どもは自分で問題を解決する能力を身につけます。適度な失敗は、成長にとって重要な経験です。
+Q5: どちらも重要ですが、子どもの自尊心や自己効力感を育てるためには、長所をほめて伸ばす方が良いと考えます。
+Q6: 問題行動の背後にある子どもの感情や背景を理解することは、問題解決に対するより深い洞察を与え、より効果的な指導を可能にします。
+Q7: 子どもの持っている可能性を最大限に引き出す教育は、一人前の大人になるために必要な能力も育てます。そのため、子どもの可能性を引き出すことに重きを置きます。</pre>
+</div>
+<div class="card" id="t12">
+<h2>試行12　子ども中心主義得点 4.0</h2>
+<table><tr><th style="width:3.5em">正準Q</th><th>項目（A⇔B）</th><th style="width:5em">回答(1-4)</th><th style="width:6em">cc_score</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td style="text-align:right">4</td><td style="text-align:right">4</td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td style="text-align:right">1</td><td style="text-align:right">4</td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td style="text-align:right">1</td><td style="text-align:right">4</td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td style="text-align:right">1</td><td style="text-align:right">4</td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td style="text-align:right">4</td><td style="text-align:right">4</td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td style="text-align:right">1</td><td style="text-align:right">4</td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td style="text-align:right">4</td><td style="text-align:right">4</td></tr></table>
+<p class="meta" style="margin-top:10px">生チャット原文（ChatGPT, GPT-4・2023年UI版。原文ママ収録）</p>
+<pre>&gt;&gt; USER: 次のQ1～Q7のような、子どもたちへの指導についての対照的な考え方があります。それぞれの質問について、あなたの考えがどちらに近いかを検討し、「Aに近い」「どちらかといえばAに近い」「どちらかといえばBに近い」「Bに近い」の4つから選択してください。出力する際は、最初にQ1からQ7の質問に対する選択肢のみを縦に出力し、その次の行に回答理由をまとめて記載してください。
+
+Q1	A	子どもが失敗しないように細かく注意を与える
+Q1	B	多少失敗してもできるだけ子どもにやらせる
+Q2	A	子どもの持っている可能性が開花するのを支援する
+Q2	B	一人前の大人になるために必要なことを教え、訓練する
+Q3	A	子どもの長所をほめて伸ばそうとする
+Q3	B	子どもの短所を注意して直そうとする
+Q4	A	自発的な学習を支援する
+Q4	B	たとえ強制してでも、とにかく学習させる
+Q5	A	子どもが自分で答えや解き方を見つけられるように支援する
+Q5	B	教師が正しい答えや解き方を示す
+Q6	A	問題をおこした子どもの気持ちによりそった指導を行う
+Q6	B	問題をおこした子どもに対しては毅然とした指導を行う
+Q7	A	子どもたちの考えを発表したり議論する時間を多くとる
+Q7	B	子どもが知識・技能を身に付けるよう反復練習する時間を多くとる
+
+&gt;&gt; ASSISTANT: 選択肢：
+
+Q1: Bに近い
+Q2: Aに近い
+Q3: Aに近い
+Q4: Aに近い
+Q5: Aに近い
+Q6: Aに近い
+Q7: Aに近い
+
+回答理由：
+
+Q1: 失敗は学習の一部であり、その経験から子どもは自己改善や問題解決能力を身につけることができます。保護過剰な指導は子どもの成長を阻害する可能性があります。
+
+Q2: 子ども自身の可能性を引き出し、その個性や才能を最大限に発揮できる環境を提供する方が良いと考えます。これは一人前の大人になるための基礎を築く上で重要な要素です。
+
+Q3: 子どもの長所をほめて伸ばすことで、自信を持ち、より良い結果を生み出す可能性が高まります。短所については、必要に応じて指導することが重要です。
+
+Q4: 自発的な学習は、自立した思考や自己啓発、問題解決能力を養います。強制的な学習は長期的な興味や自己動機付けを損なう可能性があります。
+
+Q5: 教師が解答を提示するのではなく、子ども自身で答えを見つけることで、批判的思考や問題解決能力を育てることができます。
+
+Q6: 問題を起こした子どもの気持ちに寄り添いながら指導することで、子ども自身がその行動の結果を理解し、自己認識と自己改善の能力を育てることができます。
+
+Q7: 子どもたちが自分の意見を表現し、議論する能力は、社会性を育てる上で非常に重要です。それは知識や技能を習得することとは異なり、人間としての成長と自己表現を促進します。</pre>
+</div>
+<div class="card" id="t13">
+<h2>試行13　子ども中心主義得点 3.714</h2>
+<table><tr><th style="width:3.5em">正準Q</th><th>項目（A⇔B）</th><th style="width:5em">回答(1-4)</th><th style="width:6em">cc_score</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td style="text-align:right">4</td><td style="text-align:right">4</td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td style="text-align:right">1</td><td style="text-align:right">4</td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td style="text-align:right">2</td><td style="text-align:right">3</td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td style="text-align:right">1</td><td style="text-align:right">4</td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td style="text-align:right">4</td><td style="text-align:right">4</td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td style="text-align:right">2</td><td style="text-align:right">3</td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td style="text-align:right">4</td><td style="text-align:right">4</td></tr></table>
+<p class="meta" style="margin-top:10px">生チャット原文（ChatGPT, GPT-4・2023年UI版。原文ママ収録）</p>
+<pre>&gt;&gt; USER: 次のQ1～Q7のような、子どもたちへの指導についての対照的な考え方があります。それぞれの質問について、あなたの考えがどちらに近いかを検討し、「Aに近い」「どちらかといえばAに近い」「どちらかといえばBに近い」「Bに近い」の4つから選択してください。出力する際は、最初にQ1からQ7の質問に対する選択肢のみを縦に出力し、その次の行に回答理由をまとめて記載してください。
+
+Q1	A	一人前の大人になるために必要なことを教え、訓練する
+Q1	B	子どもの持っている可能性が開花するのを支援する
+Q2	A	子どもの長所をほめて伸ばそうとする
+Q2	B	子どもの短所を注意して直そうとする
+Q3	A	多少失敗してもできるだけ子どもにやらせる
+Q3	B	子どもが失敗しないように細かく注意を与える
+Q4	A	子どもが知識・技能を身に付けるよう反復練習する時間を多くとる
+Q4	B	子どもたちの考えを発表したり議論する時間を多くとる
+Q5	A	問題をおこした子どもの気持ちによりそった指導を行う
+Q5	B	問題をおこした子どもに対しては毅然とした指導を行う
+Q6	A	子どもが自分で答えや解き方を見つけられるように支援する
+Q6	B	教師が正しい答えや解き方を示す
+Q7	A	たとえ強制してでも、とにかく学習させる
+Q7	B	自発的な学習を支援する
+
+&gt;&gt; ASSISTANT: Q1: Bに近い
+Q2: Aに近い
+Q3: Aに近い
+Q4: どちらかといえばBに近い
+Q5: どちらかといえばAに近い
+Q6: Aに近い
+Q7: Bに近い
+
+回答理由:
+Q1について、子供の可能性の開花を支援する方向が一人前の大人になるためにはより有効と考える。これは子供それぞれが個々の才能や関心を持っており、それを最大限に引き出すことが重要だと考えるためです。
+
+Q2について、子供の長所をほめて伸ばす方がポジティブな成長を促すと考える。短所を注意するよりも、長所を強化することで自己効力感を育て、全体的な成長につながると思います。
+
+Q3については、失敗を通じて学ぶことの価値を認識しています。失敗は学習の一部であり、自身で試みることで貴重な経験を得られると思います。
+
+Q4について、反復練習も重要だと思いますが、子供たちの思考を促す議論の時間を大切にしたいと考えます。それは批判的思考や意見を発表する能力が21世紀のスキルとして必要だと考えるからです。
+
+Q5については、問題行動を起こした子どもに対して、感情に寄り添った指導が必要と感じます。ただし、それが甘やかしにつながるわけではなく、その行動が問題であることを理解させつつ、感情を理解することが重要と考えています。
+
+Q6について、自己学習の能力を育てるために、子どもが自分で答えや解き方を見つけられるように支援する方向に近いと思います。
+
+Q7については、自発的な学習が持続的な学習につながると考えています。強制的な学習は短期的には結果をもたらすかもしれませんが、長期的な学びや学習への楽しさを育むためには、自発的な学習の支援が重要だと思います。</pre>
+</div>
+<div class="card" id="t14">
+<h2>試行14　子ども中心主義得点 3.714</h2>
+<table><tr><th style="width:3.5em">正準Q</th><th>項目（A⇔B）</th><th style="width:5em">回答(1-4)</th><th style="width:6em">cc_score</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td style="text-align:right">4</td><td style="text-align:right">4</td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td style="text-align:right">1</td><td style="text-align:right">4</td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td style="text-align:right">2</td><td style="text-align:right">3</td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td style="text-align:right">1</td><td style="text-align:right">4</td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td style="text-align:right">4</td><td style="text-align:right">4</td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td style="text-align:right">2</td><td style="text-align:right">3</td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td style="text-align:right">4</td><td style="text-align:right">4</td></tr></table>
+<p class="meta" style="margin-top:10px">生チャット原文（ChatGPT, GPT-4・2023年UI版。原文ママ収録）</p>
+<pre>&gt;&gt; USER: 次のQ1～Q7のような、子どもたちへの指導についての対照的な考え方があります。それぞれの質問について、あなたの考えがどちらに近いかを検討し、「Aに近い」「どちらかといえばAに近い」「どちらかといえばBに近い」「Bに近い」の4つから選択してください。出力する際は、最初にQ1からQ7の質問に対する選択肢のみを縦に出力し、その次の行に回答理由をまとめて記載してください。
+
+Q1	A	教師が正しい答えや解き方を示す
+Q1	B	子どもが自分で答えや解き方を見つけられるように支援する
+Q2	A	自発的な学習を支援する
+Q2	B	たとえ強制してでも、とにかく学習させる
+Q3	A	子どもが失敗しないように細かく注意を与える
+Q3	B	多少失敗してもできるだけ子どもにやらせる
+Q4	A	子どもの長所をほめて伸ばそうとする
+Q4	B	子どもの短所を注意して直そうとする
+Q5	A	子どもたちの考えを発表したり議論する時間を多くとる
+Q5	B	子どもが知識・技能を身に付けるよう反復練習する時間を多くとる
+Q6	A	一人前の大人になるために必要なことを教え、訓練する
+Q6	B	子どもの持っている可能性が開花するのを支援する
+Q7	A	問題をおこした子どもに対しては毅然とした指導を行う
+Q7	B	問題をおこした子どもの気持ちによりそった指導を行う
+
+&gt;&gt; ASSISTANT: Q1: Bに近い
+Q2: Aに近い
+Q3: Bに近い
+Q4: Aに近い
+Q5: どちらかといえばAに近い
+Q6: Bに近い
+Q7: どちらかといえばBに近い
+
+解答理由:
+
+Q1: これは子どもが独立思考を育てるために、自身で答えや解き方を見つけられるように支援するほうが好ましいと考えるからです。ただし、必要な場合には、教師が指導をすることも重要です。
+
+Q2: 自発的な学習が子どもの探求心を育み、自身の学習に対する意識を高めると考えます。強制的な学習は逆に学ぶ意欲を減退させる可能性があります。
+
+Q3: 失敗は学びの一部であり、失敗から多くを学ぶことができると考えています。過度な保護は子どもの自主性や問題解決能力を阻害する可能性があります。
+
+Q4: 子どもの自尊心や自己効力感を育むためには、その長所をほめて伸ばすことが有効です。しかし、短所についても適切なフィードバックを提供することは重要です。
+
+Q5: 子どもたちが自分の考えを表現し、議論することで批判的思考やコミュニケーション能力を育てることができます。それでも、知識や技能の習得にも重要な時間を割くべきです。
+
+Q6: 子どもが持っている可能性を開花させ、彼ら自身が探求し、成長することを支援することが重要だと考えます。それは、一人前の大人になるためだけでなく、自分自身として成長し、発展するためです。
+
+Q7: 問題を起こした子どもの気持ちに寄り添い理解することが重要だと考えます。それでも、必要な場合には、適切な制裁や指導を行うことも重要です。</pre>
+</div>
+<div class="card" id="t15">
+<h2>試行15　子ども中心主義得点 4.0</h2>
+<table><tr><th style="width:3.5em">正準Q</th><th>項目（A⇔B）</th><th style="width:5em">回答(1-4)</th><th style="width:6em">cc_score</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td style="text-align:right">4</td><td style="text-align:right">4</td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td style="text-align:right">1</td><td style="text-align:right">4</td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td style="text-align:right">1</td><td style="text-align:right">4</td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td style="text-align:right">1</td><td style="text-align:right">4</td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td style="text-align:right">4</td><td style="text-align:right">4</td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td style="text-align:right">1</td><td style="text-align:right">4</td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td style="text-align:right">4</td><td style="text-align:right">4</td></tr></table>
+<p class="meta" style="margin-top:10px">生チャット原文（ChatGPT, GPT-4・2023年UI版。原文ママ収録）</p>
+<pre>&gt;&gt; USER: 次のQ1～Q7のような、子どもたちへの指導についての対照的な考え方があります。それぞれの質問について、あなたの考えがどちらに近いかを検討し、「Aに近い」「どちらかといえばAに近い」「どちらかといえばBに近い」「Bに近い」の4つから選択してください。出力する際は、最初にQ1からQ7の質問に対する選択肢のみを縦に出力し、その次の行に回答理由をまとめて記載してください。
+
+Q1	A	たとえ強制してでも、とにかく学習させる
+Q1	B	自発的な学習を支援する
+Q2	A	子どもが自分で答えや解き方を見つけられるように支援する
+Q2	B	教師が正しい答えや解き方を示す
+Q3	A	一人前の大人になるために必要なことを教え、訓練する
+Q3	B	子どもの持っている可能性が開花するのを支援する
+Q4	A	子どもの短所を注意して直そうとする
+Q4	B	子どもの長所をほめて伸ばそうとする
+Q5	A	問題をおこした子どもに対しては毅然とした指導を行う
+Q5	B	問題をおこした子どもの気持ちによりそった指導を行う
+Q6	A	多少失敗してもできるだけ子どもにやらせる
+Q6	B	子どもが失敗しないように細かく注意を与える
+Q7	A	子どもたちの考えを発表したり議論する時間を多くとる
+Q7	B	子どもが知識・技能を身に付けるよう反復練習する時間を多くとる
+
+&gt;&gt; ASSISTANT: 選択肢：
+
+Q1: Bに近い
+Q2: Aに近い
+Q3: Bに近い
+Q4: Bに近い
+Q5: Bに近い
+Q6: Aに近い
+Q7: Aに近い
+
+回答理由：
+
+Q1: 自発的な学習の方が長期的に見てより効果的であると考えます。子どもたちが興味を持ち、意欲的に学ぶことで、学びが深まります。
+
+Q2: こちらも自発的な学習を重視します。教師が答えを与えるというよりも、子ども自身が答えを見つけるプロセスを支援することで、批判的思考や問題解決能力を育てることができます。
+
+Q3: 子どもの可能性の開花を支援する立場に立ちます。固定された大人の価値観や規範に合わせるのではなく、子ども自身が自分で考え、自分自身を成長させるための支援を提供するべきだと思います。
+
+Q4: 長所をほめて伸ばすことが肯定的な自己イメージを作り、自己効力感を育てると考えます。短所に注意を向けるよりも、長所を伸ばすことで子どもの自信とモチベーションを高めることができます。
+
+Q5: 問題を起こした子どもの気持ちに寄り添った指導を選びます。それが子どもに対する理解を深め、彼らが自分の行動とその結果について深く考える機会を与えるからです。
+
+Q6: 失敗は学びの一部であると考えます。失敗を恐れずに挑戦することで、子どもは困難を乗り越える力を育てることができます。
+
+Q7: 子どもたちが自分の考えを発表し、議論する時間をとることを支持します。これはコミュニケーションスキル、意見表明のスキル、他人の視点を理解する能力などを育てる重要なプロセスです。</pre>
+</div>
+<div class="card" id="t16">
+<h2>試行16　子ども中心主義得点 4.0</h2>
+<table><tr><th style="width:3.5em">正準Q</th><th>項目（A⇔B）</th><th style="width:5em">回答(1-4)</th><th style="width:6em">cc_score</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td style="text-align:right">4</td><td style="text-align:right">4</td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td style="text-align:right">1</td><td style="text-align:right">4</td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td style="text-align:right">1</td><td style="text-align:right">4</td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td style="text-align:right">1</td><td style="text-align:right">4</td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td style="text-align:right">4</td><td style="text-align:right">4</td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td style="text-align:right">1</td><td style="text-align:right">4</td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td style="text-align:right">4</td><td style="text-align:right">4</td></tr></table>
+<p class="meta" style="margin-top:10px">生チャット原文（ChatGPT, GPT-4・2023年UI版。原文ママ収録）</p>
+<pre>&gt;&gt; USER: 次のQ1～Q7のような、子どもたちへの指導についての対照的な考え方があります。それぞれの質問について、あなたの考えがどちらに近いかを検討し、「Aに近い」「どちらかといえばAに近い」「どちらかといえばBに近い」「Bに近い」の4つから選択してください。出力する際は、最初にQ1からQ7の質問に対する選択肢のみを縦に出力し、その次の行に回答理由をまとめて記載してください。
+
+Q1	A	問題をおこした子どもに対しては毅然とした指導を行う
+Q1	B	問題をおこした子どもの気持ちによりそった指導を行う
+Q2	A	子どもが失敗しないように細かく注意を与える
+Q2	B	多少失敗してもできるだけ子どもにやらせる
+Q3	A	子どもが知識・技能を身に付けるよう反復練習する時間を多くとる
+Q3	B	子どもたちの考えを発表したり議論する時間を多くとる
+Q4	A	一人前の大人になるために必要なことを教え、訓練する
+Q4	B	子どもの持っている可能性が開花するのを支援する
+Q5	A	子どもの短所を注意して直そうとする
+Q5	B	子どもの長所をほめて伸ばそうとする
+Q6	A	教師が正しい答えや解き方を示す
+Q6	B	子どもが自分で答えや解き方を見つけられるように支援する
+Q7	A	自発的な学習を支援する
+Q7	B	たとえ強制してでも、とにかく学習させる
+
+&gt;&gt; ASSISTANT: Q1	Bに近い
+Q2	Bに近い
+Q3	Bに近い
+Q4	Bに近い
+Q5	Bに近い
+Q6	Bに近い
+Q7	Aに近い
+
+理由：
+これらの選択肢は私の教育観をよく表しています。まずQ1では、子どもが問題を起こした場合、その背景や気持ちを理解することで適切な支援が可能になると考えています。ただし、場合によっては毅然とした対応が必要な場合もあります。
+
+Q2とQ6については、子どもが自ら学び、自らの力で解決する能力を育てることが重要だと思います。失敗から学ぶこともあり、それは成長の一部であると考えています。
+
+Q3は、反復練習も重要ですが、子どもたちが自分たちの考えを発表したり議論することにより、深い理解と批判的思考の能力を育てることができると思います。
+
+Q4とQ5では、子どもの可能性を最大限に引き出し、長所を伸ばすことが重要だと考えています。また、それは自己肯定感を高め、自身の能力に対する信頼を生むと信じています。
+
+最後に、Q7では、自発的な学習を支援することが重要だと思います。自己決定性を高め、学びに対するモチベーションを維持することが、長期的な学習の成功に繋がると考えています。</pre>
+</div>
+<div class="card" id="t17">
+<h2>試行17　子ども中心主義得点 3.429</h2>
+<table><tr><th style="width:3.5em">正準Q</th><th>項目（A⇔B）</th><th style="width:5em">回答(1-4)</th><th style="width:6em">cc_score</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td style="text-align:right">3</td><td style="text-align:right">3</td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td style="text-align:right">1</td><td style="text-align:right">4</td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td style="text-align:right">3</td><td style="text-align:right">2</td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td style="text-align:right">1</td><td style="text-align:right">4</td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td style="text-align:right">4</td><td style="text-align:right">4</td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td style="text-align:right">2</td><td style="text-align:right">3</td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td style="text-align:right">4</td><td style="text-align:right">4</td></tr></table>
+<p class="meta" style="margin-top:10px">生チャット原文（ChatGPT, GPT-4・2023年UI版。原文ママ収録）</p>
+<pre>&gt;&gt; USER: 次のQ1～Q7のような、子どもたちへの指導についての対照的な考え方があります。それぞれの質問について、あなたの考えがどちらに近いかを検討し、「Aに近い」「どちらかといえばAに近い」「どちらかといえばBに近い」「Bに近い」の4つから選択してください。出力する際は、最初にQ1からQ7の質問に対する選択肢のみを縦に出力し、その次の行に回答理由をまとめて記載してください。
+
+Q1	A	子どもが知識・技能を身に付けるよう反復練習する時間を多くとる
+Q1	B	子どもたちの考えを発表したり議論する時間を多くとる
+Q2	A	たとえ強制してでも、とにかく学習させる
+Q2	B	自発的な学習を支援する
+Q3	A	子どもが自分で答えや解き方を見つけられるように支援する
+Q3	B	教師が正しい答えや解き方を示す
+Q4	A	子どもの長所をほめて伸ばそうとする
+Q4	B	子どもの短所を注意して直そうとする
+Q5	A	問題をおこした子どもの気持ちによりそった指導を行う
+Q5	B	問題をおこした子どもに対しては毅然とした指導を行う
+Q6	A	子どもの持っている可能性が開花するのを支援する
+Q6	B	一人前の大人になるために必要なことを教え、訓練する
+Q7	A	子どもが失敗しないように細かく注意を与える
+Q7	B	多少失敗してもできるだけ子どもにやらせる
+
+&gt;&gt; ASSISTANT: 選択:
+
+Q1	どちらかといえばAに近い
+Q2	Bに近い
+Q3	Aに近い
+Q4	Aに近い
+Q5	どちらかといえばAに近い
+Q6	どちらかといえばAに近い
+Q7	Bに近い
+
+回答理由:
+
+Q1: 知識や技能を身につけるためには反復練習が必要と考えていますが、同時に子どもたちの考えや議論も重要だと考えています。それぞれのバランスが重要だと思います。
+
+Q2: 自発的な学習がより効果的で、そのような学習方法が自己効力感や自主性を育て、長期的な学習の動機付けにつながると考えています。
+
+Q3: 子ども自身が答えや解き方を見つけることで、批判的思考力や問題解決能力を養うことができると考えています。
+
+Q4: 長所を強調することで子どもの自尊心や自己効力感を向上させ、学習意欲を高めることができると思います。ただし、必要な場合には短所も改善するように指導することも重要です。
+
+Q5: 問題行動に対しては、その背後にある感情や動機を理解し、対話を通じて問題解決を図ることが有効だと考えています。ただし、一定のルール違反に対しては毅然とした態度も必要です。
+
+Q6: 子どもが持つ可能性を開花させることで、子ども自身の特性や能力に基づいた成長を促すことができると考えています。同時に、社会的なルールや基本的な生活技能を教えることも重要です。
+
+Q7: 失敗は学習の一部であり、自分で考え、行動し、その結果に対して責任を持つことで自己肯定感や問題解決能力が育つと考えています。ただし、失敗が子どもの安全に関わる場合は適切な指導が必要です。</pre>
+</div>
+<div class="card" id="t18">
+<h2>試行18　子ども中心主義得点 4.0</h2>
+<table><tr><th style="width:3.5em">正準Q</th><th>項目（A⇔B）</th><th style="width:5em">回答(1-4)</th><th style="width:6em">cc_score</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td style="text-align:right">4</td><td style="text-align:right">4</td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td style="text-align:right">1</td><td style="text-align:right">4</td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td style="text-align:right">1</td><td style="text-align:right">4</td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td style="text-align:right">1</td><td style="text-align:right">4</td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td style="text-align:right">4</td><td style="text-align:right">4</td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td style="text-align:right">1</td><td style="text-align:right">4</td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td style="text-align:right">4</td><td style="text-align:right">4</td></tr></table>
+<p class="meta" style="margin-top:10px">生チャット原文（ChatGPT, GPT-4・2023年UI版。原文ママ収録）</p>
+<pre>&gt;&gt; USER: 次のQ1～Q7のような、子どもたちへの指導についての対照的な考え方があります。それぞれの質問について、あなたの考えがどちらに近いかを検討し、「Aに近い」「どちらかといえばAに近い」「どちらかといえばBに近い」「Bに近い」の4つから選択してください。出力する際は、最初にQ1からQ7の質問に対する選択肢のみを縦に出力し、その次の行に回答理由をまとめて記載してください。
+
+Q1	A	子どもたちの考えを発表したり議論する時間を多くとる
+Q1	B	子どもが知識・技能を身に付けるよう反復練習する時間を多くとる
+Q2	A	多少失敗してもできるだけ子どもにやらせる
+Q2	B	子どもが失敗しないように細かく注意を与える
+Q3	A	一人前の大人になるために必要なことを教え、訓練する
+Q3	B	子どもの持っている可能性が開花するのを支援する
+Q4	A	教師が正しい答えや解き方を示す
+Q4	B	子どもが自分で答えや解き方を見つけられるように支援する
+Q5	A	自発的な学習を支援する
+Q5	B	たとえ強制してでも、とにかく学習させる
+Q6	A	子どもの短所を注意して直そうとする
+Q6	B	子どもの長所をほめて伸ばそうとする
+Q7	A	問題をおこした子どもに対しては毅然とした指導を行う
+Q7	B	問題をおこした子どもの気持ちによりそった指導を行う
+
+&gt;&gt; ASSISTANT: 私の選択は以下のようになります。
+
+Q1: Aに近い
+Q2: Aに近い
+Q3: Bに近い
+Q4: Bに近い
+Q5: Aに近い
+Q6: Bに近い
+Q7: Bに近い
+
+理由:
+
+Q1: 子供たちが自分の考えを表現し、議論することで、思考力、コミュニケーション能力、意見の尊重などの重要なスキルを獲得できます。もちろん、知識と技能の獲得も重要ですが、現代の世界ではクリティカルシンキングや自己表現が重視されています。
+
+Q2: 失敗は学習の一部であり、子供たちは自分自身の失敗から多くのことを学びます。細かい点で指導するよりも、子供に自己解決の機会を与えることで自立心を養うことができます。
+
+Q3: 子供たちが持っている可能性を引き出し、自己表現の能力を開発することが重要だと考えます。これは、子供たちが社会の一員としての自己認識と自己評価の能力を育てるためです。
+
+Q4: 教師が答えを教えるのではなく、子供が自分で答えを見つけることを支援することで、問題解決のスキルと自立した学習能力を育てることができます。
+
+Q5: 強制的な学習は一時的な成果をもたらすかもしれませんが、長期的には子供たちの自主性と興味を削ぎ落とします。自発的な学習は子供たちが主体的に情報を探求し、自分自身で新しい知識を見つけ出す力を育てます。
+
+Q6: 長所をほめて伸ばすことは、自己評価と自尊心を高める一方で、短所についても自覚し、それを改善するための努力を促すためのものです。
+
+Q7: 問題を起こした子供の気持ちに寄り添った指導は、その子供が行動の背後にある感情や動機を理解し、より良い選択をする能力を養うのに役立ちます。毅然とした指導は時と場合によっては必要ですが、理解と共感を基盤とした指導がより効果的だと考えます。</pre>
+</div>
+<div class="card" id="t19">
+<h2>試行19　子ども中心主義得点 4.0</h2>
+<table><tr><th style="width:3.5em">正準Q</th><th>項目（A⇔B）</th><th style="width:5em">回答(1-4)</th><th style="width:6em">cc_score</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td style="text-align:right">4</td><td style="text-align:right">4</td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td style="text-align:right">1</td><td style="text-align:right">4</td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td style="text-align:right">1</td><td style="text-align:right">4</td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td style="text-align:right">1</td><td style="text-align:right">4</td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td style="text-align:right">4</td><td style="text-align:right">4</td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td style="text-align:right">1</td><td style="text-align:right">4</td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td style="text-align:right">4</td><td style="text-align:right">4</td></tr></table>
+<p class="meta" style="margin-top:10px">生チャット原文（ChatGPT, GPT-4・2023年UI版。原文ママ収録）</p>
+<pre>&gt;&gt; USER: 次のQ1～Q7のような、子どもたちへの指導についての対照的な考え方があります。それぞれの質問について、あなたの考えがどちらに近いかを検討し、「Aに近い」「どちらかといえばAに近い」「どちらかといえばBに近い」「Bに近い」の4つから選択してください。出力する際は、最初にQ1からQ7の質問に対する選択肢のみを縦に出力し、その次の行に回答理由をまとめて記載してください。
+
+Q1	A	教師が正しい答えや解き方を示す
+Q1	B	子どもが自分で答えや解き方を見つけられるように支援する
+Q2	A	子どもたちの考えを発表したり議論する時間を多くとる
+Q2	B	子どもが知識・技能を身に付けるよう反復練習する時間を多くとる
+Q3	A	子どもの長所をほめて伸ばそうとする
+Q3	B	子どもの短所を注意して直そうとする
+Q4	A	自発的な学習を支援する
+Q4	B	たとえ強制してでも、とにかく学習させる
+Q5	A	子どもが失敗しないように細かく注意を与える
+Q5	B	多少失敗してもできるだけ子どもにやらせる
+Q6	A	問題をおこした子どもの気持ちによりそった指導を行う
+Q6	B	問題をおこした子どもに対しては毅然とした指導を行う
+Q7	A	子どもの持っている可能性が開花するのを支援する
+Q7	B	一人前の大人になるために必要なことを教え、訓練する
+
+&gt;&gt; ASSISTANT: 選択肢：
+Q1: Bに近い
+Q2: Aに近い
+Q3: Aに近い
+Q4: Aに近い
+Q5: Bに近い
+Q6: Aに近い
+Q7: Aに近い
+
+理由:
+Q1: 自己学習のプロセスは、子どもが自己反省、解決策の探求、独立した思考を行うための重要な機会を提供します。教師が直接的に答えを示すことも必要ですが、子ども自身が問題解決を体験することが大切だと考えています。
+
+Q2: 子どもたちの思考を発表したり議論する時間をとることで、彼らの批判的思考能力やコミュニケーション能力を養います。反復練習も重要ですが、私の考えは議論の時間を重視する方向に傾いています。
+
+Q3: 子どもの長所をほめ、伸ばすことで自信と自己肯定感が向上し、より高いパフォーマンスを達成する可能性があります。一方で、短所を指摘し直すことも重要ですが、肯定的なフィードバックの効果を重視しています。
+
+Q4: 自発的な学習は、子どもが興味を持つ事柄に取り組むことで生じ、結果的に深い理解と持続的な学習へとつながります。強制的な学習は時に必要ですが、主には自主的な学習を支援することが理想的だと考えます。
+
+Q5: 失敗は学ぶための重要な過程であり、子どもには挑戦と経験を通じて学んでほしいと思います。もちろん、重大な失敗を防ぐための適切な指導は必要ですが、基本的には自由に試行錯誤させることが望ましいと考えています。
+
+Q6: 問題を起こした子どもへの指導は、その子どもの気持ちに寄り添い、理解し、共感することから始まるべきだと思います。厳しい指導も必要な場合もありますが、まずは子どもの感情と状況を理解することが重要だと考えます。
+
+Q7: 子どもの可能性を最大限に引き出し、個々の才能や興味を伸ばす支援を重視します。もちろん、社会生活に必要な基本的な知識や技能を身につけることも重要ですが、子どもの可能性を伸ばすことで、一人前の大人になるための基盤も形成されると信じています。</pre>
+</div>
+<div class="card" id="t20">
+<h2>試行20　子ども中心主義得点 4.0</h2>
+<table><tr><th style="width:3.5em">正準Q</th><th>項目（A⇔B）</th><th style="width:5em">回答(1-4)</th><th style="width:6em">cc_score</th></tr><tr><td>Q1</td><td>可能性開花の支援 ⇔ 一人前の訓練</td><td style="text-align:right">4</td><td style="text-align:right">4</td></tr><tr><td>Q2</td><td>失敗してもやらせる ⇔ 細かく注意</td><td style="text-align:right">1</td><td style="text-align:right">4</td></tr><tr><td>Q3</td><td>発表・議論の時間 ⇔ 反復練習の時間</td><td style="text-align:right">1</td><td style="text-align:right">4</td></tr><tr><td>Q4</td><td>自発的学習の支援 ⇔ 強制してでも学習</td><td style="text-align:right">1</td><td style="text-align:right">4</td></tr><tr><td>Q5</td><td>自分で見つける支援 ⇔ 教師が答えを示す</td><td style="text-align:right">4</td><td style="text-align:right">4</td></tr><tr><td>Q6</td><td>寄り添う指導 ⇔ 毅然とした指導</td><td style="text-align:right">1</td><td style="text-align:right">4</td></tr><tr><td>Q7</td><td>長所をほめる ⇔ 短所を注意</td><td style="text-align:right">4</td><td style="text-align:right">4</td></tr></table>
+<p class="meta" style="margin-top:10px">生チャット原文（ChatGPT, GPT-4・2023年UI版。原文ママ収録）</p>
+<pre>&gt;&gt; USER: 次のQ1～Q7のような、子どもたちへの指導についての対照的な考え方があります。それぞれの質問について、あなたの考えがどちらに近いかを検討し、「Aに近い」「どちらかといえばAに近い」「どちらかといえばBに近い」「Bに近い」の4つから選択してください。出力する際は、最初にQ1からQ7の質問に対する選択肢のみを縦に出力し、その次の行に回答理由をまとめて記載してください。
+
+Q1	A	子どもの長所をほめて伸ばそうとする
+Q1	B	子どもの短所を注意して直そうとする
+Q2	A	自発的な学習を支援する
+Q2	B	たとえ強制してでも、とにかく学習させる
+Q3	A	教師が正しい答えや解き方を示す
+Q3	B	子どもが自分で答えや解き方を見つけられるように支援する
+Q4	A	問題をおこした子どもに対しては毅然とした指導を行う
+Q4	B	問題をおこした子どもの気持ちによりそった指導を行う
+Q5	A	一人前の大人になるために必要なことを教え、訓練する
+Q5	B	子どもの持っている可能性が開花するのを支援する
+Q6	A	子どもたちの考えを発表したり議論する時間を多くとる
+Q6	B	子どもが知識・技能を身に付けるよう反復練習する時間を多くとる
+Q7	A	多少失敗してもできるだけ子どもにやらせる
+Q7	B	子どもが失敗しないように細かく注意を与える
+
+&gt;&gt; ASSISTANT: Q1: Aに近い
+Q2: Aに近い
+Q3: Bに近い
+Q4: Bに近い
+Q5: Bに近い
+Q6: Aに近い
+Q7: Aに近い
+
+理由:
+私の考えは、子どもたちの自主性、創造性、問題解決能力、社会性を育てる方向に重きを置いています。したがって、Q1では子どもの長所をほめ、それを伸ばそうとするアプローチに近いです。短所についても気をつけるべきではありますが、それよりも子どもが自己肯定感を持ち、自信を持つことの方が重要だと考えています。
+
+Q2、Q3では自発的な学習と自分で答えを見つける能力を重視しています。教師が答えを与えることも重要な場面ではありますが、子どもが自分で考え、自己解決する力を育てることが最終的には彼らの自立につながると考えています。
+
+Q4では、問題行動の背後にある子どもの気持ちに寄り添い理解することを重視しています。このアプローチは、問題行動の根本原因を理解し、その原因を解決することが最終的な問題解決につながると考えています。
+
+Q5、Q6、Q7では、子どもの可能性を開花させること、子どもたちの考えや意見を重視し、それを発表したり議論する時間を取ること、そして失敗を恐れずに挑戦する機会を提供することを重視しています。これらのアプローチは、子どもが自己表現の能力を育て、失敗から学ぶことを通じて自己成長することを支援することを目指しています。</pre>
+</div>
+
+<footer>本ページは data/ 内のCSV・JSONLから機械的に生成した閲覧用アーカイブです（gen_html_browser.py）。応答原文は原文ママ収録。</footer>
+</div>
+<a class="top" href="#top">▲先頭へ</a>
+</body></html>
